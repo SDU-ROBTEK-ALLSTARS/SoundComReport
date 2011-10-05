@@ -1,0 +1,104 @@
+% C kode for ADC logging
+
+\begin{lstlisting}[language=C,caption={pseudo},label={code:temp}]
+thresholdLow = 119;
+thresholdHigh = 140;
+
+adcValue = ADCH;
+
+
+/* adcValue tjekkes mod thresholdHigh og thresholdLow for at bestemme hvilken vej
+   der drejes (eller ikke drejes). */
+
+
+
+
+
+void detectTurn()
+{
+	if (adcValue > thresholdHigh) //højre
+	{
+		if (currentTurnsts != right)
+		{
+			if (currentTurnsts = lastTurnsts)
+			{
+				return;
+			}
+			else
+			{
+				currentTurnsts = right;
+				counter = 0;
+				loadPos();
+			}
+		}
+		else
+		{
+			if (count=10)
+			{
+				saveEvent();
+			}
+			else
+			{
+				count++;
+				return;
+			}
+		}
+	}
+	else if (adcValue < thresholdLow) //ventre
+	{
+		if (currentTurnsts != left)
+		{
+			if (currentTurnsts = lastTurnsts)
+			{
+				return;
+			}
+			else
+			{
+				currentTurnsts = left;
+				counter = 0;
+				loadPos();
+			}
+		}
+		else
+		{
+			if (count=10)
+			{
+				saveEvent();
+			}
+			else
+			{
+				count++;
+				return;
+			}
+		}
+	}
+	else //lige ud
+	{
+		if (currentTurnsts != straight)
+		{
+			if (currentTurnsts = lastTurnsts)
+			{
+				return;
+			}
+			else
+			{
+				currentTurnsts = straight;
+				counter = 0;
+				loadPos();
+			}
+		}
+		else
+		{
+			if (count=10)
+			{
+				saveEvent();
+			}
+			else
+			{
+				count++;
+				return;
+			}
+		}
+	}
+}
+\end{lstlisting}

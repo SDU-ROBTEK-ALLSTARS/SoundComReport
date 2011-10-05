@@ -1,0 +1,32 @@
+\section{Metoder til aflæsning af ADNS sensor}\label{sec:bilag_adnsaflaesning}
+Under udabejdelsen af programkoden til at hente data fra sensoren, blev forskellige løsninger overvejet. Disse løsninger er kort gennemgået herunder.
+
+\subsection{Løsning 1}
+Denne løsning blev valgt, og er beskrevet i detaljer i sektion \ref{sec:aflaesning_af_sensor}, hvorfor den ikke gennemgås her.
+
+\subsection{Løsning 2}
+Denne løsning er bygget op omkring at hele sensoraflæsningen sker i et timerinterupt. Når timerinteruptet sker starter aflæsningen af sensoren, hvorefter hastighedsreguleringen startes. Fordelen ved denne er at den er forholdsvis simpel at implementere, og intervallet mellem aflæsning af sensoren vil være forholdsvis konstant. Problemet med denne model er, at denne model bruger rigtigt meget tid på at vente på svar fra sensoren, som ikke kan bruges til noget andet.
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[scale=1]{ADNS_handling_met2.pdf}  
+  \caption{Aflæsningsmetode 2}
+  \label{fig:ADNS_handling_met2}
+\end{figure}
+
+\subsection{Løsning 3}
+I denne løsning aflæses kun de to relevate data fra sensoren. Under start at microcontrolleren sendes forespørgsel om lav bytes en delta y værdien. Når denne modtages, gemmes den, og der sendes forespørgsel om høj byten af delta y. Når delta y høj modtages, gemmes denne og hastighedsreguleringen går i gang. Efter dette sendes forespørgsel om lav byte, og det hele starter forfra. Fordelen ved denne metode, er at der kun hentes data der skal benyttes. Detta kan også se som værende en ulempe, da der derfor kun er disse til rådighed ved fejlfindeing. Et problem med denne metode er at det ikke er muligt at verificere at det modtagede data er korrekt.
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[scale=0.8]{ADNS_handling_met3.pdf}  
+  \caption{Aflæsningsmetode 3}
+  \label{fig:ADNS_handling_met3}
+\end{figure}
+
+
+\subsection{Begrundelse for valg}
+%Umiddelbart er det i dette projekt kun relevant at 
+%Det blev valgt at benytte løsning 1, da der er en lang række .... 
+
+Til afhentning af data er løsning 1 benyttet. Valget er truffet på baggrund af, at denne model har en masse ekstra information fra sensoren. Dette ekstra info kan benyttes til at kontrollere, om sensoren rent faktisk er i en funktionel tilstand, og udfra dette kan der eventuelt senere opbygges programkode, der sørger for at genstarte sensoren ved fejl under kørslen. Ved at f.eks at have valgt løsning to eller tre, ville en fejl i kommunikationen ikke opdages, og herved vil der ikke kunne tages højde for dette. Ved løsning et er der mulighed for at kontrollere MOTION\footnote{Værdi der viser sensorens tilstand}-og SQUAL\footnote{Surface Quality}-værdien fra sensoren, da disse giver et repræsentativt billede af kvaliteten af de målte data og sensorens tilstand.

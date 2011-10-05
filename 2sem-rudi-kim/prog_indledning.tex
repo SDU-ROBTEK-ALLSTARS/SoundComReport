@@ -1,0 +1,6 @@
+\section{Programmering}
+ATMega32 microcontrolleren, som Scalextric bilen er udstyret med, er samlingspunkt for al sensor input. Der fås input fra musesensor, optocoupler, accelerometer og derudover skal motoren styres ud fra førnævnte input. Alt dette er microcontrollerens opgave, hvilket altså vil sige, at al aktivitet, der foregår, tager udgangspunkt i den software, der er skrevet til. I dette afsnit beskrives de forskellige programdeles formål og funktion.
+
+Den overordnede ide med softwaren er, at den skal være modulær - forstået på den måde, at det har skulle være let at ændre bilens ''opførsel'' i forskellige situationer. Det har ledt til en opbygning af programmet, der er baseret på, at der - enten manuelt eller ud fra sensorstimuli - kan skiftes mellem forskellige dele af programmet, ved at ændre på værdier i et register. Ændringen kan ske ligemeget hvor i programmet man befinder sig.
+
+Den modulære struktur af softwaren har lettet test af individuelle programstykker og har gjort, at den overordnede ide om kørselsmetode har kunne følges. Der er således en del af softwaren, der tager sig af baneopmåling og en der tager sig af kørsel. Mellemliggende programniveauer sætter rammen for hoveddelene. Enkelte dele, som f. eks. kommunikationsfunktionerne og ADNS sensordata opdatering, er konstant aktive.

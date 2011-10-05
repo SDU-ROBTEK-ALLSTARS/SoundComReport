@@ -1,0 +1,261 @@
+%%%								%%%
+%%%     PREAMBLE	%%%
+%%%								%%%
+\documentclass{article}
+
+%%% PAGE DIMENSIONS
+\usepackage{geometry} % to change the page dimensions
+\geometry{a4paper}
+
+%%% PACKAGES
+\usepackage{graphicx} % support the \includegraphics command and options
+\usepackage{pstricks} % PROBLEMER MED PDFLATEX?
+\usepackage[latin1]{inputenc}
+\usepackage[danish]{babel}
+\usepackage{csquotes}
+\usepackage{booktabs} % for much better looking tables
+\usepackage{tabularx}
+\usepackage{slashbox}
+\usepackage{array} % for better arrays (eg matrices) in maths
+\usepackage{paralist} % very flexible & customisable lists (eg. enumerate/itemize, etc.)
+\usepackage{verbatim} % adds environment for commenting out blocks of text & for better verbatim
+\usepackage{alltt}
+\usepackage{hyperref} %til links, email etc - giver ogs bookmarks i pdf filen
+\hypersetup{
+    unicode=true,          % non-Latin characters in Acrobat’s bookmarks
+    pdftoolbar=true,        % show Acrobat’s toolbar?
+    pdfmenubar=true,        % show Acrobat’s menu?
+    pdffitwindow=false,     % window fit to page when opened
+    pdfstartview={FitH},    % fit page to the window Horizontal/Vertical
+    pdftitle={Pole Position},    % title
+    pdfauthor={Rudi Hansen, Niels Høgh, Kelvin Kjærvik Pagels, Kim Lindberg Schwaner},     % author
+    pdfsubject={Udvikling af system til at drive en Scalextricbil autonomt ved hjælp af diverse sensorinput},   % subject of the document
+    pdfkeywords={Scalextric} {ATmega32} {SDU}, % list of keywords
+    pdfnewwindow=true,      % links in new window
+    colorlinks=false,       % false: boxed links; true: colored links
+    linkcolor=red,          % color of internal links
+    citecolor=green,        % color of links to bibliography
+    filecolor=magenta,      % color of file links
+    urlcolor=cyan           % color of external links
+}
+\usepackage{subfig} % make it possible to include more than one captioned figure/table in a single float
+\usepackage{float}% for at kunne justere floats position bedre (især billeder)
+\usepackage{amsmath,amsfonts,amssymb,amsthm} %AMS' packages for symbols, theorems etc.
+\usepackage{xfrac}
+\usepackage{wrapfig}% for at kunne bruge wrapfigure
+\usepackage{multicol}
+\usepackage{footnote}
+\usepackage{perpage}
+\MakePerPage{footnote}
+\makesavenoteenv{tabular}		%makes footnotes in tables possible
+\usepackage{ctable}
+\usepackage[parfill]{parskip} % Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{listings}
+\lstset{
+	language=avr,
+	numbers=left,
+	numberstyle=\tiny,
+	numbersep=6pt,
+	captionpos=b,
+	tabsize=4,
+	basicstyle=\footnotesize\sffamily,
+	breaklines=true,                % sets automatic line breaking
+	escapeinside={(*&}{&*)},
+}
+\renewcommand*\lstlistingname{Programkode}
+\usepackage{dirtree}
+
+
+%%% BIBLIOGRAPHY
+\usepackage[style=authortitle-icomp,natbib=true,sortcites=true,block=space,backend=bibtex8]{biblatex}
+\setlength{\bibparsep}{10pt}
+\bibliography{bibl}
+
+%%% HEADERS & FOOTERS
+\usepackage{fancyhdr} % This should be set AFTER setting up the page geometry
+\pagestyle{fancy} % options: empty , plain , fancy
+
+\setlength{\headheight}{15pt}
+\lhead{\nouppercase{\leftmark}}
+\chead{}
+\rhead{}  %\rhead{\textit{\leftmark}}
+\lfoot{}
+\cfoot{}
+\rfoot{\thepage}
+
+% Redefinerer plain-stilen så vi kan bruge den til at nummerere sider uden at at få sidehoved med!
+\fancypagestyle{plain}{
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[RO]{\thepage}
+}
+
+%%% SECTION TITLE APPEARANCE
+\usepackage{sectsty}
+%\allsectionsfont{\sffamily\mdseries\upshape} % (See the fntguide.pdf for font help)
+
+%%% ToC (table of contents) APPEARANCE
+%\usepackage[]{tocbibind} % Put the bibliography in the ToC         opts:   nottoc,notlof,notlot
+\setcounter{tocdepth}{3} % set how many levels the table of contents displays default=3
+\usepackage[titles,subfigure]{tocloft} % Alter the style of the Table of Contents
+\renewcommand{\cftsecfont}{\rmfamily\mdseries\upshape}
+\renewcommand{\cftsecpagefont}{\rmfamily\mdseries\upshape} % No bold!
+
+\graphicspath{{./graphics/}}% alle \includegraphics kigger som default i /graphics/-mappen
+
+\numberwithin{equation}{section} % Equations numbered by section
+\numberwithin{figure}{section}
+\numberwithin{table}{section}
+
+
+%%%PARAGRAPH EDIT
+%\setlength{\parindent}{0pt}
+%\setlength{\parskip}{2ex plus 0.5ex minus 0.2ex}
+
+
+%%% FLOAT CONTROL
+\setcounter{topnumber}{2}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{3}
+\renewcommand{\topfraction}{0.85}
+\renewcommand{\bottomfraction}{0.85}
+\renewcommand{\textfraction}{0.15}
+\renewcommand{\floatpagefraction}{0.4}
+
+
+%%% FRONTPAGE
+\input{forside.tex}
+
+
+%%%								%%%
+%%%	FRONT MATTER	%%%
+%%%								%%%
+\begin{document}
+\numberwithin{lstlisting}{section}		%sourcecode numbering by section
+
+
+\pagenumbering{roman}
+\addcontentsline{toc}{section}{Forside}
+\makefrontpage
+\setcounter{page}{1}\pagenumbering{roman}
+
+
+%\newpage\thispagestyle{plain}
+%\input{resume.tex}
+%\addcontentsline{toc}{section}{Resumé}
+
+%%FORORD
+\newpage\thispagestyle{plain}
+\input{forord.tex}
+\addcontentsline{toc}{section}{Forord}
+
+
+%%INDHOLD
+\newpage\thispagestyle{plain}
+\tableofcontents
+\addcontentsline{toc}{section}{Indhold}
+
+%\addcontentsline{toc}{section}{Figurliste}
+%\listoffigures\thispagestyle{plain}%lidt pagestyle haxx
+%\addcontentsline{toc}{section}{Tabelliste}
+%\listoftables\thispagestyle{plain}%lidt pagestyle haxx
+\newpage
+
+
+
+
+%%%								%%%
+%%%	 MAIN MATTER	%%%
+%%%								%%%
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+
+
+\input{indledning.tex}\newpage
+\input{metode_valg}
+\input{kons_sensor_valg}
+\input{metode_konk}
+
+
+\newpage
+\input{kons_indledning}
+\input{microcontroller}
+\input{kons_accelerometer}
+\input{kons_opto}
+\input{kons_adns}
+\input{kons_hbro}
+
+
+\newpage
+\input{prog_indledning}
+\input{modes}
+\input{hastighedsregulering}
+\input{kommunikation}
+
+
+\newpage
+\input{diskussion}
+\input{konklusion}
+
+
+
+%%Litteratur
+\newpage\thispagestyle{plain}
+
+\nocite{*} % Inkluderer alle poster i bibl.bib-filen (dvs. kun skriv litteratur ind vi rent faktisk har brugt)
+\printbibliography[title=Litteratur]\thispagestyle{plain}
+\addcontentsline{toc}{section}{Litteratur}
+
+\pagestyle{plain}%lidt pagestyle haxx
+
+
+
+
+%%BILAG
+\appendix
+
+\newpage
+\section{Hastighedsmåling}\label{sec:bilag_hastighed}
+\input{bilag_hastighed.tex}
+
+\newpage
+\input{bilag_adnsaflaesningmetoder.tex}
+
+\newpage
+\input{bilag_acc.tex}
+
+\newpage
+\input{bilag_hbro.tex}
+
+\newpage
+\input{komponent_liste.tex}
+
+\newpage
+\input{cdindhold.tex}
+
+%%SOURCECODE
+%\newpage
+%\section{Kildekode}
+%
+%\lstinputlisting[captionpos=t,title=\lstname]{./sourcecode/root/main.asm}
+%\lstinputlisting[captionpos=t,title=\lstname]{./sourcecode/root/macros.asm}
+%\lstinputlisting[captionpos=t,title=\lstname]{./sourcecode/root/adns9500/adns_spi.asm}
+%\lstinputlisting[captionpos=t,title=\lstname]{./sourcecode/root/adns9500/adns_aux.asm}
+%\lstinputlisting[captionpos=t,title=\lstname]{./sourcecode/root/adns9500/adns_run.asm}
+%\lstinputlisting[captionpos=t,title=\lstname]{./sourcecode/root/speedcalculation.asm}
+%\lstinputlisting[captionpos=t,title=\lstname]{./sourcecode/root/interrupts.asm}
+%\lstinputlisting[captionpos=t,title=\lstname]{./sourcecode/root/ana_comp.asm}
+%\lstinputlisting[captionpos=t,title=\lstname]{./sourcecode/root/comm.asm}
+%\lstinputlisting[captionpos=t,title=\lstname]{./sourcecode/root/commactions.asm}
+%\lstinputlisting[captionpos=t,title=\lstname]{./sourcecode/root/utils.asm}
+%\lstinputlisting[captionpos=t,title=\lstname]{./sourcecode/root/debug.asm}
+%\lstinputlisting[captionpos=t,title=\lstname]{./sourcecode/root/ModeDefault.asm}
+%\lstinputlisting[captionpos=t,title=\lstname]{./sourcecode/root/ModePreWarmup.asm}
+%\lstinputlisting[captionpos=t,title=\lstname]{./sourcecode/root/ModeWarmup.asm}
+%\lstinputlisting[captionpos=t,title=\lstname]{./sourcecode/root/ModeRace.asm}
+%\lstinputlisting[captionpos=t,title=\lstname]{./sourcecode/root/ModePreRace.asm}
+%\lstinputlisting[captionpos=t,title=\lstname]{./sourcecode/root/adns9500/adns_firmware.asm}   % <- skal måske undlades ^^
+
+
+\end{document}

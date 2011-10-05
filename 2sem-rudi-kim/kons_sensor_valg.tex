@@ -1,0 +1,78 @@
+\subsection{Sensorvalg}
+I dette afsnit vil det blive gennemgået hvilke sensorer der blev overvejet til brug i konstruktionen af bilen og der vil blive argumenteret for valget af sensorer. Projektgruppen har vurderet sensorerne ud fra den viden, der var ved projektets begyndelse.
+
+I Tabel \ref{tab:sensorvalg}, er der oplistet forskellige måder at detektere hastighed, sving og målstreg på.
+
+\begin{table}[htb]
+\begin{center}
+	\begin{tabular}{l | l | l}
+			Hastighed & Sving & Målstreg \\
+			\hline
+			Optisk musesensor & Accelerometer & Optocoupler\\
+			Magnetfelt (Hall-effekt) & Skinnernes magnetfelt & \\
+			Triangulering & Optisk (placeret rigtig på bagenden) & \\
+			Rotationsenkoder & Potentiometer på skoen & \\
+			PWM (induceret DC) && \\
+			Accelerometer meter && \\
+			Lysfølsom diode && \\
+		\end{tabular}
+	\end{center}
+	\caption{Sensorvalg}
+	\label{tab:sensorvalg} %%ref
+\end{table}
+
+\subsubsection{Måling af hastighed}
+I det følgende underafsnit vil sensorerne til måling af hastighed, i tabel \ref{tab:sensorvalg}, blive beskrevet. Med undgangspunkt i forskellige sensorer, vil fordele og ulemper blive diskuteret.
+
+\subsubsection*{Optisk Musesensor}
+En optisk musesensor tager billeder af overfladen, den bevæger sig hen over. Ved at sammenligne unikke punkter i billederne, kan den beregne tilbagelagt strækning og i hvilken retning. Hvis en musesensor monteres under bilen, kan bilens hastighed måles direkte, ved kontinuerligt at aflæse bevægelsen, med et fast tidsinterval imellem. Fordelene ved denne løsning er, at der opnås en høj præcision, og det er en direkte måling, i forhold til banen. Derfor vil eventuelle udskridninger ikke give en fejlmåling. Ulempen er, at det er en mere kompleks konstruktion og kan være svær at implementere programmeringsmæssigt. 
+
+\subsubsection*{Motorens magnetfelt}
+I bilen er der monteret en DC motor. Når en DC motor kører, er der et magnetfelt der roterer. Hvis dette magnetfelt kan måles, må omdrejningerne, som motoren kører med, kunne bestemmes. Dette vil resultere i, at hastigheden kan beregnes. Det er et simpelt design, men det er usikkert, om det lade sig gøre at måle et brugbart magnetfelt på motoren.
+
+\subsubsection*{Triangulering}
+Hvis ultralyd, infrarødt lys eller radiobølger bliver udsendt fra minimum tre steder rundt om banen, og en modtager bliver monteret på bilen, vil bilens position kunne bestemmes ved hjælp af triangulering. Det kan dog være en risikabel løsning at implementere, da der sandsynligvis kræves mere databehandling end med mange andre metoder. Derudover har ingen gruppemedlemmer erfaring med en sådan løsningsmetode, hvilket nok vil gøre det meget tidskrævende.
+
+\subsubsection*{Rotationsenkoder}
+En rotationsenkoder måler antallet af hjulets rotationer. Når hjulets omkreds er kendt, kan den tilbagelagte strækning beregnes ved at gange omkredsen med antal rotationer. En rotationsenkoder kan for eksempel konstrueres ved at lave nogle hvide markeringer på hjulet og detektere dem ved hjælp af en optisk sensor. Denne løsning er forholdsvis simpel at konstruere. En ulempe er dog, at rotationsenkoderen måler hjulets rotation, hvilket kan give fejl hvis hjulet roterer og bilen ikke bevæger sig tilsvarende. Det vil de for eksempel ikke hvis hjulene skrider i sving, da hjulene er forbundet med en fast akse. Det kan i sidste ende give store problemer, især i slutningen af en omgang, da fejlen akkumuleres.
+
+\subsubsection*{Pulse-width modulation}
+Da motoren drives med et PWM signal vil den inducere en strøm når PWM signalet er lavt. Ud fra størrelsen af denne strøm kan motorens omdrejningshastighed bestemmes. Det har dog den ulempe, at strømmen skal måles i meget korte intervaller og hastigheden ikke måles direkte i forhold til banen. Denne løsning kan ikke benyttes ved 100\% duty cycle på PWM signalet.
+
+\subsubsection*{Accelerometer}
+Et accelerometer kan detektere accelerationer. Hvis accelerationen integreres fås hastigheden, og en integration yderligere vil give positionen. En fordel ved denne løsning er, at der kun vil være brug for en enkelt sensor til både registrering af hastighed og sving. Derimod vil en enkelt fejlmåling betyde, at resultatet af integrationen vil blive forkert. Denne fejl vil først kunne elimineres, når bilen igen passerer målstregen eller et andet referencepunkt på banen.
+%Er accelerometer kan dediktere accelerationer. Hvis man differentiere accelerationen, med henhold til tiden, kan hastigheden bestemmes. 
+%Hvis man ligger alle accelerationer positivt som negative, differentiere det og få hastigheden. Det var ideen med dette. Formålet med at bruge et accelerometer, er at det. \\
+%Et accelerometer kan dediktere acceleracion, hvis man ligger alle accelerationer sammen kan hastigheden bregnes. Hvis man ved hvor lang tid der accelereres kan der regnes baglæns og hastigheden kan derfor %beregnes. Hvis man hele tiden holder øje med hvad netto accelerationen er kan afstanden beregnes.\\
+
+\subsubsection*{Lysfølsom diode}
+De små banestykker er opbygget af af inder- og yderspor. I midten af sporene mellem strømskinnerne er der en række huller, hvor underlaget er synligt. Det blev overvejet, om det var muligt at måle forskellen mellem den sorte bane og underlaget igennem hullerne. Dette kunne gøres ved hjælp af en lyskilde og lysfølsom diode. Hullerne er ens for hvert type banestykke, og det er derfor muligt at bestemme, hvilke banestykker man befinder sig på, ved at genkende hulmønsteret for netop dette banestykke. Da alle banestykkernes længder i forvejen er kendte, må hastigheden kunne beregnes.
+Afstanden mellem de to metalskinner er ca. 3 mm og det er derfor svært at få en diode ned imellem dem. Fordi pladsen er meget trang, er der stor risiko for at dioden støder imod kanten og dermed skaber ekstra friktion. Da hastigheden beregnes udfra hele banestykker, er det en ulempe, at den præcise hastighed på midten af et banestykke ikke er kendt.
+%Hullerne for enhver banestykke er ens og det er derfor muligt at bestemme, hvilke banestykker man befinder sig på, ved at genkende hulmønsteret for netop dette banestykke. Da alle banestykkernes længder er kendte må hastigheden kunne beregnes.
+
+\subsubsection{Måling af sving}
+I det dette underafsnit diskuteres sensorer, nævnt i tabel \ref{tab:sensorvalg}, til registrering af sving.
+
+\subsubsection*{Accelerometer}
+Når bilen bevæger sig i et sving vil den blive udsat for en centripetalacceleration. Den kan måles med accelerometer og hvilket gør det muligt at bestemme om bilen befinder sig i et sving. Svingets radius, og om det er et højre eller et venstre sving, kan bestemmes ud fra accelerationens størrelse.
+
+\subsubsection*{Skinnernes magnetfelt}
+Når der løber en strøm igennem metalskinnen i banen, vil der dannes et magnetfelt rundt om skinnen. Ved at placere en eller flere Hall-effekt sensorer i hver enden af bilen, er det muligt at måle om skinnens magnetfelt flytter sig relativt i forhold til bilen. Da der maksimalt må trækkes en strøm på to ampere (jf. projektbegrænsning) i skinnen, er det derfor meget svage felter der skal måles og derfor kan støj blive et problem.
+
+\subsubsection*{Optisk musesensor}
+En optisk musesensor fungerer ved at beregne en x- og y-værdi, som repræsenterer bevægelsen i forhold til overfladen. Fordi musesensoren er monteret på bilen, vil dens x- og y-værdi altid tage udgangspunkt i bilens placering på banen. Når bagenden skrider ud, ændres y- værdien (forudsat at y-værdien måler sideværts) og derved vil et sving kunne registreres. Den skal monteres så langt tilbage på bilen som muligt, for netop at kunne opfange størst mulig ændring af y-værdier og derfor kunne opfange et sving. Figur \ref{fig:musesensor} illustrerer de to situationer, hvor bilen kører ligeud og hvor bilen svinger.
+
+\begin{figure}[htb]
+  \centering
+  \subfloat[Lige ud]{\label{fig:lige}\includegraphics[scale=0.42,trim=50 500 70 20]{msligeud.pdf}}  %trim=l b r t
+  \subfloat[Sving]{\label{fig:sving}\includegraphics[scale=0.42,trim=80 500 70 20]{mssving.pdf}}
+  \caption{Musesensorplacering}
+  \label{fig:musesensor}
+\end{figure}
+
+\subsubsection*{Potentiometer på sko}
+Bilen er forsynet med en sko, der har forbindelse til to strømførende skinner i banen. Skoen er af praktiske grunde lavet, så den kan rotere i forhold til bilen.
+Når bilen kører ind i et sving, vil skoen dreje for at følge banens forløb. Ved at montere et drejepotentiometer mellem skoen og bilen, er det muligt at opfange denne rotation. Konstruktionen er umiddelbart simpel, men øget friktion fra potentiometeret vil hæmme skoens bevægelsesfrihed og dermed øge bilens friktion i det den svinger.
+
+\subsubsection{Detektering af målstreg}
+Der er valgt en optocoupler til detektering af målstreg. Ingen andre alternativer blev overvejet til dette formål.

@@ -1,0 +1,72 @@
+\subsection{Accelerometer} 
+Når bilen er i et sving, bliver den accelereret ind mod centrum af svinget. Forudsat at svinget er jævnt, vil sammenhængen mellem radius, hastighed og centripetalacceleration\footcite[70-72,124-128]{fysik} være:
+
+\begin{align}
+	a_{cen}=\frac{v^2}{r}
+	\label{eq:centripetal}
+\end{align}
+
+Når bilen er i opmålingstilstand, er det derfor muligt at detektere sving ved hjælp af et accelerometer. Til dette formål er der valgt et accelerometer, ADXL203 fra Analog Devices, der kan måle både dynamisk og statisk acceleration på maksimalt $1,7g =16,7m/s^2$.
+Hvis hastigheden er kendt, er det muligt at beregne radius af svinget og derved bestemme om bilen befinder sig i det indre- eller ydre spor:
+
+\begin{align}
+r=\frac{v^2}{a_{cen}}
+\end{align}
+
+Figur \ref{fig:indreydre} viser målt radius for det indre- og ydre spor.
+
+\begin{figure}[htb]
+  \centering
+  \subfloat[Indre]{\label{fig:Indre}\includegraphics[scale=0.42]{radiusindre.png}}  %trim=l b r t
+  \subfloat[Ydre]{\label{fig:ydre}\includegraphics[scale=0.42]{radiusydre.png}}
+  \caption{Radius for indre og ydre spor}
+  \label{fig:indreydre}
+\end{figure}
+
+På grund af accelerometerets begrænsning på $16,7m/s^2$, er den maksimale hastighed, bilen kan køre i opmålingstilstanden ved sving derfor:
+I det indre spor: 
+
+\begin{align*}
+v=a_{cen}\cdot r_{indre}=16,7\cdot0,25m=2,0 m/s
+\end{align*}
+
+I det ydre spor:
+\begin{align*}
+v=a_{cen}\cdot r_{ydre}=16,7\cdot0,33=2,3 m/s
+\end{align*}
+
+Accelerometeret er placeret forrest i bilen, da bagenden kan skride ud og derved ændre accelerometerets radius i forhold til svinget. Udskridning vil dog, uanset accelerometerets placering forårsage, at accelerometeret bliver roteret i forhold til bevægelsesretningen, og dermed ikke måler vinkelret på denne - hvilket vil give en lille fejl.
+
+\subsubsection{Kredsløb til Accelerometer}
+Forsyningen til accelerometeret er afkoblet med en 0,1$\mu$F kondensator (se figur \ref{fig:acc_print}), for at minimere støj. Kondensatoren mellem udgangen og stel bestemmer båndbredden. Da det er relativt langsomme ændringer, der skal måles, kan støj reduceres yderligere, ved at vælge en lav båndbredde. I bilen anvendes en kondensator på $1\mu$F (se Appendiks \ref{sec:bilag_acc}) og båndbredden bliver da 5Hz. Accelerometeret er forbundet til ATmega32 microcontrolleren gennem port AD0.
+
+\begin{figure}[htb]
+	\begin{center}
+	\includegraphics[scale=1.08,trim=200 380 200 380]{accelerometer_v1.pdf}%trim=l b r t
+	\caption{Accelerometerdiagram}
+	\label{fig:acc_print}
+	\end{center}
+\end{figure}
+
+\subsubsection{AD konvertering}
+AD-converterens reference er tilsluttet til en 5V forsyning. Det betyder at 5V svarer til en værdi på 1023, hvilket også kaldes 5V fullscale. Det vurderes, at en 8 bit opløsning er tilstrækkelig, og da det er nemmere at håndtere 8bit internt i processoren, vælges en opløsning på 8bit fremfor 10bit. Da accelerometeret er begrænset til $16,7m/s^2$ kan det kun give et udslag fra 0,8V til 4,2V. Ved en 8 bit præcision er der $5/256 V/bit$. Accelerometeret leverer $1 V/9,82 m/s^2$, hvor nulpunktet ligger på $2,5 V$, i et område fra $0,8 V$ til $4,2 V$. Ud fra dette er det muligt at beregne, hvor stor accelerationen pr. bit er:
+
+\begin{align*}
+\frac{9,82 m/s^2}{1V}\cdot\frac{5V}{256bit}=0,192\frac{m/s^2}{bit}
+\end{align*}
+
+Det vurderes, at det er muligt at køre 1m/s i svinget uden at bilen falder af banen. Dette vil teoretisk give et udslag på 
+
+\begin{align*}
+	\frac{v^{2}}{r\cdot 0,192\frac{m/s^2}{bit}}=bit
+\end{align*}
+Indre spor:
+\begin{align*}
+	\frac{1^{2}}{0.25\cdot 0,192\frac{m/s^2}{bit}}\approx\pm21 bit
+\end{align*}
+Ydre spor:
+\begin{align*}
+	\frac{1^{2}}{0.33\cdot 0,192\frac{m/s^2}{bit}}\approx\pm16 bit
+\end{align*}
+
+Fordi der er et teoretisk udslag på omkring 16 bit ved kørsel i yderbane, vurderes det at 8bit opløsning er tilstrækkelig til at detektere sving.

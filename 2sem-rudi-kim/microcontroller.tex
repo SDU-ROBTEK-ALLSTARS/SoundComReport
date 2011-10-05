@@ -1,0 +1,9 @@
+\subsection{Microcontroller}
+I projektet benyttes en AVR ATmega32 microcontroller som samlingspunkt for sensorinput og til signalbehandling. Den styrer ligeledes motorhastighed og retning. Her beskrives kort, hvordan microcontrolleren er bygget op og hvilke funktioner - af dem der bliver udnyttet i dette projekt - den indeholder.
+
+ATmega32 er en 8-bit microcontroller, der bygger på RISC\footnote{Reduced Instruction Set Computing} designstrukturen, hvilket kort sagt betyder, at microcontrollerens instruktioner alle er forholdsvis simple og kun tager kort tid (mange kun 1 \textit{clock cycle\footnote{Tiden mellem én stigende flanke til den næste stigende flanke på et pulserende signal}}). ATmega32 microcontrolleren har 32kB programhukommelse, der ikke slettes, hvis strømmen afbrydes og 2kB SRAM\footnote{Static random-access memory}, som ikke består hvis strømmen afbrydes.
+
+AVR microcontrolleren indeholder en lang række periferiske enheder, hvoraf mange bliver brugt i forbindelse med kommunikation og input fra sensorer. Deriblandt er analog-til-digital konverteren, som kan ''oversætte'' et analogt signal til en digital, binær, værdi i op til 10-bit opløsning. Der benyttes også en analog komparator, som funktionelt ligner et almindeligt komparatorkredsløb (op-amp med positiv feedback). Der kan frit vælges referencespænding til komparatoren - altså den spænding indgangssignal sammenlignes med - mellem enten en intern 2,56 V eller en ekstern spænding påført en indgang.
+
+SPI\footnote{Serial Peripheral Interface} og USART\footnote{Universal synchronous/asynchronous receiver and transmitter} er begge enheder til seriel kommunikation. De er også i forvejen indbygget i ATmega32 og bliver beskrevet mere indgående i senere software afsnit.
+

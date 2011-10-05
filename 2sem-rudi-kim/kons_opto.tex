@@ -1,0 +1,50 @@
+\subsection{Optocoupler}
+Halvlederbaserede komponenter såsom dioder og transistorer reagerer på lys i det synlige spektre og i særdeleshed infrarødt lys, hvis indkapslingen er gennemsigtig.
+
+N-lag materiale laves ved at forurene halvlederen med et grundstof fra hovedgruppe 5. Det kendetegnes ved, at der er nogle få frie elektroner, og at det er en rimelig god elektrisk leder. P-lag materiale laves ved at dupe halvlederen med et grundstof fra hovedgruppe 3. Her er der et underskud af elektroner eller et overskud af ''huller''. P-lag er ligeledes en rimelig leder.
+
+Når en NP overgang belyses, dannes der elektron-hulpar ved hjælp af den fotovoltaiske effekt, og det forsager, at der løber en strøm $I_{lum}$ fra N til P laget. Strømmen stiger proportionalt med lysstyrken. Dette princip udnyttes i solceller - se figur \ref{fig:np}a.
+
+Hvis der påtrykkes en positiv spænding over NP overgangen, vil der løbe en meget lille strøm $I_{sat}$ fra N til P, dette reducerer responstiden når NP overgangen belyses vil $I_{lum}$ stort set være uændret se figur \ref{fig:np}b.
+
+\begin{figure}[htb]
+	\begin{center}
+	\subfloat[NP lag]{
+	\includegraphics[scale=0.42,trim=150 425 100 200]{np.pdf}}%trim=l b r t
+	\subfloat[NP overgang påtrykket positiv spænding]{
+	\includegraphics[scale=0.42,trim=100 625 100 50]{np_for.pdf}}%trim=l b r t
+	\caption{NP lag}
+	\label{fig:np}
+	\end{center}
+\end{figure}
+
+En fototransistor er en modificeret transistor, hvor en del af komponenten kan belyses. Producenterne har været særligt opmærksomme på at fremme lysfølsomhed ofte ved at montere en linse eller lignende. Fototransistorrespons er størst i det infrarøde område, derfor benyttes der ofte en infrarød diode som lyskilde.
+
+Der er valgt at bruge en optisk sensor fra Vishay semiconductors, model CNY70. Dette er en optisk sensor med et transistoroutput. Sensoren består en af diode og en NPN fototransistor. Dioden udsender infrarødt lys, med en bølgelængde på 955nm. En NPN transistor består af to N-lag og et p-lag som vist på figur \ref{fig:npntrans1}.
+
+\begin{figure}[htb]
+	\begin{center}
+	\includegraphics[scale=0.46,trim=0 0 0 0]{npn_trans.pdf}%trim=l b r t
+	\caption{NPN fototransistor}
+	\label{fig:npntrans1}
+	\end{center}
+\end{figure}
+
+Når der påtrykkes en positiv spænding over collector og emitter benene vil NP overgangen mellem collector og base også blive påtrykket en positiv spænding. Hvis denne overgang belyses, vil der løbe en strøm $I_{lum}$, der på samme måde som base strømmen $I_{b}$ i en almindelig transistor vil styre, hvor stor en strøm der løber gennem transistoren. Derved bliver transistoren styret af, hvor stor en del af det infrarøde lys dioden udsender, der bliver reflekteret af den overflade, sensoren befinder sig over.
+
+Optosensoren er forbundet som vist på figur \ref{fig:fotosch}. R1 styrer, hvor stor strøm der løber i gemmen dioden. Hvis der regnes med et spændingsfald over dioden på $1,25V$ er der spændingsfald på $3,75V$ over R1. $3,75V/180ohm$ det giver en strøm på $I=21mA$ gennem dioden.
+
+\begin{figure}[htb]
+	\begin{center}
+	\includegraphics[scale=0.34,trim=0 0 0 0]{optosch.pdf}%trim=l b r t
+	\caption{Fotosensorkredsløb}
+	\label{fig:fotosch}
+	\end{center}
+\end{figure}
+
+Transistorens arbejdslinje vil i dette kredsløb være:
+
+\begin{align}
+I_{C}=\frac{1}{R2}\cdot V_{CE} - \frac{V_{DC}}{R2}
+\end{align}
+Optosensoren er koblet til ATmega32 chippens komparator gennem port PB2, referencespændingen er koblet til PB3. Ved at ændre referencespændingen er det muligt at justere hvornår optosensoren forårsager et interrupt.

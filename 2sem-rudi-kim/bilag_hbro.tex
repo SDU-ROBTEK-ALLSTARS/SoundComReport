@@ -1,0 +1,11 @@
+\section{H-bro test}\label{sec:bilag_hbrotest}
+For at påvise, at H-broen fungerer til at øge Scalextricbilens bremseevne, er der foretaget en række forsøg. Som beskrevet i sektion \ref{sec:hbro}, er formålet med H-broen at bremse bilen. Hvor stor en kraft motoren skifter retning med, kan vha. microcontrolleren justeres alt efter hvilke værdier der sendes til bilen. Der sendes en hexadecimal værdi fra 0x00-0xFF til bilen, hvor 0x00 er ingen værdi og 0xFF er max bagud/forud-rettet kraft. 0x00 har ingen effekt på bilen og den vil fortsætte upåvirket. Des højere værdien sættes til, des større kraft bremses bilen med. På Figur \ref{fig:hbrotest} kan der ses de 3 bremselængder med henholdsvis a0, kortslutning og fri løb.
+
+\begin{figure}[htb]
+\center
+\includegraphics[scale=0.5]{hbrotest.png}
+\caption{H-bro test}
+\label{fig:hbrotest}
+\end{figure}
+
+Som der ses på figuren, er der markeret en hvid streg på skinnen, som optosensoren opfanger. Når bilen passere denne streg tændes H-broen med den værdi der nu er sendt til den. Som tidligere nævnt skifter motoren retning og hastigheden daler hurtigt. Efter kort tid vil bilen i et kort øjeblik stå stille og bakke. Netop dette øjeblik registreres med målebånd og øjet. Udfra Figur \ref{fig:hbrotest} ses der at jo større Hex Værdi der sendes, jo kortere bremselængde har bilen. Konklusionen på dette forsøg er, at H-broen virker ubeklageligt. 

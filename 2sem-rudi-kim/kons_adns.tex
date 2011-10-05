@@ -1,0 +1,314 @@
+%/*
+%Musesensor
+% - Indledning
+%Til at bestemme positionen af bilen,
+% For at bestemme den nøjagtige position af bilen I forhold til banens start, er der arbejdet med den
+%
+%
+%de teknikker en moderne computermus benytter sig af for at kunne aflæse sin position.
+%
+%Til at bestemme bilen hastighed, er der under bilen monteret en ADNS-9500 mussesensor. Sensoren kan løbende aflæses af bilen microcontroler for ændringer I positionen af sensoren I forhold til overfladen under bilen. Ved en kontinuerlig aflæsning med fast tidsinterval af sensoren, repræsenterer den aflæste værdi direkte hastigheden af bilen, og ved at summere alle 
+%
+%\begin{table}[htb]
+%	\begin{center}
+%	\begin{tabular}{l|l|l}
+%	
+%	Sensor				 & Max hastighed			& Max accelleration		& Teknologi		\\
+%	\hline
+%	ADNK-2080				& 30ips				& 20g 				& LED
+%	ADNS-9500 				& 200ips 				& 30g				& Laser\\
+%
+%
+%	\end{tabular}
+%	\end{center}
+%	\caption{Telegramkommandoer}
+%	\label{tab:kommandoer} %%ref
+%\end{table}
+%
+%
+%Eventuelt lidt om hvordan de virkede før laser.
+%- Forklaring af hvordan den tager billeder af overfladen og sammenligner.
+% - Valg af sensor ud fra krav om hastighed <<<<<<<<<<<<<<<<<
+%  (Billeder af hvordan laser og kamera er placeret i forhold til overfladen)
+%  - Eventuelt henvisning til tidligere artikler omkring brug af musesensore til displacement messurement.
+%  - (Hvorfor er den bedre?)
+%  - Præcission
+%  - Ulæmper
+%
+% - Kommunikations med den? Aflæsning af data fra sensoren
+% - Circle of life
+%; Metoder til aflæsning / timings
+%
+%
+%Til forskel fra en almingelig RS232 seriel kommunkation, er der ved SPI fælles clock som sendes fra MASTER enheden.
+%
+%   - Hastighed på SPI?
+%Beregninger
+%Timings på ADNS sensor
+%  - Hvad kan den fortælle tilbage omkring position (Og hvad kan den ikke)
+%   - Tegninger over SPI hardware interface.
+%   - / Tilslutnig til ATmega32A
+%  - SPI på atmega32A
+%   - Registre
+%   - Interupts
+% - ASM kode til opsamling af data fra sensoren.
+%  - Forskellige modeller for opsamling og behandling af data.
+% - Montering på bilen
+%  - Forklaring af hvad det er den kan se når vi får en dX eller dY.
+%
+% TEST AF SENSOR
+%  - Hvor gode data får vi?
+%LASEREN (Bølgelængde, 
+%
+%Tegninger/Figurer:
+%Indre og yderebane (Se tavle) OK
+%Billeder af bilen fra oven (Skal bruges til visning af placering af sensoren) --  er Niels ved at lave dette?
+%
+%
+%
+%*/
+\subsection{ADNS Sensor}
+En essentiel faktor for at opnå den hurtigste omgangstid på Scalextricbanen, såvel som på en almindelig racerbane er, at bremse ned til svinget på det helt rigtige tidspunkt og holde den hurtigst mulige hastighed hele svinget igennem. Ved en for sen nedbremsning vil bilen have en for høj hastighed i svinget og kører derfor af banen. Modsat vil en for tidlig nedbremsning, i forhold til svinget betyde, at man får en dårligere omgangstid og derved nedsætter chancen for at vinde.
+
+For at microcontrolleren skal vide, præcis, hvor på banen bilen befinder sig, er der monteret en sensor fra en moderne computermus under bilen, da disse netop er i stand til at angive præcise positionsdata. Sensorens opgave er at måle bilens bevægelseshastighed i forhold til banen.
+
+\subsubsection{Hvordan virker den?}
+En moderne optisk mus er bygget op af en lyskilde, i form af en laser eller lysdiode, et kamera og en billedeprocessorenhed. Laseren er monteret så den sidder forskudt i forhold til kameraet (se figur \ref{fig:adns_sideview}), og derfor vil skabe en masse små skygger i forhold til kameraets vinkling. Dette giver en bedre kontrast på billedet fra kameraet, og derved bliver der flere unikke fikspunkter at måle forskydelser i forhold til. Kameraet tager kontinuerligt billeder, og processorenheden regner på billeddataen og finder fikspunkter i billedet. Når sensoren flyttes i forhold til overfladen, vil disse fikspunkter flytte sig i forhold til billedet, optaget af kameraet. Denne information behandles i processoren, og udfra dette er den i stand til at beregne hvordan sensoren har flyttet sig i forhold til overfladen. Dog skal man være opmærksom på, at sensoren ikke er i stand til at aflæse rotation omkring sig selv.
+%(SE FORSIDE AF DATABLAD UNDER THEORY OF OPERATION FOR INPUT TIL TEKST)
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[scale=0.2]{ADNS_sideview.pdf}  
+  \caption{ADNS sensor i forhold til overflade}
+  \label{fig:adns_sideview}
+\end{figure}
+
+\subsubsection{Valg af musesensor} % Fordele ved den valgte sensor
+Ved valg af sensoren er der lagt vægt på, at sensoren er i stand til at opfange positionsdata ved tilstrækkeligt høje bevægelseshastigheder. Før valget af sensor blev der derfor foretaget måling af bilens maksimale hastighed (se Appendiks \ref{sec:bilag_hastighed}), for at bestemme en minimumshastighed som sensoren bør være i stand til at måle. Konklusionen af hastighedsmålingen blev, at sensoren skal være i stand til at aflæse hastigheder op til $5$ $\sfrac{m}{s}$.
+
+Tidligere undersøgelser af optiske sensorer fra mus har vist, at disse har en høj nøjagtighed. I en artikel\footcite{optimouse} fra 2003 er der beskrevet, hvordan en optisk mussensensor kan benyttes til 2D forskydelsesmåling. De har på det tidpunkt kunnet konkludere, at MSE\footnote{Mean square error} på den afprøvede sensor var mindre end $0,018$ $mm^{2}$ under optimale forhold.
+
+Af lagermæssige grunde var det udelukkende Avago Technologies' sensorer der var mulige at fremskaffe til dette projekt, og denne producent oplyser ikke hvad man kan forvente af nøjagtighed på deres sensorer, hvorfor denne faktor ikke kan tages med i valget af sensor. Det må formodes, at resultatet fra tidligere nævnte artikel er en god guideline, til hvilken præcision der kan forventes, og denne er langt bedre end, hvad der vurderes at være nødvendigt.
+
+De fleste musesensorer, der er kigget på, er i stand til at registere accelerationer på omkring $20$ $\sfrac{m}{s^{2}}$. 
+Hvis bilen skal accelerere med $20$ $\sfrac{m}{s^{2}}$ til en makshastighed på $5$ $\sfrac{m}{s}$ vil bilen opnå sin makshastighed på $0,25$ $s$, såfremt det antages at accelerationen er konstant. Ved at observere bilen køre, ses det tydeligt, at dette ikke er tilfældet, og at denne faktor derfor ikke skal tages med i valget af sensor.
+
+Kommunikationsinterfacet til Avago Technologies' musesensorer er enten TWI\footnote{Two Wire Interface} eller SPI\footnote{Serial Peripheral Interface}, hvilke ATmega32 microcontrolleren begge har hardwareunderstøttelse for. Således er dette heller ikke en afgørende faktor for valget af sensor.
+
+%(evt. tabel over valgmuligheder / udvalgte sensorer)
+%Avago technologies tilbyder mange forskellige optiske mussesensore, baseret både på LED og laser teknologi. 
+Ved gennemgang af udvalget af sensorer, viser det sig at langt de fleste sensorer maksimalt kan måle hastigheder op til $1-2$ $\sfrac{m}{s}$, og den eneste sensor, der er i stand til at måle tilstrækkeligt høje hastigheder, er en ADNS-9500 sensor.
+ADNS-9500 er en musesensor designet til professionelle computerspillere, der stiller høje krav til nøjagtigheden af deres mus. Sensoren er i stand til at måle hastigheder op til $5,08$ $\sfrac{m}{s}$ på udvalgte overflader, og accellerationer op til $30$ $g$. Sensorens interne billedeenhed og processeringsenhed arbejder med op til 11750 billeder i sekundet, og laseren, der belyser overfladen, kræver ingen manuel justering og belyser overfladen med ikke synligt lys med en bølgelængde på omkring $832-865$ $nm$. Denne sensor blev valgt til projektet.
+
+\subsubsection{Tilslutning af sensor}
+Det er et krav, for at sensoren skal fungere optimalt, at der benyttes afkobling til alle forsyningsben på kredsen. For at kunne have plads til denne afkobling under bilen, hvor sensoren er monteret, er der til formålet lavet et SMD\footnote{Surface mount devices} print. SMD printet indeholder den nødvendige afkobling samt en transistor, som har til formål at strømbegrænse den interne laser diode. Diagrammet til SMD printet er vist herunder på figur \ref{fig:adns_sch}
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[scale=0.56,trim=50 8 50 30]{ADNS_sch.pdf}    %trim=l b r t
+  \caption{ADNS sensor print}
+  \label{fig:adns_sch}
+\end{figure}
+%\begin{figure}[htb]
+%  \centering
+%  \includegraphics[scale=0.1]{ADNS_smd_front.pdf}  
+%  \caption{ADNS print forside}
+%  \label{fig:adns_smd_front}
+%\end{figure}
+%\begin{figure}[htb]
+%  \centering
+%  \includegraphics[scale=0.1]{ADNS_smd_back.pdf}  
+%  \caption{ADNS print bagside}
+%  \label{fig:adns_smd_back}
+%\end{figure}
+\subsubsection{Aflæsning af sensor}\label{sec:aflaesning_af_sensor}
+ADNS-9500 sensoren kan udelukkende aflæses ved hjælp af SPI. SPI-protokollen er beskrevet senere, men det er vigtigt at være opmærksom på, at dataoverførslen foregår asynkront, og at dataen synkroniseres af en clockpuls, der er styret fra masterenheden, som i dette tilfælde er ATmega32-controlleren.
+
+%(Her skal også stå noget omkring høj og lav byte af hastighedsværdien fra sensoren)\\
+
+Det betyder i praksis, at en læsning af data fra sensoren kræver afsendelse af to bytes. Først sendes adressen der ønskes aflæst, hvorefter en tom byte sendes, mens dataen modtages. Den tomme byte er for, at ATmega32 microcontrolleren sender en clock til sensoren, som den kan sende data tilbage på. %(SE FIGUR??)
+Man kan vælge kontinuerligt at spørge efter de værdier, man skal bruge fra sensoren, eller benytte sig af den indbygge mulighed for ''motion burst''.
+
+Under udarbejdelsen af programkode til at aflæse sensoren er der vurderet fordele og ulemper ved de forskellige modeller for aflæsning, som gennemgås i Appendiks \ref{sec:bilag_adnsaflaesning}. Herunder gennemgås den valgte metode til aflæsning af sensor i detaljer. Konklusionen heraf blev, at benytte sensorens indbyggede motion burst kommando.
+
+Ved motion burst sender man en kommando til sensoren, som herefter sender 14 bytes med data tilbage. De 14 bytes indeholder:
+
+\begin{verbatim}
+BYTE [00] = Motion
+BYTE [01] = Observation
+BYTE [02] = Delta_X_L
+BYTE [03] = Delta_X_H
+BYTE [04] = Delta_Y_L
+BYTE [05] = Delta_Y_H
+BYTE [06] = SQUAL
+BYTE [07] = Pixel_Sum
+BYTE [08] = Maximum_Pixel
+BYTE [09] = Minimum_Pixel
+BYTE [10] = Shutter_Upper
+BYTE [11] = Shutter_Lower
+BYTE [12] = Frame_Period_Upper
+BYTE [13] = Frame_Period_Lower
+\end{verbatim}
+
+Programkoden til aflæsning af sensoren er vist grafisk på figur \ref{fig:ADNS_handling_met1}, og forklaret herunder i trin.
+
+%For at håndtere SPI kaldene og den data der kommer fra sensoren, på den mest effektive måde, er der udarbejdet en model for hvordan microcontrolleren skal benytte interupts til at håndtere dataen, uden at skulle vente på denne. Modellen for hvordan koden til aflæsning af sensoren er bygget op, er vist på figur \ref{fig:ADNS_handling_met1} og beskrevet herunder.
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[scale=0.7]{ADNS_handling_met1.pdf}  
+  \caption{Grafisk beskrivelse af hvordan aflæsningen af sensoren foregår}
+  \label{fig:ADNS_handling_met1}
+\end{figure}
+
+\subsubsection*{Trin 1. Opstart af microcontroller}
+Ved opstart af microcontrolleren indstilles SPI-enheden, tæller værdien byte\_count sættes til 0 og den benyttede timer0 sættes op, så den er klar til brug. Herefter sendes der en 0x00 (versionsnummer) kommando til sensoren, for at teste om kommunikationen er korrekt. Ved modtagelse af forkert svar, genstartes SPI-kommunikationen, og der springes tilbage til opstart af sensoren. Når det korrekte svar (0x33) modtages, fortsættes opstart ved at sende en række kommandoer, der starter sensoren op. Deriblandt upload af firmware og kommandoer til at aktivere laseren og læse \verb@MOTION@-byten på sensoren. \verb@MOTION@ indeholder oplysninger om sensorens status, og kan blandt andet fortælle, om laseren er korrekt startet op, eller om der er sket en fejl i sensoren. Såfremt der er fejl i laseren eller at der på anden måde meldes om fejl i \verb@MOTION@, forsøges genstart af sensor, ellers sendes der en MOTION\_BURST kommando til sensoren, og microcontrollerens opstart fortsættes.
+
+\subsubsection*{Trin 2. Modtagelse af ''afsendelses''-byte}
+Når MOTION\_BURST kommandoen er sendt, kommer der et SPI overførselsinterrupt i microcontrolleren, fordi SPI-protokollen er asynkron og der derfor også vil være modtaget data i samme tidsrum. I interruptet kontrolleres værdien byte\_count, og den vil i dette tilfælde være lig med 0. Da sensoren har brug for $100$ $\mu s$ efter burstkommandoen er sendt, til at dataen i senoren er klar til afsendelse, sættes og aktiveres timeren timer0 samt timer0 overflow interrupt. Herefter afsluttes interruptet.
+
+\subsubsection*{Trin 3. Klar til modtagelse af data}
+Efter noget tid, vil timer0 udløse et overflow interrupt, som følge af, at den afsatte tid til at klargøre dataen i sensoren er gået. I interruptet kontrolleres værdien af byte\_count, og den vil i dette tilfælde være lige med 0, og derfor påbegyndes afsendelse af en tom byte for at modtage første byte. Der tælles en op i byte\_count, og interruptet afsluttes.
+
+\subsubsection*{Trin 4. Modtagelse af byte}
+SPI overførselsinterrupt aktiveres igen. Dataen gemmes i hukommelsen på en foruddefineret adresse, hvor byte\_count lægges til. Byte\_count øges med en, således at den næste modtagede byte ikke bliver skrevet oven i samme adresse. Herefter afsluttes interruptet. Dette trin gentages ind til at byte\_count viser at alle 14 bytes er modtaget.
+
+\subsubsection*{Trin 5. Alle bytes er modtaget}
+Når alle bytes er modtaget, bliver positions- og hastighedsværdierne i hukommelsen opdateret. Herefter påbegyndes hastighedsreguleringen der bliver beskrevet i sektion \ref{sec:hastighedsregulering}. For at opnå et passende tidsinterval mellem afhentning af data fra sensoren, startes nu timer0 og interruptet afsluttes.
+
+\subsubsection*{Trin 6. Påbegyndelse af næste datamodtagelse}
+Når timeren interrupter kontrolleres værdien af byte\_count. Hvis byte\_count tælleren viser, at sidste byte er modtaget, sættes byte\_count lig med 0, og kommandoen for motion burst sendes igen til sensoren. Herefter påbegyndes trin 2 igen, og således fortsættes læsningen af dataen fra sensoren.
+
+% Her kommer noget omkring timingen af afhenting af data
+For at sikre at der er tid nok til at læse data fra sensoren, er der udført beregninger for at finde den totale tid, det tager at afvikle motion burst kommandoen.
+SPI-bussen er nedskaleret med en faktor 8, sådan at bussen kører med 2MHz. Det tager en clock på SPI-bussen at overføre 1 bit, og en SPI-clock tager $\sfrac{1}{(2\cdot10^{6})} = 500ns$. Derfor vil det tage $500ns \cdot 8 = 4000ns$ fra at der er sat data til afsendelse på SPI bussen, til at dette er overført. Yderligere timingtal der bliver brugt i denne beregning er målt ved brug af debuggeren i AVR Studio fra Atmel. Der er lavet en visualisering af, hvornår processoren er i brug på figur \ref{fig:adns_timediag}, for at give en ide om, hvor meget det optager processoren, og hvad tiden går med.
+
+%Clocken på SPI bussen er skaleret ned med /8. Dvs. 16MHz/2 = 2MHz.
+%1 Clock er derfor lig med (1/2000000)s = 500 nanoseconds
+\begin{savenotes}
+\begin{table}[htb]
+	\begin{center}
+	\begin{tabular}{l|l|l|r|r}
+	
+			Nr.\footnote{''Nr.'' refererer til numrene på figur \ref{fig:adns_timediag}} 		& Opgave															& Processor opg	& Tid		& Pct.	\\
+	\hline
+			1							& Transmission af motion burst kommando									& Nej		&   4000 $ns$	& 1,87\%  \\
+			1							& Modtagelse af tom byte og indstilling af timer				& Ja		&   3190 $ns$	& 1,49\%  \\
+			2							& Sensor klargøring af data															& Nej		& 100000 $ns$	& 46,67\%	 \\
+			3							& Afsendelse af 1. ''modtagelsesbyte''									& Ja		&   3190 $ns$	& 1,49\%	\\
+			3							& Data transmission																			& Nej		&   4000 $ns$	& 1,87\%	\\
+			3							& 13 gange afsendelse og data transmission							&	-			&	 93470 $ns$	& 43,62\%  \\
+			3							& Modtagelse af sidste byte og start af timer						&	Ja		&   3440 $ns$	& 1,60\%  \\
+			4 						& Sensor ventetid før ny motion burst (t$_{BEXIT}$)				& Nej		&    500 $ns$	&	0,23\%  \\
+			4							& Afsendelse af ny motion burst kommando								& Ja		&   2500 $ns$	& 1,17\%  \\
+	\hline
+										&	Total tid benyttet																		&				& 214,29 $ \mu s $ &  \\
+										& Beregningstid benyttet																&				&  53,79 $ \mu s$ & 25,10\%  \\
+										& Transmission af data og sensor forsinkelser						&				&  160,5 $ \mu s$ & 74,90\%  \\
+	\end{tabular}
+	\end{center}
+	\caption{Beregning af brugt tid ved afhentning af motion burst data}
+	\label{tab:adns_timing} %%ref
+\end{table}
+\end{savenotes}
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[scale=0.08]{ADNS_timediag.pdf}  
+  \caption{Visualisering af tidsforbrug ved burst mode. Rød = Beregning, Grøn = Fri}
+  \label{fig:adns_timediag}
+\end{figure}
+
+Som det ses i udregningen i tabel \ref{tab:adns_timing} tager det 214$\mu s$ at hente de 14 motion bytes fra sensoren. 
+%Det er nu muligt at beregne, hvor mange motion bursts der kan hentes fra sensoren pr. sekund, og finde ud af om 
+Ud fra at bilen bevæger sig med op til $5$ $\sfrac{m}{s}$, og der ønskes en præcision på $0,5$ $cm$, betyder dette, at dataen fra sensoren skal hentes 1000 gange pr. sekund. Det vil sige, at der skal bruges $1000 \cdot 214,29 \mu s = 0,21 s$ på afhentning af data, så dette vil ikke blive en begrænsning. Ved 1000 hentninger pr. sekund skal processoren bruge $53,79\mu s \cdot 1000 = 53,79ms$ på beregning over dette sekund. Det betyder at det vil optage 5,38\% af processorens regnekapacitet at håndtere afhentning af data fra sensoren.
+
+%Afsendelse af byte										8*500ns   =   4000ns (Fritid)				 1,87%	
+%interrupt															3,19us 		=   3190ns (Proc)					 1,49%
+%Sensor klargøring af data							100us			= 100000ns (Fritid)				46,67%
+%Afsendelse af 1. ''modtagelsesbyte''	3,19us		=   3190ns (Proc)					 1,49%
+%
+%
+%			Data transmisson											8*500ns 	=   4000ns (Fritid)	 1,87%
+%			interrupt ''indlæsning af modtaget byte og afsendelse af ny modtagelses byte''
+%																						3,13us		=   3190ns (Proc)		 1,49%
+%x13 (4000+3190)13 =																			 93470ns					43,62%
+%
+%Data transmission											8*500ns 	=   4000ns (Fritid)				 1,87%
+%Modtagelse af sidste byte							3,44us		=   3440ns (Proc)					 1,60%			(Herunder ikke regnet hastighedregulering)
+%
+%tBEXIT																					=    500ns (Fritid)				 0,23%
+%
+%timer til afsendelse af ny motion burst	2,25us	= 	2500ns (Proc)					 1,17%
+%
+%FRITID: 				160 500 nanoseconds = 160.5 microseconds
+%PROC:						53 790 nanoseconds = 53.79 microseconds
+%TOTAL:					214 290 ns = 214,29 microseconds
+%
+%Den skal tømmes 1000 gange / sek for at opnå 0.5 cm præcision.
+%53 790 000 nanoseconds = 0.05379 seconds ~ 5%
+
+\subsection{Hvordan virker SPI}
+SPI står for Serial Peripheral Interface, og er en asynkron seriel protokol, der blandt andet benyttes til at tilslutte eksterne ADC, DAC og EEPROM enheder. SPI benytter sig af minimum 4 ledere, hvoraf to af dem bruges til selve dataoverførslen. %Der findes forskellige måder at navngive disse 4 ledere på. 
+Herunder er navngivningen fra ADNS-9500 sensorens datablad benyttet til disse ledere: 
+\begin{itemize}
+	\item MOSI (Master Out Slave In)
+	\item MISO (Master In Slave Out)
+	\item SCLK (Shift Clock)
+	\item NCS (Negeret Chip Select)
+\end{itemize}
+%\begin{table}[htb]
+%	\begin{center}
+%	\begin{tabular}{l|l}
+%	MOSI (Master Out Slave In) 	& SDI \\
+%	MISO (Master In Slave Out)	& SDO	\\
+%	SCLK (Data Clock)			& SCLK (Shift Clock) \\
+%	NCS (Negeret Chip Select)	& CE (Chip enable) \\
+%	\end{tabular}
+%	\caption{SPI}
+%	\label{tab:spi}
+%	\end{center}
+%\end{table}
+
+SPI-bussen er bygget sådan op, at der er en hoved (''master'')-enhed på bussen og en, eller flere, under (''slave'')-enheder. For hver slave-enhed der tilsluttes, skal der forbindes et dedikeret NCS ben mellem master og slave enheden. Dette er vist på figur \ref{fig:spi_connectors}.
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[scale=0.2]{spi_connectors.pdf}  
+  \caption{Forbindelse mellem SPI master og en eller flere slave enheder}
+  \label{fig:spi_connectors}
+\end{figure}
+
+Når masterenheden skal udveksle data med en slave enhed på bussen, sættes NCS benet, der er forbundet med slaven, til logisk lav, imens de andre enheders NCS ben sættes til høj. Når en slave-enhed får et 0 på NCS benet, aktiveres kommunikationen med enheden. Masterenheden sætter nu en clock på SCLK benet, og for hvert puls sendes der data fra master til slave på MOSI benet, og data fra slave til master på MISO. Når dataoverførslen er færdig stoppes clocken på SCLK, og NCS benet til slaven sættes igen høj.
+
+Der findes 4 forskellige måder at synkronisere clock pulsen med dataen, og de kan beskrives med CPOL (Clock Polaritet) og CPHA (Clock phase).
+
+\begin{table}[htb]
+	\begin{center}
+	\begin{tabular}{l|l|l}
+Mode		& CPOL	& CPHA \\
+0		& 0		& 0 \\
+1		& 0		& 1 \\
+2		& 1		& 0 \\
+3		& 1		& 1
+	\end{tabular}
+	\caption{SPI indstillinger}
+	\label{tab:spi_settings}
+	\end{center}
+\end{table}
+
+CPOL bestemmer polariteten af clock pulsen. I praksis betyder det om clock pulsen vendes på hovedet, altså om pulsen kommer fra høj og går lav, eller om den kommer fra lav og går høj. CPHA bestemmer om data er klar på dataen er klar på stigende eller faldende flanke. Figur \ref{fig:spi_bus_polarity_and_phase}\footnote{Billede taget fra \url{http://en.wikipedia.org/wiki/File:SPI_timing_diagram2.svg}} illustrerer dette.
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[scale=0.6]{spi_bus_polarity_and_phase.pdf}  
+  \caption{Beskrivelse af CPOL og CPHA}
+  \label{fig:spi_bus_polarity_and_phase}
+\end{figure}
+
+Derudover skal man være opmærksom på, hvorvidt det er det mest betydende (MSB) eller mindst betydende (LSB) bit, der sendes først og frekvensen på clocken mellem de to enheder skal køre med.
+
+Til kommunikation med ADNS-9500 sensoren benyttes mode 3 og MSB først. Dette indstilles i ATmega32 microcontrollerens SPI registre. ATmega32 indeholder to registre, der skal indstilles, når man skal benytte sig at SPI interfacet. SPCR indeholder: SPI interrupt aktiveret, SPI aktiveret, Data Order (MSB eller LSB først), Master select (Er ATmega32en master eller slave på bussen), Clock Polaritet, Clock Fase, Clock hastighed
+
+Derudover er der mulighed for at fordoble hastigheden på SPI bussen i SPSR registeret, ved indstilling af bit 1.
+

@@ -1,0 +1,31 @@
+\section{Indledning}
+Mange robotter har i dag en vis grad af selvstændighed. Autonome robotter er robotter der kan udføre en ønsket opgave, uden løbende, menneskelig vejledning. Udviklingen af flere autonome robotter peger i retning af, at mere og mere i dag bliver automatiseret. Derfor er det vigtigt, at forske og undersøge dette område.
+
+\subsection{Problemformulering}
+Hovedformålet med projektet er at lave en microcontroller-baseret styring til en Scalextric legetøjsracerbil. Dette med henblik på at optimere dens hastighed, så racerbilen kan opnå den hurtigst mulige banetid på en ukendt bane. Dette gøres ved at indsamle data ved hjælp af forskellige sensorer og derefter behandle dem i den software, der skrives til microcontrolleren.
+
+For at opnå det, er der valgt at optimere med følgende tiltag:
+\begin{itemize}
+	\item	ud fra projektgruppens kendskab udvælges der sensorer til dataindsamling i forbindelse med kørsel på bane.
+	\item	software til behandling af sensordata i microcontrolleren i bilen skal optimeres for at opnå hurtigst mulig databehandlingstid.
+	\item	en kommunikationsprotokol skal udvikles for at opnå en ensartet standard for kommunikation til brug ved test, målinger og fejlsøgning.
+	\item montering og styring af H-bro for at opnå kortest mulig bremselængde og på den måde opnå en hurtigere omgangstid.
+	\item et SMD\footnote{Surface mount devices} print skal udlægges og produceres for at fjerne unødig vægt.
+\end{itemize}
+
+\subsection{Projektafgrænsning}
+Projektet skal, som beskrevet i problemformuleringen, indeholde en kombination af hard- og software for at muliggøre dataindsamling, databehandling og kørsel. I sidste ende skal det munde ud i en bil, der kan køre så hurtig som muligt på en ukendt bane. Projektet kommer til at indeholde valg, montering, test og kørsel med forskellige sensorer. Disse sensorer er dem, der efter projektgruppens overbevisning er de bedst egnede til formålet. Det er dog langt fra umuligt, at der findes bedre alternativer til sensorer eller metoder at bruge dem på, som projektgruppen ikke kender til i skrivende stund.
+
+På grund af kompabilitet og af konkurrencemæssige årsager, er der også visse begrænsninger: Den udleverede bil skal benyttes, og der må ikke ændres på den mekaniske konstruktion. Der kan således ikke skiftes motor i Scalextricbilen, hvilket ellers ville have været en åbenlys forbedring. Banen er forsynet med en strømforsyning, hvorfra der maksimalt kan trækkes to ampere. Derudover skal kommunikation også foregå ved 9600 bit/s, hvilket begrænser mængden af data, der kan overføres i et tidsinterval.
+
+Elektronikkonstruktionen bygger på et i forvejen udlagt print, hvorpå der er monteret en ATmega32 microcontroller. Det er et krav til opgaven at den type microcontroller skal bruges. Programmer til skal skrives i AVR Assembler, hvilket også sætter en grænse for, hvor hurtigt kompleks programkode kan udvikles.
+
+\subsection{Metode}
+Efter grundig overvejelse udvælges sensorer og udvikles kredsløb til dem, så en Scalextricbil kan opbygges til at køre så hurtigt som muligt. Derudover udvikles software, som bedst muligt udnytter sensorinput til bestemmelse af, hvordan fortsat kørsel på banen skal foregå.
+%Der er opbygget en racerbil, som efter projektgruppens medlemmer, ses som den bedste opbygning. Efter flere overvejelser, er der valgt det bedste hardware, for at optimere hastigheden og omgangstiden bedst muligt. For at vælge de rette sensorer, er de gennemdiskuteret i gruppen - for netop at vælge de rigtige. Ved hjælp af microcontrolleren og diverse kommandoer, er hardwaren optimeret bedst muligt. Dette gør, efter gruppens overbevisning, at bilen opnår den bedst mulige omgangshastighed.
+
+\subsection{Rapportstruktur}
+Rapporten består, overordnet set, af 3 sammenhængende dele. Den første behandler alle de overvejelser projektgruppen har gjort sig, før den egentlige konstruktion begyndtes. Mere specifikt bestemmes hvilken måde bilen skal køre på, og sensorer til det formål diskuteres og udvælges. Andel del af rapporten gennemgår hardwareimplementeringen og de valgte sensorer beskrives i større detalje. Tredje del af rapporten beskæftiger sig med softwareudvikling og optimering. Her bekrives de forskellige programalgoritmer, der benyttes i forskellige stadier af kørslen.
+
+Til slut diskuteres opnåede resultater
+%Rapporten er skrevet således, at den er delt op i 2 sammenhængende afsnit. Det første afsnit omhandler Hardware, hvor der vil blive beskrevet om alt hardware i projektet. Afsnittet efter vil omhandle sofware, hvor der vil blive beskrevet hvordan hardwaren er blevet brugt i sofware delen. Dette betyder på den anden side, at læseren, der læser rapporten, vil kunne støde på eventuelle gentagelser. Ved gennemgang af rapporten, anbefales det, at læse den udarbejdede tekst til figurerne, for at minimere risikoen for fejlfortolkning af resultaterne. De mest relevante bilag, kan findes bag i rapporten. For at gøre rapporten mere læsevenlig, er udarbejdelse af kurver og tabeller over datamålinger - placeret på den vedlagte CD.

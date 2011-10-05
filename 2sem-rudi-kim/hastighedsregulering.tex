@@ -1,0 +1,38 @@
+\subsection{Hastighedsregulering}
+\label{sec:hastighedsregulering}
+
+Som en del af strategien med at køre en runde for at finde alle svingene og herefter beregne maksimal hastigheden, er der lavet en regulering, som står for at justere signalet til motoren, således at bilens hastighed er så tæt på den ønskede hastighed som muligt. Alternativt kan man antage, at bilen har en bestemt hastighed ved et givet motorsignal, men fordi bilens hastighed afhænger af langt flere faktorer end dette, er denne løsning ikke acceptabel til dette formål. Hastighedsreguleringen vil blandt andet elliminere problemer med spændingsfaldet i banens indflydelse på motorhastigheden, da motorenshastighed er afhængig af dens forsyning fra banen. Formålet er derudover også at optimere nedbremsningen i svingene og, hvis nødvendigt, at vende spændingen over motoren ved hjælp af h-broen (se appendix \ref{sec:bilag_hbrotest}) med henblik på at levere en stor modsat rettet accelleration og derved effektivt bremse bilen til den ønskede hastighed.
+
+Styring af bilens motor foregår ved hjælp at et puls-bredde-moduleret signal, også kaldet PWM "Pulse Width Modulation". Et PWM signal har kun to tilstande, logisk høj (tændt) eller logisk lav (slukket). Udtrykket "Duty cycle" beskriver, hvor stor en del af en periode, signalet befinder sig i høj tilstand. Afhængigt af H-broens tilstand, vil det betyde at des højere duty cyclen bliver, des mere energi tilføres der til motoren. Et eksempel på et PWM signal er vist på figur \ref{fig:pwm}.
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[scale=0.27]{pwm.pdf}  
+  \caption{Beskrivelse af PWM}
+  \label{fig:pwm}
+\end{figure}
+
+
+Ved brug af et PWM signal holder man transistorne i h-broen udenfor det aktive område størstedelen af tiden ved enten at lukke helt op for transistoren eller lukke helt i. Dette afsætter en langt mindre effekt i transistoren, da den kun befinder sig i det aktive område, og dermed kun afsætter effekt, i det øjeblik der skiftes mellem åben og lukket tilstand på transistoren i h-broen. PWM signalet kan genereres direkte på en af microcontrolerens timere, ved hjælp af compare værdien.
+
+Hastighedsreguleringen på bilen er en simpel lineær regulering. Det vil sige, at des mere den nuværende hastighed afviger fra den ønskede, des større ændring tilføres motorens PWM. Program koden til hastighedsreguleringen virker som vist på figur \ref{fig:ADNS_speedcalculation_1}. Yderligere forklaring følger efter figuren.
+
+Til regulering af bilens hastighed, er der benyttet en simpel model, hvor der benyttes en feedback i form af bilens hastighed til at justere imod den ønskede hastighed. Dette er illustreret på figur \ref{fig:hastighedsregulering}.
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[scale=0.75]{Hastighedsregulering.pdf}  
+  \caption{Reguleringssløjfe}
+  \label{fig:hastighedsregulering}
+\end{figure}
+
+Hastighedsreguleringen virker ved, at den har fået angivet en ønsket hastighed fra den øvrige programkode i bilen. Den aktulle hastighed aflæses ved hjælp af musesensoren, og trækkes fra den ønskede hastighed, således at resultatet heraf repræsenterer afvigelsen fra den aktuelle hastighed og dermed fejlen. Fejlen multipliceres med en konstant og adderes til PWM-signalet. Således er fejlen proportional med ændringen af duty cyclen på PWM-signalet. Således vil en stor fejl betyde en stor ændring i PWM-signalet for at mindske denne fejl. Konstanten kan tilpasses efter at opnå optimal regulering, så den er tilstrækkelig stor til at fejl korrigeres hurtigt uden at reguleringen går i selvsving. Selvsving kan opstå, hvis konstanten bliver for stor, og en lille fejl herved multipliceres til en alt for stor korrektion, således at fejlen bliver større i modsat retning.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.75]{ADNS_speedcalculation_1.pdf}  
+  \caption{Programbeskrivelse af hastighedsregulering}
+  \label{fig:ADNS_speedcalculation_1}
+\end{figure}
+
+I programkoden sker reguleringen ved, at H-broens retning bliver bit-shiftet ind og sat som fortegn på nuværende PWM-værdi. Det betyder, at PWM-værdien nu er en signed byte, der angiver retning og duty cycle på motoren. Nu beregnes differencen mellem den nuværende hastighed og den ønskede hastighed ved subtraktion. Resultatet af denne repræsenterer fejlen og en signed byte. Fejlen ganges med reguleringskonstanten og resultatet lægges til den signede PWM-værdi. Den signede værdi bitshiftes nu ud af den signede PWM-værdi, og sættes på H-broen, således at et negativt tal vil vende H-broen, og sætte negativ spænding over elektromotoren. Den nye bitshiftede PWM-værdi sættes nu tilbage i PWM-registeret. For at reguleringen ikke skal gå i selvsving, er der lavet en tæller således at der skal ske et foruddefineret antal aflæsninger af data fra sensoren, før der skal beregnes en ny PWM-værdi.% Er ikke testet i praksis om dette kan undgås med den korrekte konstant

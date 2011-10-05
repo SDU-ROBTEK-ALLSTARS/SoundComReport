@@ -1,0 +1,38 @@
+\section{Hukommelsesforbrug}\label{sec:bilag_hukommelse}
+Liste over benyttet SRAM på Atmega32.
+\begin{table}[htb]
+	\begin{center}
+	\begin{tabular}{l|l|l}
+	
+	Adresse		& Navn		& Benyttelse								\\
+	\hline
+	0x0067	& ADNS\_DATA+0 		& Speed \\
+	0x0068	& ADNS\_DATA+1 		& Position H \\
+	0x0069	& ADNS\_DATA+2 		& Position 4 \\
+	0x0070	& ADNS\_DATA+3 		& Position 3 \\
+	0x0071	& ADNS\_DATA+4 		& Position 2 \\
+	0x0072	& ADNS\_DATA+5 		& Position 1 \\
+	0x0073	& ADNS\_DATA+6 		& Position L \\
+	0x0074	& ADNS\_DATA\_LAST+0 	& Reserveret \\
+	0x0075	& ADNS\_DATA\_LAST+1 	& MOTION byte fra sensor \\
+	0x0076	& ADNS\_DATA\_LAST+2 	& Observation byte fra sensor \\
+	0x0077	& ADNS\_DATA\_LAST+3 	& Delta\_X\_L byte fra sensor \\
+	0x0078	& ADNS\_DATA\_LAST+4 	& Delta\_X\_H byte fra sensor \\
+	0x0079	& ADNS\_DATA\_LAST+5 	& Delta\_Y\_L byte fra sensor \\
+	0x0080	& ADNS\_DATA\_LAST+6 	& Delta\_Y\_H byte fra sensor \\
+	0x0081	& ADNS\_DATA\_LAST+7 	& SQUAL byte fra sensor \\
+	0x0082	& ADNS\_DATA\_LAST+8 	& Pixel\_Sum byte fra sensor \\
+	0x0083	& ADNS\_DATA\_LAST+9 	& Maximum\_Pixel byte fra sensor \\
+	0x0084	& ADNS\_DATA\_LAST+10 	& Minimum\_Pixel byte fra sensor \\
+	0x0085	& ADNS\_DATA\_LAST+11 	& Shutter\_Upper byte fra sensor \\
+	0x0086	& ADNS\_DATA\_LAST+12 	& Shutter\_Lower byte fra sensor \\
+	0x0087	& ADNS\_DATA\_LAST+13 	& Frame\_Period\_Upper byte fra sensor \\
+	0x0088	& ADNS\_DATA\_LAST+14 	& Frame\_Period\_Lower byte fra sensor \\
+	0x0089	& ADNS\_DATA\_LAST+15 	& Byte tæller til modtagelse over SPI \\
+	\hline
+	test	& Ikke benyttet	\\
+	\end{tabular}
+	\end{center}
+	\caption{Hukommelses allokering}
+	\label{tab:temp1} %%ref
+\end{table}

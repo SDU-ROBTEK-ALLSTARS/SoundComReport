@@ -1,0 +1,34 @@
+Formålet med forsøget er, at finde en musesensor der vil kunne opfange bilens hastighed. For at finde ud af om musesensoren kan opfange bilens hastighed, må nogle forsøg foretages. Hvis bilens maxhastighed er 6m/s, og den musesensor, der er tiltænkt projektet, kun kan opfange 5m/s, må en ny musesensor findes. For netop at finde den rigtige musesensor, må disse forsøg derfor foretages.
+\subsubsection*{Forsøgsopstilling}
+\begin{figure}[htb]
+\includegraphics[scale=0.5]{hastighed3.png}
+\caption{Hastighedsopstilling}
+\label{hastighed}
+\end{figure}
+Bilen startes ved den hvide streg og får givet max hastighed. Når bilen er i max hastighed, er en fotocelle opstillet, til at måle dens hastighed. På bilens tag er monteret en sort boks (som ses på figur \ref{hastighed}). Fotocellen måler tiden det tager den sorte boks at pasere A, B og fra A til B (Kaldet AB). Måden hastigheden beregnes på, er ved simpel matematisk udregning. Ved at tage et par forsøg og med tro på at fotocellen fungere, kan dette forsøg siges at være fejlfrit. \\
+Følgende tabel er de seks forsøg, der er blevet udført. 
+\begin{table}[htb]
+\begin{center}
+	\begin{tabular}{| l | l | l | l|}
+			\backslashbox{Forsøg}{Placering} & A (ms) & B (ms) & AB (ms)\\
+			\hline
+			1 & 2.68 & 2.60 & 85.91\\
+			2 & 2.69 & 2.70 & 86.42\\
+			3 & 2.55 & 2.58 & 82.27\\
+			4 & 2.57 & 2.57 & 82.25\\
+			5 & 2.53 & 2.50 & 80.83\\
+			6 & 2.55 & 2.55 & 81.93\\
+		\end{tabular}
+\end{center}
+	\caption{Hastighedsmåleresultater}
+	\label{tab:hastighed} %%ref
+\end{table} \\
+Som tidligere nævnt, kan hastigheden findes ved hjælp af simple matematiske beregninger. Der er udvalgt tilfældigt i forsøgene og afstanden er delt med tiden. Det kan virke overflødigt at tage seks udregninger med, men for at vise forsøgene næsten er identiske, er dette alligevel valgt. 
+\begin{align*}
+Hastighed&=\frac{Afstand}{Tid} = \frac{1.1\cdot 10^{-2}m}{2.53 \cdot 10^{-3}s} = 4.35 \frac{m}{s}\\
+Hastighed&=\frac{Afstand}{Tid} = \frac{1.1\cdot 10^{-2}m}{2.50 \cdot 10^{-3}s} = 4.40 \frac{m}{s}\\
+Hastighed&=\frac{Afstand}{Tid} = \frac{1.1\cdot 10^{-2}m}{2.55 \cdot 10^{-3}s} = 4.31 \frac{m}{s}\\
+Hastighed&=\frac{Afstand}{Tid} = \frac{350\cdot 10^{-3}m}{80.83 \cdot 10^{-3}s} = 4.33 \frac{m}{s}\\
+Hastighed&=\frac{Afstand}{Tid} = \frac{350\cdot 10^{-3}m}{81.93 \cdot 10^{-3}s} = 4.27 \frac{m}{s}
+\end{align*}
+Forsøget er udført uden top-karosset monteret på bilen og bilen vil derfor aldrig kunne opnå denne max hastighed - da vægten er betydelig mindre. Konklusionen på dette forsøg er, at hvis musesensoren kan opfange mere end 4.40m/s, er det mere end rigeligt.

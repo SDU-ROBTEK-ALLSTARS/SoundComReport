@@ -1,0 +1,33 @@
+\section{Kommandoer}\label{sec:bilag_kommandoer}
+I det, der er implementeret en softwarekommunikationsprotokol, er der en given mængde kommandoer bilen kan reagere på. Samtidig er der ligeså et antal mulige svar. For at holde styr på dem alle findes i Tabel \ref{tab:kommandoer} en oversigt over kommandoer.
+
+\begin{savenotes}
+\begin{table}[htb]
+	\begin{center}
+	\begin{tabular}{l|l|l}
+	
+	TYPE									& KOMMANDO																					& DATA																		\\
+	\hline
+	\verb@0x55@ (Set) 		& \verb@0x01@ (Sæt low(adresse\footnote{test}))			& \verb@0x00 - 0xFF@ (Hastighedsniveau)		\\
+												& \verb@0x09@ (Sæt high(adresse\footnote{test}))		& \verb@0x00 - 0xFF@ (Hastighedsniveau)		\\
+												& \verb@0x09@ (Kør baglæns)													& \verb@0x00 - 0xFF@ (Hastighedsniveau)		\\
+												& \verb@0x09@ (Kør baglæns)													& \verb@0x00 - 0xFF@ (Hastighedsniveau)		\\
+			 									& \verb@0x10@ (Kør forlæns)													& \verb@0x00 - 0xFF@ (Hastighedsniveau)		\\
+			 									& \verb@0x11@ (Stop)																& \verb@-@																\\
+			 									& \verb@0x12@ (\verb@MODE@=Auto) 										& \verb@-@																\\
+												& \verb@0x12@ (\verb@MODE@=Default)									& \verb@-@																\\
+	\hline
+	
+	\verb@0xAA@ (Get)			& \verb@0x12@ (\verb@MODE@)													& \verb@0x??@ (\verb@MODE@ register)			\\
+	
+	\hline
+		
+	\verb@0xBB@ (Reply)		& \verb@0x10@ (Error)																& \verb@0x00 - 0xFF@ (Fejlkode)						\\
+												& \verb@0x12@ (\verb@MODE@)													& \verb@0x??@ (\verb@MODE@ register)			\\
+
+	\end{tabular}
+	\end{center}
+	\caption{Telegramkommandoer}
+	\label{tab:kommandoer} %%ref
+\end{table}
+\end{savenotes}

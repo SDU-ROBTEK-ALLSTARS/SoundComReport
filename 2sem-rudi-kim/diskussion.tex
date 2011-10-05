@@ -1,0 +1,25 @@
+\section{Diskussion}
+Valget af ADNS-9500 til afstandsmåling var et modigt valg, da gruppen fra start var klar over, at det var en svær løsning. Forventningen var, at opnå en højere præcision end med andre løsningsmetoder. Da ADNS-9500 sensoren først blev testet, på et Arduino udviklingsboard, virkede kommunikationen uden problemer. Samspillet med Assemblerkoden på ATmega32 microcontrolleren endte dog med at give problemer. Opstart, firmwareupload og umiddelbare tests forløb problemtfrit, men efter nogen tid mistedes kommunikationen med sensoren. Årsagen til fejlen er stadig ikke opdaget: Det eneste fælles for fejlene har været, at de er opstået mellem 20 sekunder og 5 minutter efter opstart af sensoren, hvilket har gjort fejlsøgning svær.
+
+Der har under test været indikationer på, at strømmen kort afbrydes når bilen krydser overgangen mellem to banestykker. Det har givet sig til udtryk ved, at forbindelsen med bluetooth modulet er blevet afbrudt, og forbindelsen til det forbundede terminalprogram dermed også er blevet afbrudt, imens at microcontrolleren har fortsat uafbrudt. Hvis strømforsyningen i bilen er ustabil, kan dette have haft indflydelse på den anvendte musesensor.
+
+En alternativ løsning til musesensoren kunne have været en rotationsenkoder. Denne ville have været lettere at implementere, da man kunne have undgået at anvende SPI kommunikation. En rotationsenkoder er ikke blevet brugt, da en løsning på problemerne med ADNS-9500 sensoreren hele tiden har syntes at være indenfor rækkevidde.
+
+Projektet vil kunne udvides med en elektromagnet, hvorved der muligvis vil kunne opnås en større hastighed i sving. Den mulighed er dog ikke blevet forfulgt, da det har været gruppens vudering, at det var vigtigere, at optimere softwaren til kørsel af bilen.
+
+
+%ADNS fejlsøgnings har givet lille tid til optimering af kørsel - rotationsenkoder ville måske ha været bedre at have samtidig så test kunne udføres tidligere
+
+%Assembler vs C = lang tid brugt på kode debug / skrive simple prorgammer
+
+%hardware SPI/interrupt prioritering = øget præcision på ADNS
+
+%Man kan monitorere bilens energiforbrug og virkningsgrad, baseret på målt hastighed og acceleration(kraft) vs. målt elektrisk energiforbrug.
+
+%At der laves en teoretisk (matematisk) model af bilens kørsel på banen, hvor-ved det skal være muligt at lave en teoretisk bedste gennemkørsel (på bag-grund af forskellige parametre, der afhænger af bilens og banens egenska-ber), der så kan sammenlignes med den bedste tid, der faktisk opnås.
+
+%ADNS kan detektere velocity sidelæns
+
+%regulering af hastighed 
+
+%større, software FIFO, sendebuffer?

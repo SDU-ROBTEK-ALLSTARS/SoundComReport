@@ -1,0 +1,188 @@
+\subsection{Programtilstande}
+Som tidligere omtalt i sektion \ref{sec:metodevalg}, er det valgt, at der skal køres ''opmålt'' kørsel. Det vil sige, at der først køres en eller, for den sags skyld, flere opmålingsrunder, hvor det bestemmes til hvilke positioner bilen møder sving. Derefter skal bilen skifte til at køre efter de tidligere opmålte data. Der er på det grundlag blevet introduceret en række forskellige \textit{tilstande}, som softwaren til bilen kan befinde sig i. Tilstand vil herfra blive brugt som en beskrivelse af, hvilken del af koden der eksekveres på ATmega32 microcontrolleren.
+
+En byte i hukommelsen bruges som statusregister: Afhængig af hvilke bits, der er sat, eksekveres bestemte stykker kode. Hvert stykke, eller tilstand, tjekker løbende, om der er sket en ændring af det nævnte statusregister. Hvis der ikke er, fortsætter den ''i rundkreds''. Hvis der er, brydes der, og afhængig af hvad den nye tilstand er, køres kode et nyt sted i programhukommelsen. Tabel \ref{tab:mode_bits} viser den byte, der indholder de flag, der bestemmer hvilken tilstand, der er aktiv.
+
+\subsubsection*{MODE - Statusregister for tilstand}
+\newcolumntype{K}{>{\centering\arraybackslash}X}%
+\begin{table}[H]
+	\begin{center}
+	\begin{tabularx}{0.98\textwidth}{| K | c | c | K | K | K | K | K |}
+	\multicolumn{1}{c}{7} & \multicolumn{1}{c}{6} & \multicolumn{1}{c}{5} & \multicolumn{1}{c}{4} & \multicolumn{1}{c}{3} & \multicolumn{1}{c}{2} & \multicolumn{1}{c}{1} & \multicolumn{1}{c}{0} \\
+	\hline
+	\verb@MD_SET@ & \verb@-@ & \verb@-@ & \verb@MD_PRERACE@ & \verb@MD_PREWARM@ & \verb@MD_RACE@ & \verb@MD_WARM@ & \verb@MD_DEF@ \\
+	\hline
+	\end{tabularx}
+	\end{center}
+	\caption{MODE register}
+	\label{tab:mode_bits} %%ref
+\end{table}
+
+\begin{itemize}
+	\item \textbf{Bit 7 - Settings Flag}\\
+	Dette flag er det eneste, der er fælles for de forskellige tilstande. I det en ny tilstand aktiveres bliver dette flag nulstillet. Dermed ved den nye tilstand, at den skal sætte indstillinger for netop den nye tilstand. Hver tilstand har et antal forskellige ting, der skal initialiseres før hovedrutinen udføres. Så snart det er sket, sættes \verb@MD_SET@, og det bliver ved med at være sat, indtil der skiftes til en ny tilstand.
+	\item \textbf{Bit 6:5 - Reserveret}\\
+	Disse bits er ikke brugt og bliver ikke læst, men de er reserveret til eventuelt senere brug. Der bør derfor skrives 0 til dem i alle tilfælde.
+	\item \textbf{Bit 4 - Pre-race tilstand}\\
+	Dette bit er 1 når pre-race tilstand er sat. Pre-race tilstand er trinnet før race tilstand, og det tidspunkt i koden, hvor beregninger foretages som forberedelse til den egentlige tidskørsel.
+	\item \textbf{Bit 3 - Pre-warmup tilstand}\\
+	Dette bit er 1 når pre-warmup tilstand er sat. I pre-warmup tilstand søges der efter målstregen således, at warmup tilstanden kan aktiveres, så snart mållinjen krydses.
+	\item \textbf{Bit 2 - Race tilstand}\\
+	Dette bit er 1 når race tilstand er sat. Dette er tidskørslen, hvor den hurtigst mulige omgangstid ønskes sat. Data indsamlet i warmup tilstand benyttes til at bestemme hvordan og hvornår hastigheden skal ændres.
+	\item \textbf{Bit 1 - Warmup tilstand}\\
+	Dette bit er 1 når warmup tilstand er sat. Warmup tilstand er den programrutine, hvor der indsamles data: Hvornår der forekommer sving, og til hvilken position det sker.
+	\item \textbf{Bit 0 - Default tilstand}\\
+	Dette bit er 1 når default tilstand er sat. Når default tilstand er aktiv, foretager bilen sig intet af sig selv. Alle funktioner er passive og f. eks. kørsel, eller start af automode, sker kun ved input fra brugeren.
+\end{itemize}
+Kun et af de tilstandsbestemmende bits bør være sat ad gangen.
+
+\begin{figure}[htb]
+	\begin{center}
+	\includegraphics[page=1,scale=0.80,trim=30 440 0 100]{modes.pdf} %trim=l b r t
+	\caption{Programtilstande}
+	\label{fig:modes}
+	\end{center}
+\end{figure}
+
+Det er et krav til projektet, at bilen skal kunne startes med \textit{automode}-kommandoen og derefter køre autonomt. Figur \ref{fig:modes} illustrerer, hvordan automode består af pre-warmup, warmup, pre-race og race-tilstand. Ved boot sættes default tilstand som udgangspunkt. Der skal så et manuelt input (GET-telegram via. USART) til at aktivere automode, som her begynder i pre-warmup tilstand.
+
+Når pre-warmup tilstand er sat, kan bilen klare sig på egen hånd. Når målstregen krydses, sørger komparator interruptrutinen (udløst når optocoupleren passerer målstregen) for at skifte til næste tilstand i rækkefølgen: Pre-warmup, warmup, pre-race og race. Komparatorinterruptet aktiverer timer1 overflow interruptet for at tilføje en forsinkelse, før komparatorinterruptet næste gang kan udløses. Grunden til dette er, at at målstregen ellers kan udløse flere komparatorinterrupts, hvis ikke den er fuldstændig jævn.
+
+Pre-warmup og pre-race tilstandene er, som nævnt, forløbere til warmup og race tilstandende, henholdsvis. Derfor beskrives efterfølgende warmup-og racetilstand i detaljer.
+
+\subsubsection{Warmup}
+Warmup-tilstand er, hvor banen måles op ved en hastighed, hvor det er sikkert, at bilen ikke falder af. Målet er at detektere, hvornår bilen kører ind i et sving, og hvornår den kører ud af det. Det vil sige, at analog-til-digital konverteren, og dermed accelerometerværdien, skal aflæses løbende, og når et udslag detekteres, skal positionen, hvor det sker, gemmes. Til det formål oprettes en tabel i SRAM, herfra kaldet \verb@EVTTBL@, som indeholder position samt om der drejes (og hvilken retning), eller om der køres ligeud. Det er vigtigt at notere, at det kun er, når der sker en \textit{ændring} fra sving til et lige stykke, eller omvendt, at der skal gemmes et datasæt. \verb@EVTTBL@ ser ud som vist i Tabel \ref{tab:evttbl}, hvor \verb@Pos[5:0]@ er de 6 bytes, der gemmer nuværende position (opdateret løbende af SPI interruptrutinen, der læser data fra ADNS9500 sensoren). \verb@TURNSTS@ er en værdi, bestemt af en ADC måling, der fortæller om hændelsen beskrevet er et højre- eller venstresving eller et lige banestykke. \verb@TURNSTS@ kan antage værdierne 0x01 (lige ud), 0x02 (venstre) og 0x04 (højre). \verb@Pos[x]@$_{y}$ betegner en målt værdi.
+
+\begin{table}[htb]
+	\begin{center}
+	\begin{tabular}{c|c|c|c|c|c|l}
+	\multicolumn{6}{c|}{Position} & \verb@TURNSTS@\\
+	\hline
+	\verb@Pos[5]@$_{0}$ & \verb@Pos[4]@$_{0}$ & \verb@Pos[3]@$_{0}$ & \verb@Pos[2]@$_{0}$ & \verb@Pos[1]@$_{0}$ & \verb@Pos[0]@$_{0}$ & \verb@TURNSTS@$_{0}$ \\
+	\hline
+	\verb@Pos[5]@$_{1}$ & \verb@Pos[4]@$_{1}$ & \verb@Pos[3]@$_{1}$ & \verb@Pos[2]@$_{1}$ & \verb@Pos[1]@$_{1}$ & \verb@Pos[0]@$_{1}$ & \verb@TURNSTS@$_{1}$ \\
+	\hline
+	\verb@Pos[5]@$_{2}$ & \verb@Pos[4]@$_{2}$ & \verb@Pos[3]@$_{2}$ & \verb@Pos[2]@$_{2}$ & \verb@Pos[1]@$_{2}$ & \verb@Pos[0]@$_{2}$ & \verb@TURNSTS@$_{2}$ \\
+	\hline
+		... & ... & ... & ... & ... & ... & \multicolumn{1}{|c}{...}
+	\end{tabular}
+	\end{center}
+	\caption{EVTTBL}
+	\label{tab:evttbl} %%ref
+\end{table}
+
+I løbet af prøvekørsler opdagedes der, at de målinger, der optages af analog-til-digital konverteren, ind imellem kan \textit{spike} (se Appendiks \ref{sec:bilag_acc}). Det vil sige, at der er risiko for, at der detekteres sving, hvor der i virkeligheden ikke er det. Det har altså ikke været nok bare at holde øje med udslag fra accelerometeret. Det har på det grundlag været nødvendigt at modificere koden, der læser ADC værdier, til ikke uden videre at ''godkende'' og gemme alle målinger. Når warmup-tilstand er aktiv, gennemløbes koden, der herunder beskrives, helt indtil der skiftes tilstand igen, efter der er kørt en omgang på banen, og målstregen krydses.
+
+\begin{figure}[htb]
+	\begin{center}
+	\includegraphics[page=1,scale=0.80,trim=150 162 150 108]{adc_logging.pdf} %trim=l b r t
+	\caption{Detektering af svingændring}
+	\label{fig:acd_log}
+	\end{center}
+\end{figure}
+
+Så snart warmup tilstand aktiveres initialiseres en pointer\footnote{16-bit værdi - gemt i to 8-bit registre - der peger på en adresse i SRAM} til at pege på \verb@EVTTVL@ hvorefter en ADC konvertering startes. Så snart den første konvertering er begyndt forløber processen som vist på Figur \ref{fig:acd_log}. Ideen bag løkken er, at der skal 10 ADC (og dermed accelerometer) målinger til for at et ny ændring af sving logges. Alle 10 målinger skal konvergere enten over 140 (højresving), under 119 (venstresving) eller mellem de to værdier (lige ud). Hvis ikke de gør det, begyndes en ny måleserie. Positionen til stedet hvor en svingændring sker, læses altid \textit{første} gang en ændring detekteres, så der ikke forekommer en forskydelse fra den egentlige sving-position, til den målte. Tærkselværdierne for, hvornår sving registreres, er bestemt ud fra målinger af accelerometerdata - se Appendiks \ref{sec:bilag_acc}.
+
+For hver svingændring, der gemmes i hukommelsen, øges pointerværdien med 7 (6 byte til position og 1 til \verb@TURNSTS@ værdien). Når warmup-tilstand ender (når målstregen krydses og pre-race tilstand aktiveres) sættes bilens position til 0 og pointerværdien gemmes på en fast adresse i SRAM, så både start- og slutadressen på \verb@EVTTBL@ er kendt.
+%
+%		PSEUDO/C-KODE til ADC sving detektering
+%
+%\begin{lstlisting}[language=C,caption={pseudo},label={code:temp}]
+%
+%//Der skal bruges 10 målinger i træk, hvor der drejer samme vej for at en svingændring logges
+%while (c < 10)
+%{
+%	//Læs nuværende ADC værdi
+%	adcVal = ADCH;
+%	
+%	//Bestem om der køres til højre, venstre eller ligeud
+%	if (adcVal > thresholdHigh)
+%	{
+%		currentTurnsts = right;
+%	}
+%	else if (adcVal < thresholdLow)
+%	{
+%		currentTurnsts = left;
+%	}
+%	else
+%	{
+%		currentTurnsts = straight;
+%	}
+%	
+%	//Hvis vi drejer samme vej som forrige check øges counteren, hvis ikke resettes den
+%	if (currentTurnsts == lastTurnsts)
+%	{
+%		c++;
+%	}
+%	else
+%	{
+%		c = 0;
+%	}
+%	
+%	//Der "huskes" hvilken retning der lige er blevet kørt i
+%	lastTurnsts = currentTurnsts;
+%}
+%
+%//Idet counteren når 10 gemmes position og sving-retning
+%saveValues();
+%
+%\end{lstlisting}
+%
+
+\subsubsection{Race}
+Når race-tilstand aktiveres begynder kørsel efter en ny tabel i hukommelsen: \verb@DRVTBL@. Det er en tabel, der oprettes i løbet af pre-race tilstand. Den indeholder position og en beregnet hastighed, hvormed bilen skal køre. Hastigheden er den eneste variabel der kan ændres under kørsel - det sørger hastighedsreguleringen\footnote{Se sektion \ref{sec:hastighedsregulering} om hastighedsregulering} for. Der omregnes fra en sving-betegnelse (\verb@TURNSTS@) til en hastighed før den egentlige tidskørsel indtræder for at mindske kravet til ledige clockcycles i microcontrolleren. Hvis \verb@TURNSTS@ først skulle læses, og derefter bruges til at bestemme en hastighed, ville det optage unødig processortid under tidskørslen. Der er til gengæld nok plads i SRAM til at lagre \verb@DRVTBL@ uden konsekvenser.
+
+Omregningen fungerer ved, at der indlæses et datasæt, altså en tabelrække på 7 bytes, fra \verb@EVTTBL@ i SRAM til registre $r0$ $<$ $R$ $<$ $r31$, så der kan arbejdes med dataen. Formålet er at læse en position, hvortil der vides, om bilen enten er på vej \textit{ind} i et sving eller på vej \textit{ud} af det. Det fortæller \verb@TURNSTS@-værdierne forskellige steder på banen. De tre forskellige scenarier, der kan bestemmes ud fra de målte data i warmup-tilstand er vist i Tabel \ref{tab:turnstsvals}.
+
+\begin{table}[htb]
+	\begin{center}
+	\begin{tabular}{l|l}
+	 \multicolumn{1}{c|}{Køresituation} & \verb@TURNSTS@ \\
+	\hline
+	 Fra et lige banestykke til et højresving & 0x04\\
+	 Fra et lige banestykke til et venstresving & 0x02\\
+	 Fra et sving til et lige stykke & 0x01\\
+	\end{tabular}
+	\end{center}
+	\caption{TURNSTS-værdier i forskellige køresituationer}
+	\label{tab:turnstsvals} %%ref
+\end{table}
+
+Figur \ref{fig:banemapping} viser et banestykke med et sving. Scalextricbilen kører fremad og er på vej ind i svinget ved punkt $A$. Lidt senere kører den ud af svinget ved punkt $B$. Punkt $A$ og $B$ måltes i løbet af warmup-tilstand og har dermed fået \verb@TURNSTS@-værdierne: \verb@TURNSTS@$_{A}$ = 0x04 og \verb@TURNSTS@$_{B}$ = 0x01 med tilhørende position \verb@Pos[5:0]@$_{A}$ og \verb@Pos[5:0]@$_{B}$. Der ønskes at bestemme en ny position, \verb@Pos[5:0]@$_{A}'$, som er den, hvor hastighedsændringen (her sænkelse af hastigheden før sving $A$) skal ske. Den nye position bestemmes ved at trække en konstant fra \verb@Pos[5:0]@$_{A}$, således at hastighedsjusteringen kan ske \textit{før} svinget nås. Bilen har nemlig en vis bremselængde\footnote{Se appendiks \ref{sec:bilag_hbrotest} om test med H-bro}, som der skal tages højde for. Når bilen kører ud af svinget, kan hastigheden også godt justeres op, før den er helt ude på det lige stykke.
+
+\begin{figure}[htb]
+	\begin{center}
+	\includegraphics[page=1,scale=0.24,trim=0 0 0 0]{banemapping.pdf} %trim=l b r t
+	\caption{Mapping af banestykke}
+	\label{fig:banemapping}
+	\end{center}
+\end{figure}
+
+Ligesom der findes tre forskellige værdier for \verb@TURNSTS@ findes tre forskellige værdier for offset konstantenterne, herfra kaldet \verb@OS@$_{TURNSTS_{RIGHT}}$, \verb@OS@$_{TURNSTS_{LEFT}}$ og \verb@OS@$_{TURNSTS_{STRAIGHT}}$ (også vist på Figur \ref{fig:banemapping}). De er bestemt ved prøvekørsel på en test bane. På samme grundlag findes der 3 forskellige hastigheder, \verb@V@$_{RIGHT}$, \verb@V@$_{LEFT}$ og \verb@V@$_{STRAIGHT}$, som ligeså er bestemt empirisk. Hastighederne er 8-byte værdier og maksimal opløsning er, som følge af det, 256.
+
+Den nye tabel, \verb@DRVTBL@, som der skal følges under tidskørsel får på den måde samme struktur som \verb@EVTTBL@, men med en hastighedsværdi, \verb@V@, som erstatning for for \verb@TURNSTS@, og en ny position, \verb@Pos[5:0]@$_{}'$.
+
+\begin{table}[htb]
+	\begin{center}
+	\begin{tabular}{c|l c c|l}
+	\multicolumn{2}{c}{EVTTBL} & & \multicolumn{2}{c}{DRVTBL} \\
+	\cline{1-2} \cline{4-5}
+	Position & \verb@TURNSTS@ & & Position' & \verb@V@ \\
+	\cline{1-2} \cline{4-5}
+	\verb@Pos[5:0]@$_{0}$ & \verb@TURNSTS@$_{0}$ & 								& 
+	\verb@Pos[5:0]@$_{0}'=$ \verb@Pos[5:0]@$_{0}-$\verb@OS@$_{TURNSTS_{0}}$ & \verb@V@$_{0}$ \\
+	
+	\verb@Pos[5:0]@$_{1}$ & \verb@TURNSTS@$_{1}$ & $\Rightarrow$ 	& 
+	\verb@Pos[5:0]@$_{1}'=$ \verb@Pos[5:0]@$_{1}-$\verb@OS@$_{TURNSTS_{1}}$ & \verb@V@$_{1}$ \\
+	
+	\verb@Pos[5:0]@$_{2}$ & \verb@TURNSTS@$_{2}$ & 								& 
+	\verb@Pos[5:0]@$_{2}'=$ \verb@Pos[5:0]@$_{2}-$\verb@OS@$_{TURNSTS_{2}}$ & \verb@V@$_{2}$ \\
+	
+	... & \multicolumn{1}{c}{...} & & ... & ...
+	\end{tabular}
+	\end{center}
+	\caption{Omregning fra EVTTBL til DRVTBL}
+	\label{tab:drvtbl} %%ref
+\end{table}
+
+Selve kørslen foregår ved løbende at læse en tabelrække fra \verb@DRVTBL@-tabellen og sammenligne bilens position til et bestemt øjeblik med den, der står i tabellen. Så snart bilens position er den samme, eller over den, der står i \verb@DRVTBL@, skal en eventuel hastighedsændring udføres og en ny tabelrække indlæses. Kører bilen over målstregen nulstilles dens nuværende positionsværdi. På samme tidspunkt skulle enden af \verb@DRVTBL@ være nået, og der startes igen fra begyndelsen af tabellen.

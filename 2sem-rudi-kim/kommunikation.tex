@@ -1,0 +1,120 @@
+\subsection{Kommunikation}
+For at kunne kommunikere med microcontolleren i Scalextricbilen på en ensartet måde, skal en softwarebaseret kommunikationsprotokol implementeres. Selve kommunikationen foregår via. USART, som er en hardwareenhed til seriel kommunikation indbygget i ATmega32 microcontrolleren. Fra microcontrolleren føres sende- og modtagesignaler videre til et bluetoothmodul, der muliggør trådløs kommunikation.
+
+\subsubsection{AVR USART}
+USART i AVR ATmega32 chippen er opbygget af tre hoveddele: Sender, modtager og clockgenerator. Clockgeneratoren er ansvarlig for at generere en \textit{baud rate}, hvilket er hvor mange pulser i sekundet, dataen overføres med. Baud raten genereres ved, at en tæller - der drives af system clockfrekvensen - tæller ned fra værdien, som står i \verb@UBBR@ registret, til nul. I dette projekt benyttes en baud rate på 9600 bit/s. Ligning \eqref{eq:baud} for baud rate i normal (når \verb@U2X@ er sat til 0), asynkron tilstand, er givet i databladet for ATmega32 microcontrolleren\footcite[151]{atmega32}.
+
+\begin{equation}
+BAUD=\dfrac{f_{osc}}{16(UBBR+1)} \Leftrightarrow UBBR=\dfrac{f_{osc}}{16 BAUD}-1
+\label{eq:baud}
+\end{equation}
+
+Divisoren 16 kommer af, at modtage-logikken synkroniserer indkommende seriel kommunikation med system clockfrekvensen, $f_{osc}$. I normal tilstand er \textit{sample raten} 16: Når der detekteres et indkommende signal (når signalet skifter fra høj til lav), laves 16 målinger i løbet af startbitten. Modtageren benytter så de tre midterste målinger til at synkronisere efter, så den ''rigtigste'' måling opnås. På samme måde samples i løbet af modtagelsen af data bits.
+
+På grund af forholdet mellem systemclockfrekvensen, $f_{osc}$, \verb@UBBR@ værdien og baud- og samplerate beskrevet i Ligning \eqref{eq:baud} gives der også anledning til en vis fejl, da den ønskede baud rate ikke altid kan genereres præcist ved en given clockfrekvens. I dette projekt benyttes en krystal, der svinger ved 16 MHz, og kravet til baud rate er 9600 bit/s. Ligningen \eqref{eq:baud} bliver således:
+
+\begin{equation*}
+UBBR=\dfrac{16 \cdot 10^{6}}{16 \cdot 9600}-1=103+\dfrac{1}{6}
+\end{equation*}
+
+Der er altså $\sfrac{1}{6}$ ''i rest'', som ikke kan skrives til \verb@UBBR@ registret, da det kun godtager en 16-bit hex værdi. Det giver en fejl på:
+
+\begin{align*}
+Afvigelse&=
+\left(
+\dfrac
+			{
+			baud rate_{tætteste match}
+			}
+			{
+			baud rate
+			}
+-1
+\right) \cdot 100\%
+\\&=
+\left(
+\dfrac
+			{
+			\dfrac{16 \cdot 10^{6}}{16(103+1)}
+			}
+			{
+			\dfrac{16 \cdot 10^{6}}{16(103+\dfrac{1}{6}+1)}
+			}
+-1
+\right) \cdot 100\%
+\\&\approx 0,16\%
+\end{align*}
+
+hvilket selvfølgelig ikke er perfekt, men bestemt acceptabelt i det miljø, kommunikationen bruges.
+
+\subsubsection{Modtagelse}
+Kommunikationsprotokollen skal overholde et fastlagt format af telegrammer til- og fra microcontrolleren. Det er tre byte langt og består af en \verb@TYPE@ byte, en \verb@COMMAND@ byte og en \verb@DATA@ byte (se Tabel \ref{tab:telegramformat}). Tilsammen bestemmer de en handling, som microcontrolleren skal udføre.
+
+\begin{table}[htb]
+	\begin{center}
+	\begin{tabular}{c|c|c}
+	Byte 1 & Byte 2 & Byte 3 \\
+	\hline
+	\verb@TYPE@ & \verb@KOMMANDO@ & \verb@DATA@ \\
+	\end{tabular}
+	\end{center}
+	\caption{Telegramformat}
+	\label{tab:telegramformat} %%ref
+\end{table}
+
+ATmega32 USART'en har en hardwarebuffer til brug ved modtagelse. Det er en 2 byte lang, cirkulær, FIFO\footnote{First In, First Out} buffer. Den tømmes, idet man læser fra \verb@UDR@ I/O adressen. På trods af, at skifteregistret faktisk også benyttes som et tredie buffer-niveau, kan det ikke forudses, med hvilken hastighed et telegram bliver sendt. Derfor har det været nødvendigt at skrive en softwarebuffer for at undgå, at microcontrolleren ingenting laver, mens den venter på ny indkommende data.
+
+Softwarebufferen er ganske enkel, og består af to fastlagte adresser i microcontrollerens SRAM. Det vil sige, at hardwarebufferen er fri til at modtage et nyt telegram mens en handling eksekveres ud fra det, i hukommelsen, gemte telegram. Der benyttes interrupt-dreven modtagelse. Interrupt-flaget bliver sat hver gang en ny modtagelse er sket, og dataen er klar til at blive læst fra \verb@UDR@ registret. Samtidig holder en tæller styr på, hvilken byte i rækken af 3, der er den næste, således at en handling kan sættes igang så snart et fuldstændigt telegram er modtaget.
+
+\begin{figure}[htb]
+	\begin{center}
+	\includegraphics[page=1,scale=0.6,trim=113 96 123 80]{comms.pdf} %trim=l b r t
+	\caption{USART Recieve Complete interrupt og behandling af telegram}
+	\label{fig:usart_receive}
+	\end{center}
+\end{figure}
+
+På Figur \ref{fig:usart_receive} ses et diagram over USART Receive Complete interruptrutinen, som udføres hver gang, der er ulæst data i \verb@UDR@ bufferen. De to første bytes, der bliver modtaget i en række, gemmes i hukommelsen, og så snart den tredje modtages, udføres den instruktion, telegrammet giver. Hvis ikke rutinen kender den, eller de bytes, der bliver modtaget, meldes der fejl, og tælleren bliver sat tilbage til sin oprindelige værdi (0). Det giver mulighed for at kunne sende et nyt telegram allerede ganske kort tid efter, da koden ''redder sig selv''. I tilfælde af modtagebuffer \textit{overrun} - altså at den modtager data hurtigere end det kan læses - sørger koden selv for at tømme bufferen således at normal funktion kan genoprettes.
+
+Den \textit{jump table}, der er nævnt under telegrambehandlingsfunktionen i Figur \ref{fig:usart_receive} er en effektiv måde at \textit{branche} til et andet sted i programmet på. I stedet for at lade programmet løbe igennem en lang liste af \verb@cpi@\footnote{ComPare with Immidiate} instruktioner og sammenligne med hver enkelt byte, der repræsenterer en kommando, den skal kende, kan man lade den anden byte i telegrammet fungere som et off-set fra et kendt sted i programhukommelsen. En sådan kendt adresse kunne være \verb@RX_SET_EVENTS@ (assembleren erstatter den \textit{label} med en faktisk adresse i programhukommelsen) som er vist i Programkode \ref{code:rxjump}.
+
+\begin{lstlisting}[caption={RX SET EVENTS jump table},label={code:rxjump}]
+RX_SET_EVENTS:
+	rjmp	USART_RXC_Exec_ErrorByte2		;Byte 2 bestemmer off-set fra RX_SET_EVENTS
+	rjmp	SET_MEM_LO						;01
+	rjmp	SET_MEM_HI						;02
+	rjmp	SET_MEM_Write					;03
+	rjmp	USART_RXC_Exec_ErrorByte2		;04
+	rjmp	SET_WD_Reset					;05
+	rjmp	USART_RXC_Exec_ErrorByte2		;06
+	rjmp	USART_RXC_Exec_ErrorByte2		;07
+	rjmp	USART_RXC_Exec_Exit				;08
+	rjmp	SET_Reverse						;09
+	rjmp	USART_RXC_Exec_ErrorByte2		;0A
+	rjmp	USART_RXC_Exec_ErrorByte2		;0B
+	rjmp	USART_RXC_Exec_ErrorByte2		;0C
+	rjmp	USART_RXC_Exec_ErrorByte2		;0D
+	rjmp	USART_RXC_Exec_ErrorByte2		;0E
+	rjmp	USART_RXC_Exec_ErrorByte2		;0F
+	rjmp	SET_Start						;10
+	rjmp	SET_Stop						;11
+	rjmp	SET_ModeAuto					;12
+	rjmp	SET_ModeDefault					;13
+\end{lstlisting}
+
+Et telegram bestående af 0x55 (SET), 0x10 (Start) og 0xFF (Hastighed) ville lande på adressen \verb@RX_SET_EVENTS@ + 0x10 og blive bedt om at \textit{branche} til \verb@SET_Start@, som findes et andet sted i programhukommelsen. Her vil de instruktioner, der får bilen til at køre fremad, så udføres.
+
+\subsubsection{Afsendelse}
+USART'ens sendebuffer har plads til en byte. Skifteregistret fungerer som et 2. bufferniveau. Det vil sige, at er bufferen ledig, kan der flyttes to bytes ind i bufferen umiddelbart efter hinanden. Problemet opstår, når en tredje byte skal skrives ind i \verb@UDR@ registret - hvis ikke man venter, til bufferen er tom, overskriver man den byte, der allerede ligger i bufferen og venter på at blive flyttet ud. Umiddelbart kan man godt bare lade koden vente, til bufferen er blevet tom, men det er ikke ønskeligt, da det tager forholdsvis meget tid. Med en baud rate på 9600 bit/s og en sending på 10 bits (8 data bit, 1 start bit og 1 stop bit) per byte, der skrives til \verb@UDR@ registret, tager det omtrent et millisekund at sende en byte. Det vil sige, at skulle men bremse koden indtil alle tre bytes er sendt, er det meget sandsynligt, at der i hvert tilfælde bliver spildt 16000 clock cycles.
+
+Løsningen på det problem er en tre byte stor buffer i microcontrollerens SRAM, som kan lagre en, to eller alle tre bytes af det telegram, der ønskes sendt - afhængig af hvornår bufferen bliver fuld. Man kan naturligvis stadig nå at fylde både USART bufferen \textit{og} bufferen i hukommelsen, men fordi microcontrolleren kun skal bruge sendefunktionen, når det kræves svar på et GET-telegram, er det ikke sandsynligt, at det sker.
+
+\begin{figure}[htb]
+	\begin{center}
+	\includegraphics[page=2,scale=0.6,trim=113 46 123 50]{comms.pdf} %trim=l b r t
+	\caption{UsartTx funktionen og \textit{buffer empty} interruptrutinen}
+	\label{fig:usart_transmit}
+	\end{center}
+\end{figure}
+
+Figur \ref{fig:usart_transmit} viser funktionen UsartTx, som bliver kaldt, når microcontrolleren skal sende svar på et GET-telegram. Argumenter til funktionen er de tre bytes, der ønskes sendt. UsartTx bruger en tæller, TXCOUNT, der holder styr på, hvilken byte i rækken af tre den er nået til. Så længe bufferen er klar til at modtage data, dvs. når \verb@UDRE@ flaget er sat, sendes der på normal vis ved at skrive til \verb@UDR@ I/O registret. Hvis bufferen til gengæld er fuld, gemmes den, eller de ikke-sendte bytes i SRAM og derefter slår UsartTx et interrupt til, der udløses, så snart bufferen igen bliver klar til at modtage data. Interruptrutinen sørger for at sende den næste byte, som den læser i SRAM i rækken. På den måde muliggøres udførelsen af andre instruktioner i microcontrolleren, selvom den er blevet bedt om at sende et REPLY-telegram.

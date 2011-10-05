@@ -1,0 +1,15 @@
+\section{Konklusion} 
+Ved hjælp af accelerometeret har det været muligt at måle udslag i sving og ved tilpasning af afkoblingskondensatorer har støj kunne minimeres. Softwaren har gjort at en mere præcis detektering har kunne opnås, idet fejlagtige målinger er sorteret fra.
+
+Optosensoren er brugt til at registrere, hvornår bilen passerer målstregen. Kredsløbet til optosensoren har fungeret tilfredsstillende og ved hjælp af en tidsforsinkelse har det kunne sikres, at den ikke registerer målstregen flere gange ved samme passage.
+
+Kommunikationen med musesensoren (ADNS-9500) har vist sig at virke, men en periodisk fejl, hvor sensoren ikke længere sender korrekt data, har gjort kørsel efter opmålt data umulig. Hele ideen bag opmålt kørsel bygger på, at bilens position altid er kendt. Det har derfor ikke været muligt at teste koden, der bruges i forbindelse med kørsel efter indsamlet data, i praksis.
+
+Registreringen af sving har dog vist sig at være en succes, på trods af, at positionsværdierne ofte har været ukorrekte. Kommunikationsprotokollen har ligeså fungeret godt og har, som det var meningen, muliggjort datalogging fra f. eks. accelerometer og musesensor. Samtidig har kommunikationsprotokollen lettet debugging.
+
+H-broen er testet og virker efter hensigten. Hvis der laves fuld reversering, reduceres bremselængden betydeligt. 
+ 
+Der er designet et SMD print til ADNS9500 sensoren og det har gjort en optimal montering under bilen mulig.
+
+Samlet set kan det konkluderes, at bilen ikke kunne køre efter logget data. Udover afstandsmåling har opsamling af de øvrige data virket efter hensigten. 
+

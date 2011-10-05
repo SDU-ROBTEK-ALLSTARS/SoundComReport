@@ -1,0 +1,19 @@
+\section{Kørselsmetode}
+I det følgende afsnit vil der blive beskrevet, hvilke overordnede løsningsforslag gruppen har arbejdet med. Derefter diskuteres hvilke sensortyper, der bedst muliggør den valgte kørselsmetode. I slutningen af hver undersektion konkluderes kort hvilke løsninger, der arbejdes videre med.
+
+\subsection{Metodevalg}\label{sec:metodevalg}
+% Måske lidt indlednings-aktigt?
+I projektoplægget er opgaven meget kort defineret som ''Lav en microcontroller-baseret styring til en racerbil med henblik på at opnå den korteste omgangstid på en ukendt bane. På langsiderne vil bilen kunne køre med max. hastighed, mens et sving kræver en nedsat hastighed. Holdet har 5 minutter til at opnå den bedste omgangstid.'' Overordnet har holdet diskuteret to forskellige løsningsmodeller:
+\begin{enumerate}[a)]
+	\item Aktiv kørsel - her justeres kørslen, efter hvad bilen kan detektere her og nu.
+	\item Opmålt kørsel - her køre bilen en opmålingsrunde med en sikker hastighed hvor banens forløb registreres og gemmes. De efterfølgende runder køres med hurtigst mulig hastighed på baggrund af de målte data.
+\end{enumerate}
+
+\subsubsection*{Aktiv kørsel}
+Aktiv kørsel kræver at bilen kan ''se'' fremad på banen. Jo længere fremme på banen bilen kan registrere ændringer, des hurtigere kan den køre. Dette er fordi bilen skal være i stand til at bremse ned før et sving og derfor opnå sikker svinghastighed - så den ikke ryger af banen. Der er vurderet, at bilen maksimalt vil være i stand til at registrere ændringer på 5-7 cm afstand. Dette er vurderet udfra gruppemedlemmernes overbevisning. For at denne metode kan lade sig gøre, vil det indebære en form for billedbehandling. Dette vurderes dog at give store mængder data og dermed en krævende databehandling - hvilket kan være svært at håndtere i ATmega32´en. En fordel ved aktiv kørsel er, at bilen ikke er afhængig af gemt data. Bliver strømmen afbrudt, eksempelvis hvis bilen falder af, vil den kunne sættes tilbage på banen igen og umiddelbart forsætte kørslen. Slutteligt forekommer aktiv kørsel at være mere ''ægte'' autonom kørsel, da bilen reagere på de umiddelbare omgivelser - og ikke på optagede omgivelser.
+
+\subsubsection*{Opmålt kørsel}
+Opmålt kørsel medfører, at bilen først skal køre en opmålingsrunde og derefter køre efter de målte data. Bilen skal derfor registrere, om målstregen bliver passeret. Dette bruges som referencepunkt for den tilbagelagte afstand, og hvornår sving starter og slutter. Alt data gemmes i ATmega32 microcontrollerens hukommelse. I runderne, der kommer efter den først runde, hvor der laves opmåling, registreres ligeledes hvornår målstregen passeres. Den tilbagelagte afstand og hastigheden justeres efter de gemte data om svingenes placering. Denne løsningsmodel er god, fordi der kan opnås en reaktionstid på knap en hel banelængde, men er dog afhængig af de gemte data. Hvis strømmen til microcontrolleren afbrydes, mistes de gemte data, og det vil være nødvendigt at køre en ny opmålingsrunde. Fordelen ved denne metode er, at bilen i opmålingsrunden kun skal være i stand til at registrere ændringer af den umiddelbare position. Dette kræver langt færre ressourcer end at se frem på banen. I runderne, hvor der køres efter den opmålte data, er tophastigheden kun begrænset af banens forløb, forudsat opmåling er korrekt.
+
+\subsubsection*{Konklusion}
+Ud fra ovenstående overvejelser er opmålt kørsel valgt. Den er valgt da den efter projektgruppens vurdering giver mulighed for at opnå en højere tophastighed. Ved aktiv kørsel er det formentligt ikke muligt at registrere ændringer i banens forløb tilstrækkeligt langt frem, og hurtigt, til at bilen kan opnå samme hastighed. Derudover er det meget usikkert, om ATmega32 microcontrolleren kan håndtere databehandlingen hurtigt nok.

@@ -1,0 +1,72 @@
+\subsection{H-bro}\label{sec:hbro}
+For at kunne benytte bilens motor, er der brug for at kunne styre strømforsyninen til motoren. Microcontrollerens udgange er kun i stand til at levere få milliampere, så det er nødvendigt at benytte en transistorløsning til at kunne styre den forholdsvis store strøm, der skal drive motoren. I dette projekt er der benyttet en H-bro kobling af transistorne til styring af strømmen gennem motoren. 
+Ved at benytte en H-bro til styring af motoren, kan spændingen over motoren skift retning, således at man både kan bruge motoren til en fremadrettet kraft og en bagudrettet kraft. Den bagudrettede kraft kan benyttes til at bremse bilen ned.
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[scale=0.17]{hbro.pdf}  
+  \caption{Forsimplet H-bro}
+  \label{fig:hbro}
+\end{figure}
+
+H-broen kan betragtes som fire kontakter, der er fundet til motoren som vist på figur \ref{fig:hbro}. Ved at slutte de viste kontakter i forskellige kombinationer, vil der kunne løbe en strøm gennem motoren afhængigt af dette. Hvis eks. S1 og S4 sluttes, mens S2 og S3 afbrydes, vil strømmen løbe den ene vej. Sluttes i stedet for S2 og S3, mens S1 og S4 afbrydes, vil strømmen løbe i modsat retning motoren. 
+%En sidste mulighed er at man åbner for S2 og S4 samtidig, således begge ben på motoren er forsynet med samme potentiale. Herved vil al den inducerede strøm i motoren kortsluttes, og dette vil give en
+
+I praksis vil de beskrevede kontakter være udskiftet med transistorer, som så er forbundet med microcontrolleren, sådan at den har styringen med motoren.
+
+På figur \ref{fig:hbro} er der ligeledes beskrevet 4 dioder. Disse dioder er nødvendige da motoren er forsynet med spoler, som inducerer en høj spænding ved en pludselig ændring af strøm gennem dem. I tilfælde af en stor strøm fra motoren, vil denne have mulighed for at løbe gennem dioderne og undgå at ødelægge transistorne.
+
+I opbygningen af bilen er der benyttet en færdig H-bro, som kommer i en integreret kreds. 
+
+% Noget med IC kredsen
+
+
+%I tabel \ref{tab:hbroconf} ses en liste over mulige indstillinger af disse ''kontakter''.
+
+%\begin{table}[htb]
+%	\begin{center}
+%	\begin{tabular}{l|l|l}
+%	
+%	S1				& S2			& S3	& S4 & Indstilling		\\
+%	\hline
+%	Afbrudt		& Afbrudt	& Afbrudt 	& Afbrudt & Motor ikke forbundet til forsyning \\
+%	Sluttet		& Afbrudt	& Afbrudt 	& Sluttet & Spænding over motoren, positiv retning \\
+%	Sluttet		& Afbrudt	& Afbrudt 	& Sluttet & Spænding over motoren, negativ retning \\
+%	ADNS-9500 				& 200ips 				& 30g				& Laser\\
+%
+%
+%	\end{tabular}
+%	\end{center}
+%	\caption{Mulige indstillinger for H-broen}
+%	\label{tab:hbroconf} %%ref
+%\end{table}
+
+%Noget med transistorer
+
+%Noget med spolen og dioderne.
+
+
+
+
+
+
+%En h-bro har den fordel, at man kan vende retningen af spændingspotentialet over motoren, og i forbindelse med bilen, opnå en bremsende effekt. 
+
+%En forsimplet H-bro består af 4 transistore, som vist på figur \ref{fig:hbro}. 
+
+%Grunden til at benytte en H-bro, er at man kan sætte potentialet på begge sider af motoren uafhængigt af hinanden. Det betyder at man kan sætte begge ben til samme potentiale og opnå en bremsende effekt pga. 
+
+
+%Der findes forskellige måder at forbinde en transistor til motoren, så det er muligt at styre den med en forholdsvis lille strøm, en af disse måder kaldes for en H-bro. H
+
+
+
+%h-bro
+
+%Der er valgt en h-bor til bremse bil med. 
+%opbygning og funktion
+%	beskyttelses dioder
+	
+%kredsløb
+
+%mållinger?
