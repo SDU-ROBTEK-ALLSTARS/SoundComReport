@@ -1,0 +1,60 @@
+\newcommand{\makefrontpage}
+{\begin{titlepage}%
+    \begin{pspicture}(0cm,0cm)(\textwidth,\textheight)
+
+      \rput[tr](14.4,21.8){\includegraphics[scale=1]{sdulogo.png}}
+
+      \rput[tl](0.01\textwidth,0.90\textheight){
+        \begin{minipage}[t]{14cm}
+         \textsf{\Large{\textbf{}}}\\
+          \vspace*{0.10\textheight}
+          \textit{\textsf{\Large{
+                \begingroup
+                \tabcolsep -2mm
+                \begin{tabular}{ p{2,4cm} l }
+   \textsf{\Large{\textbf{DAT2}}}             & \textsf{\Large{\textbf{Gruppe 2}}}\\
+   &   \\ 
+260387 & Rudi Hansen \\
+050379 & Niels Høgh \\
+280786 & Kelvin Kjærvik Pagels \\
+160788 & Kim Lindberg Schwaner\\
+                \end{tabular}
+                \endgroup}}}\\
+          \begin{flushleft}
+            \Huge{\textsf{\textbf{Pole Position}}}
+          \end{flushleft}
+          
+          \vspace*{0.01\textheight}
+          
+          \begin{flushleft}
+            \LARGE{\textsf{\textbf{Udvikling af system til at drive en Scalextricbil autonomt ved hjælp af diverse sensorinput}}}
+          \end{flushleft}
+
+          \vspace*{0.04\textheight}
+          \textsf{\Large{februar - juni 2011}}
+          \vspace*{0.04\textheight}
+
+          \textsf{\Large{Vejleder: René Lynge Eriksen}}
+           
+          \vspace*{0.06\textheight}
+              \textsf{I denne 2. semesters rapport undersøges et design af styringen til en autonom scalextric bil. I rapporten gennemgås hvilke kriterier sensorer og andre elektriske komponenter er blevet udvalgt efter. Deres virkemåde og hvordan de anvendes beskrives. Den udviklede software til ATmega32 microcontrolleren, til at styre bilen, gennemgås ligeledes. Slutteligt konkluderes der at det, på grund af uventede komplikationer med sensor input, ikke har været muligt at få bilen til at køre autonomt.}\\
+          
+          
+
+	\vspace*{0.05\textheight}
+              \textsf{Det Tekniske Fakultet\\
+                  Syddansk Universitet\\
+                  Niels Bohrs Allé 1\\
+                  DK-5230 Odense M\\
+                  \vspace*{0.3cm}Danmark\\
+                  www.sdu.dk/tek\\
+                  Tlf: (+45) 65 50 73 03\\
+                  E-mail: tek@tek.sdu.dk\\
+              }
+
+        \end{minipage}}
+    \end{pspicture}
+   \end{titlepage}%
+  \setcounter{footnote}{0}
+  % 
+ }
