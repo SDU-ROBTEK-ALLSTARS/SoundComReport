@@ -1,0 +1,93 @@
+\section*{Opgave 6}\addcontentsline{toc}{section}{Opgave 6}\refstepcounter{section}
+Der skal findes en løsning til den partielle differentialligning
+\begin{equation*}
+	3u_{xx}-12u_{xy}+9u_{yy}=0
+\end{equation*}
+hvor $u$ er en funktion af $x$ og $y$
+
+Vi har at gøre med en 2. ordens partiel differentialligning på formen $Au_{xx}+2Bu_{xy}+Cu_{yy}=F(x,y,u,u_x,u_y)$. Det ses at - fordi $AC-B^2<0$ - er ligningen hyperbolsk.
+
+For at transformere differentialligningen til \textit{normal form} løses karakteristikligningen\footcite[551]{kreyzig}
+\begin{align*}
+	A\left(\frac{dy}{dx}\right)^2 - 2B\frac{dy}{dx} + C &= 0 \implies \\
+	\frac{dy}{dx} &= \dfrac{B \pm \sqrt{B^2-AC}}{A} \implies \\
+	\frac{dy}{dx} &= \dfrac{-6 \pm \sqrt{(-6)^2 - 3 \cdot 9}}{3} \implies \\
+	\frac{dy}{dx} &= \left\{
+	  \begin{array}{l}
+	   -3 \\
+	   -1 \\
+	  \end{array} \right. \implies \\
+	y &= \left\{
+	  \begin{array}{l}
+	   -3x+K \\
+	   -1x+K \\
+	  \end{array} \right.
+\end{align*}
+
+Løsningerne til karakteristikligningen lader vi være
+\begin{align*}
+	v(x,y) &= 3x+y \\
+	w(x,y) &= x+y 
+\end{align*}
+så
+\begin{align*}
+	\frac{\partial v}{\partial x} &= 3\\
+	\frac{\partial v}{\partial y} &= 1\\
+	\frac{\partial w}{\partial x} &= 1\\
+	\frac{\partial w}{\partial y} &= 1
+\end{align*}
+
+Ved brug af kædereglen fås
+\begin{align*}
+	\frac{\partial u}{\partial x} &= \frac{\partial u}{\partial v} \frac{\partial v}{\partial x} + \frac{\partial u}{\partial w} \frac{\partial w}{\partial x} = 3 \frac{\partial u}{\partial v} + \frac{\partial u}{\partial w} \\
+	\frac{\partial u}{\partial y} &= \frac{\partial u}{\partial v} \frac{\partial v}{\partial y} + \frac{\partial u}{\partial w}\frac{\partial w}{\partial y} = \frac{\partial u}{\partial v} + \frac{\partial u}{\partial w}
+\end{align*}
+
+Vi ser nu på den oprindelige differentialligning $3u_{xx}-12u_{xy}+9u_{yy}$ for, ledvist, at bestemme de dobbeltdifferentierede - igen ved brug af kædereglen (den virker også på et differentieret led idet det selv er en funktion af $x$ og $y$)
+\begin{align*}
+		u_{xx} &= \frac{\partial}{\partial x} \frac{\partial u}{\partial x} = \frac{\partial }{\partial x} \left( 3 \frac{\partial u}{\partial v} + \frac{\partial u}{\partial w} \right)\\
+		&= 3 \left( \left( \frac{\partial }{\partial v} \frac{\partial u}{\partial v} \right) \frac{\partial v}{\partial x} + \left( \frac{\partial }{\partial w} \frac{\partial u}{\partial v} \right) \frac{\partial w}{\partial x} \right) +
+			\left( \frac{\partial }{\partial v} \frac{\partial u}{\partial w} \right) \frac{\partial v}{\partial x} + \left( \frac{\partial }{\partial w} \frac{\partial u}{\partial w} \right) \frac{\partial w}{\partial x}\\
+		&= 9 \frac{\partial^2 u}{\partial v^2} + 6 \frac{\partial^2 u}{\partial v \partial w} + \frac{\partial^2 u}{\partial w^2}
+	\\
+%--
+	u_{xy} &=	\frac{\partial}{\partial y}\frac{\partial u}{\partial x} = \frac{\partial }{\partial y} \left( 3 \frac{\partial u}{\partial v} + \frac{\partial u}{\partial w} \right)\\
+	&= 3 \left( \left( \frac{\partial }{\partial v} \frac{\partial u}{\partial v} \right) \frac{\partial v}{\partial y} + \left( \frac{\partial }{\partial w} \frac{\partial u}{\partial v} \right) \frac{\partial w}{\partial y} \right) +
+			\left( \frac{\partial }{\partial v} \frac{\partial u}{\partial w} \right) \frac{\partial v}{\partial y} + \left( \frac{\partial }{\partial w} \frac{\partial u}{\partial w} \right) \frac{\partial w}{\partial y}\\
+		&= 3 \frac{\partial^2 u}{\partial v^2} + 4 \frac{\partial^2 u}{\partial v \partial w} + \frac{\partial^2 u}{\partial w^2}
+	\\
+%--
+	u_{yy} &=	\frac{\partial}{\partial y}\frac{\partial u}{\partial y} = \frac{\partial}{\partial y} \left( \frac{\partial u}{\partial v} + \frac{\partial u}{\partial w} \right)\\
+	&= \left( \frac{\partial }{\partial v} \frac{\partial u}{\partial v} \right) \frac{\partial v}{\partial y} + \left( \frac{\partial }{\partial w} \frac{\partial u}{\partial v} \right) \frac{\partial w}{\partial y} +
+			\left( \frac{\partial }{\partial v} \frac{\partial u}{\partial w} \right) \frac{\partial v}{\partial y} + \left( \frac{\partial }{\partial w} \frac{\partial u}{\partial w} \right) \frac{\partial w}{\partial y}\\
+	&= \frac{\partial^2 u}{\partial v^2} + 2 \frac{\partial^2 u}{\partial v \partial w} + \frac{\partial^2 u}{\partial w^2}
+\end{align*}
+
+Indsat i differentialligningen fås
+\begin{align*}
+	3u_{xx}-12u_{xy}+9u_{yy} = 0& \\ \implies &\\
+	3 \left( 9 \frac{\partial^2 u}{\partial v^2} + 6 \frac{\partial^2 u}{\partial v \partial w} + \frac{\partial^2 u}{\partial w^2} \right)
+	- 12 \left( 3 \frac{\partial^2 u}{\partial v^2} + 4 \frac{\partial^2 u}{\partial v \partial w} + \frac{\partial^2 u}{\partial w^2} \right)
+	+ 9 \left( \frac{\partial^2 u}{\partial v^2} + 2 \frac{\partial^2 u}{\partial v \partial w} + \frac{\partial^2 u}{\partial w^2} \right) = 0&\\
+	\implies &\\
+	-12 \frac{\partial^2 u}{\partial v \partial w} = 0& 
+\end{align*}
+
+Det fortæller os, at $\dfrac{\partial u}{\partial w}$ differentieret mht. $v$ er 0 og således må $\dfrac{\partial u}{\partial w}$ være en funktion kun afhængig af $w$ - lad os kalde den $f$: 
+\[
+	\frac{\partial u}{\partial w}=f(w)
+\]
+Integreres en gang mht. $w$ fås
+\begin{align*}
+	u(v,w) &= \int f(w) \, dw \\
+	&= F(w) + G(v)
+\end{align*}
+hvor integrationskonstanten er $G(v)$ - siden vi kun integrerer mht. $w$ kan den stadig godt være en funktion af $v$.
+Det er den generelle løsning på ligningen. Som funktion af $x$ og $y$ bliver løsningen
+\[
+	u(x,y) = F(x+y) + G(3x+y)
+\]
+%Vælger vi f. eks. $F(x)= x^2$ og $G(x)= \sin x$ kan vi tjekke om løsningen er ok
+%\begin{align*}
+%	u(x,y) = (x+y)^2 + \sin(3x+y)\\
+%\end{align*}

@@ -1,0 +1,113 @@
+\section*{Opgave 1}\addcontentsline{toc}{section}{Opgave 1}\refstepcounter{section}
+Ved hjælp af Laplacetransformation ønskes det at løse differentialligningen
+
+\begin{equation}
+	y''(t)+2y'(t)-3y(t)=2t
+	\label{eq:opg1}
+\end{equation}
+
+med begyndelsesbetingelserne
+\begin{align}
+	y(0)&=1\notag\\
+	y'(0)&=2
+	\label{eq:opg1_beting}
+\end{align}
+
+Første trin er, at finde Laplacetransformationen til hvert led i differentialligningen.
+\begin{equation}
+	\boxed
+	{
+		\mathcal{L}\{f^{(n)}\} = s^{n} \mathcal{L}\{f\} - \sum_{i=1}^{n} s^{(n-i)} f^{(i-1)}(0)
+	}
+	\label{eq:opg1_lapl_difflign}
+\end{equation}
+
+Laplacetransformationen til den $n$'te afledte af en funktion $f$ er givet\footcite[228]{kreyzig} i \eqref{eq:opg1_lapl_difflign}. Laplacetransformationen af $2t$ er givet i tabellen\footcite[224]{kreyzig} over funktioner og deres Laplacetransformeringer.
+\begin{align*}
+	\mathcal{L}\{y''(t)\}+2\mathcal{L}\{y'(t)\}-3\mathcal{L}\{y(t)\}&=\mathcal{L}\{2t\}\\
+	&\implies \\
+	s^{2} Y(s) - s y(0) - y'(0) +2 \left( s Y(s)-y(0) \right) -3 Y(s) &= \dfrac{2}{s^{2}}
+\end{align*}
+
+I det begyndelsesbetingelserne \eqref{eq:opg1_beting} indsættes, fås
+\begin{align*}
+	s^{2} Y(s) - s y(0) - 2 +2 \left( s Y(s)-1 \right) -3 Y(s) &= \dfrac{2}{s^{2}}\\
+	&\iff\\
+	s^{2} Y(s)+ 2s Y(s) -3 Y(s) - s  - 4 &= \dfrac{2}{s^{2}}
+\end{align*}
+
+Der løses for $Y(s)$
+\begin{align*}
+	s^{2} Y(s)+ 2s Y(s) -3 Y(s) - s  - 4 &= \dfrac{2}{s^{2}}\\
+	&\iff\\
+	Y(s)\left(s^{2} + 2s - 3 \right) &= \dfrac{2}{s^{2}} + s + 4\\
+	&\iff\\
+	Y(s) &= \dfrac{\dfrac{2}{s^{2}} + s + 4}{s^{2} + 2s - 3}
+\end{align*}
+
+Nu kendes altså Laplacetransformationen til $y(t)$. Løsningen til IVP'et fås ved at tage den inverse transformering til $Y(s)$. Den letteste metode er nu at dele $Y(s)$ i partielle brøker, så der kommer nogle led, der kan transformeres tilbage vha. ''transformationstabellen''.
+
+Først omskrives udtrykket for $Y(s)$ for at undgå at skulle opløse i partielle brøker to gange.
+\begin{align*}
+	Y(s) &= \dfrac{\dfrac{2}{s^{2}} + s + 4}{s^{2} + 2s - 3} \\
+	&= \dfrac{2}{s^{2} (s-1) (s+3)} + \dfrac{s + 4}{(s-1) (s+3)}\\
+	&= \dfrac{2 (s-1) (s+3) + (s+4) (s^{2} (s-1) (s+3))}{s^{2} \left((s-1) (s+3)\right)^{2}}\\
+	&= \dfrac{s^3 + 4s^2 +2}{s^{2} (s-1) (s+3)}
+\end{align*}
+
+Den partielt opløste brøk bestemmes og der sættes på fælles brøkstreg: Der kan uden videre opløses i partielle brøker idet graden af nævneren er højere end graden af tælleren.
+\begin{align}
+	Y(s) &= \dfrac{s^3 + 4s^2 +2}{s^{2} (s-1) (s+3)}\notag\\
+	&= \dfrac{A}{s^2} + \dfrac{B}{s} + \dfrac{C}{s-1} + \dfrac{D}{s+3}\label{eq:opg1_part_brok}\\
+	&= \dfrac{A(s-1)(s+3) + Bs(s-1)(s+3) + Cs^2(s+3) + Ds^2(s-1)}{s^2 (s-1) (s+3)}\notag
+\end{align}
+
+Med ens nævnere må tællerne også være lig med hinanden
+\begin{align*}
+	s^3 + 4s^2 +2 &= A(s-1)(s+3) + Bs(s-1)(s+3) + Cs^2(s+3) + Ds^2(s-1)\\
+	&= As^2+2As-3A + Bs^3+2Bs^2-3Bs + Cs^3+3Cs^2 + Ds^3-Ds^2
+\end{align*}
+
+Det ses, at $A$ er den eneste konstant, der bliver stående når $s=0$
+\begin{align*}
+	2 &= -3A \iff \\
+	A &= -\dfrac{2}{3}
+\end{align*}
+
+Sættes $s=1$ bliver $C$ stående, da $(s-1)=0$
+\begin{align*}
+	s^3 + 4s^2 +2 &= Cs^3+3Cs^2 \Big|_{s=1} \implies \\
+	C &= \dfrac{7}{4}
+\end{align*}
+
+Sættes $s=-3$ bliver $(s+3)=0$, hvilket lader $D$ stå tilbage
+\begin{align*}
+	s^3 + 4s^2 +2 &= Ds^3-Ds^2 \Big|_{s=-3} \implies \\
+	D &= -\dfrac{11}{36}
+\end{align*}
+
+For til sidst at bestemme $B$ isoleres,
+\begin{align*}
+	s^3 + 4s^2 +2 &= As^2+2As-3A + Bs^3+2Bs^2-3Bs + Cs^3+3Cs^2 + Ds^3-Ds^2 \iff \\
+	B(s^3+2s^2-3s) &= s^3 + 4s^2 +2 - (As^2+2As-3A) - (Cs^3+3Cs^2) - (Ds^3-Ds^2) \iff \\
+	B &= \dfrac{s^3+4s^2+2 -As^2-2As+3A -Cs^3-3Cs^2 -Ds^3+Ds^2}{s^3+2s^2-3s}
+\end{align*}
+
+og de øvrige konstanter $A$, $C$ og $D$ indsættes
+\begin{align*}
+	B &= \dfrac{s^3+4s^2+2 -\left(-\frac{2}{3}\right)s^2-2\left(-\frac{2}{3}\right)s+3\left(-\frac{2}{3}\right) -\frac{7}{4}s^3-3\cdot\frac{7}{4}s^2 -\left(-\frac{11}{36}\right)s^3+\left(-\frac{11}{36}\right)s^2}{s^3+2s^2-3s}\\	
+	&= \dfrac{ -\frac{4}{9}s^3 -\frac{8}{9}s^2 +\frac{12}{9}s}{s^3+2s^2-3s}\\
+	&= \dfrac{-\frac{4}{9} \big( s^3 + 2s^2 - 3s \big)}{s^3+2s^2-3s}\\
+	&= -\dfrac{4}{9}
+\end{align*}
+
+Nu kan alle konstanter sættes ind i den partielt opløste brøk \eqref{eq:opg1_part_brok}
+\begin{align*}
+	Y(s) &= \dfrac{A}{s^2} + \dfrac{B}{s} + \dfrac{C}{s-1} + \dfrac{D}{s+3}\\
+	&= \dfrac{-\frac{2}{3}}{s^2} + \dfrac{-\frac{4}{9}}{s} + \dfrac{\frac{7}{4}}{s-1} + \dfrac{-\frac{11}{36}}{s+3}
+\end{align*}
+
+Ved at tage den inverse Laplacetransformering (se tabel\footcite[224]{kreyzig}) kan løsningen på begyndelsesværdiproblemet findes
+\begin{align*}
+	y(t) &= -\dfrac{2 t}{3} -\dfrac{4}{9} +\dfrac{7 e^t}{4} -\dfrac{11 e^{-3t}}{36}
+\end{align*}

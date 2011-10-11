@@ -1,0 +1,164 @@
+\section*{Opgave 7}\addcontentsline{toc}{section}{Opgave 7}\refstepcounter{section}
+Følgende differentialligning ønskes løst
+\[
+	u_{tt}+au_t=c^2u_{xx} ,\quad 0\leq x \leq 1 ,\quad t \geq 0
+\]
+hvor $u$ er en funktion af $x$ og $t$: $u(x,t)$. $a$ og $c$ er konstanter.
+
+Randbetingelser for ligningen er
+\begin{align*}
+	u(0,t) &= 0\\
+	u(L,t) &= 0
+\end{align*}
+og begyndelsesbetingelserne er
+\begin{align*}
+	u(x,0) &= 0\\
+	u_t(x,0) &= g(x)
+\end{align*}
+
+%%%%%%%%%%%
+\subsection*{a)}\addcontentsline{toc}{subsection}{a)}\refstepcounter{subsection}
+Første trin af løsningen er at omskrive den partielle differentialligning til to ODE'er ved brug af metoden ''seperation af variable''. Det antages at $u(x,t)=F(x)\,G(t)$
+
+Først differentieres $u(x,t)=F(x)\,G(t)$ for at opnå de led, der behøves i den oprindeligt givne differentialligning. Prikkerne over $G$ angiver, at den er differentieret mht. $t$ (tid)
+\begin{align*}
+	u(x,t) &= F(x)\,G(t) \implies \\
+	u_{xx} &= F'' G \\
+	u_{tt} &= F \ddot{G} \\
+	u_{t} &= F \dot{G}
+\end{align*}
+
+Indsættes disse i den oprindelige differentialligning fås
+\[
+	F \ddot{G} + a F \dot{G} = c^2 F'' G
+\]
+
+Ligningen arrangeres så $F$- og $G$-leddene kommer til at stå på hver sin side af lighedstegnet
+\begin{align*}
+	F \ddot{G} + a F \dot{G} &= c^2 F'' G \iff \\
+	\frac{\ddot{G}}{G} + a \frac{\dot{G}}{G} &= c^2 \frac{F''}{F}
+\end{align*}
+
+Nu er venstresiden kun afhængig af $t$ og højresiden kun af $x$. Det vil sige, at begge sider må være konstante - ændres kun enten $x$ eller $t$ ville ligheden ikke gælde, hvis begge sider ikke var konstante. Altså har vi
+\[
+	\frac{\ddot{G}}{G} + a \frac{\dot{G}}{G} = c^2 \frac{F''}{F} = k
+\]
+hvor $k$ kaldes seperationskonstanten. Den er endnu arbitrær.
+
+Nu kan vi inddele i to ordinære differentialligninger
+\begin{align*}
+	\frac{\ddot{G}}{G} + a \frac{\dot{G}}{G} = c^2 \frac{F''}{F} &= k \implies \\
+	c^2 F'' - k F &= 0 \\
+	\ddot{G} + a \dot{G} - k G &= 0
+\end{align*}
+
+%%%%%%%%%%%
+\subsection*{b)}\addcontentsline{toc}{subsection}{b)}\refstepcounter{subsection}
+Vi skal nu bestemme løsninger til $F(x)$ og $G(t)$ så de opfylder randbetingelserne. Dvs følgende skal gælde for alle $t$
+\begin{align*}
+	u(0,t) &= F(0)\,G(t) = 0\\
+	u(L,t) &= F(L)\,G(t) = 0
+\end{align*}
+
+Vi viser, at seperationskonstanten, $k$ må være negativ: Hvis $k=0$ får vi
+\[
+	c^2 F''= 0
+\]
+
+hvis karakterligning har roden $r=\nicefrac{0}{2c^2}=0$. En løsning er $F=e^{rx}=1$. Altså bliver $F''=0$ og den har den generelle løsning $F=ax+b$ og fordi $u(0,t) = F(0)$ og $G(t) = 0$ bliver $a=b=0$ så $F=0$ hvilket gør at den oprindelige ligning bliver $u(x,y)=F(x)\,G(t)=0$ hvilket ikke er særlig interessant for os.
+
+For en positiv $k=v^2$ har vi
+\[
+	c^2 F'' - v^2 F = 0
+\]
+hvis karakterligning har rødderne $r_1=\nicefrac{v}{c}$ og $r_2=-\nicefrac{v}{c}$ og dermed løsningen
+\[
+	F(x) = Ae^{\frac{v}{c} x}+Be^{-\frac{v}{c} x}
+\]
+så
+\[
+	F(0) = F(L) = A+B = Ae^{\frac{v}{c} L}+Be^{-\frac{v}{c} L} = 0
+\]
+
+Heraf kan vi se, at $F=A=B=0$ som før. Denne løsning er altså heller ikke interessant.
+
+Til sidst ser vi på løsningen for $F$ når $k$ er valgt negativ: $k = -u^2$. Da får vi 
+\[
+	c^2 F'' + u^2 F = 0
+\]
+
+hvis karakterligning har rødderne $r=\pm \, \mathrm{i} \, \dfrac{u}{c}$ og således løsningen
+\[
+	F(x) = A \cos\left(\frac{u}{c} x\right) + B \sin\left(\frac{u}{c} x\right)
+\]
+
+og $F(0)$ bliver 
+\begin{align*}
+	F(0) = A \cos\left(\frac{u}{c} \cdot 0\right) + B \sin\left(\frac{u}{c} \cdot 0\right) &=0 \implies \\
+	A &= 0
+\end{align*}
+
+da $A=0$ bliver $F(L)$
+\[
+	F(L) = 0 = B \sin\left( \frac{u}{c} L \right)
+\]
+
+Vi må vælge $B \neq 0$ da vi eller får $F=0$ som før. Dvs at $\sin\left(\dfrac{u}{c} L\right) = 0$ før $F(L) = 0$ er opfyldt. Altså må
+\[
+	\frac{u L}{c} = n \pi \iff \frac{u}{c} = \frac{n \pi}{L},\quad (n=\dots, -1, 0, 1, 2, \dots)
+\]
+
+Sættes f. eks. $B=1$ opnås uendelig mange løsninger: $F(x)=F_n(x)$ hvor
+\[
+	F_n(x) = \sin \left( \frac{n \pi}{L} x \right) ,\quad (n=1, 2, 3, \dots)
+\]
+
+%%%%%%%%%%%
+\subsection*{c)}\addcontentsline{toc}{subsection}{c)}\refstepcounter{subsection}
+Nu kan vi også løse $\ddot{G} + a \dot{G} - k G = 0$ hvor $k = -u^2 = -\left(\dfrac{n \pi c}{L}\right)^2$
+\begin{align*}
+	\ddot{G} + a \dot{G} + \left(\frac{n \pi c}{L}\right)^2 G &= 0 \implies \\
+	\ddot{G} + a \dot{G} + \lambda_n^2 G &= 0
+\end{align*}
+
+hvor
+\[
+	\lambda_n = \frac{n \pi c}{L}
+\]
+
+Der løses, idet $a = 2 \lambda$, hvorved komplimentærligningen bliver
+\[
+	r^2+2 \lambda r + \lambda^2 =0
+\]
+
+Diskriminanten til komplimentærligningen er da 
+\[
+	D=(2 \lambda)^2 - 4 \lambda^2 =0
+\]
+
+De to ens rødder til komplimentærligningen er
+\[
+	r=\frac{-2 \lambda}{2}= - \lambda
+\]
+
+og den generelle løsning af $G$ bliver 
+\[
+	G(t) = A e^{- \lambda t} + B t e^{- \lambda t}
+\]
+
+Dermed fås
+\begin{align*}
+	u(x,t) &= F(x)\,G(t) \implies \\
+	u(x,t) &= \sin \left( \frac{n \pi x}{L} \right) \left(A e^{- \lambda t} + B t e^{- \lambda t} \right)
+\end{align*}
+
+Vi ser på begyndelsesbetingelserne hvor
+\begin{align*}
+		u(x,0) = \sin \left( \frac{n \pi x}{L} \right) \left(A  \right) &= 0 \implies \\
+		A &= 0
+\end{align*}
+
+og så
+\begin{align*}
+	u(x,t) &= B t e^{- \lambda t} \sin \left( \frac{n \pi x}{L} \right)
+\end{align*}

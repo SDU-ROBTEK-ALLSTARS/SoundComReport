@@ -1,0 +1,195 @@
+%%%								%%%
+%%%     PREAMBLE	%%%
+%%%								%%%
+\documentclass{article}
+
+%%% PAGE DIMENSIONS
+\usepackage{geometry} % to change the page dimensions
+\geometry{a4paper}
+
+%%% PACKAGES
+\usepackage{graphicx}
+\usepackage[latin1]{inputenc}
+\usepackage[danish]{babel}
+\usepackage{csquotes}
+\usepackage{booktabs} % for much better looking tables
+\usepackage{tabularx}
+\usepackage{slashbox}
+\usepackage{array} % for better arrays (eg matrices) in maths
+\usepackage{paralist} % very flexible & customisable lists (eg. enumerate/itemize, etc.)
+\usepackage{verbatim} % adds environment for commenting out blocks of text & for better verbatim
+\usepackage{alltt}
+\usepackage{hyperref} %til links, email etc - giver ogs bookmarks i pdf filen
+\hypersetup{
+    unicode=true,          % non-Latin characters in Acrobat’s bookmarks
+    pdftoolbar=true,        % show Acrobat’s toolbar?
+    pdfmenubar=true,        % show Acrobat’s menu?
+    pdffitwindow=true,     % window fit to page when opened
+    %pdfstartview={FitH},    % fit page to the window Horizontal/Vertical
+    pdfstartview={XYZ null null 1},
+    pdftitle={Matematik eksamen DAT2F11},    % title
+    pdfauthor={Kim Lindberg Schwaner},     % author
+    pdfnewwindow=true,      % links in new window
+    colorlinks=false,       % false: boxed links; true: colored links
+    linkcolor=red,          % color of internal links
+    citecolor=green,        % color of links to bibliography
+    filecolor=magenta,      % color of file links
+    urlcolor=cyan           % color of external links
+}
+\usepackage{subfig} % make it possible to include more than one captioned figure/table in a single float
+\usepackage{float}% for at kunne justere floats position bedre (især billeder)
+\usepackage{amsmath,amsfonts,amssymb,amsthm} %AMS' packages for symbols, theorems etc.
+\usepackage{mathrsfs}
+\usepackage{eucal}
+\usepackage{nicefrac}
+\usepackage{wrapfig}
+\usepackage{multicol}
+\usepackage{footnote}
+\usepackage{ctable}
+\usepackage[parfill]{parskip} % Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{listings} %Sourcekode
+\lstset{
+	language=C,
+	numbers=left,
+	numberstyle=\tiny,
+	numbersep=6pt,
+	captionpos=b,
+	tabsize=4,
+	basicstyle=\footnotesize\sffamily,
+	breaklines=true,                % sets automatic line breaking
+	escapeinside={(*&}{&*)},
+}
+\renewcommand*\lstlistingname{Kildekode}
+\usepackage{dirtree}
+\usepackage{perpage}
+\MakePerPage{footnote}
+\makesavenoteenv{tabular}		%makes footnotes in tables possible
+
+%%% BIBLIOGRAPHY
+\usepackage[style=authortitle-icomp,natbib=true,sortcites=true,block=space,backend=bibtex8]{biblatex}
+\setlength{\bibparsep}{10pt}
+\bibliography{bibl}
+\defbibheading{bibempty}{} 
+
+%%% HEADERS & FOOTERS
+\usepackage{fancyhdr} % This should be set AFTER setting up the page geometry
+\pagestyle{fancy} % options: empty , plain , fancy
+
+\setlength{\headheight}{15pt}
+\lhead{\nouppercase{\leftmark}}
+\chead{}
+\rhead{}  %\rhead{\textit{\leftmark}}
+\lfoot{}
+\cfoot{}
+\rfoot{\thepage}
+
+% Redefinerer plain-stilen så vi kan bruge den til at nummerere sider uden at at få sidehoved med!
+\fancypagestyle{plain}{
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[RO]{\thepage}
+}
+
+
+%%% SECTION TITLE APPEARANCE
+%\usepackage{sectsty}
+%\allsectionsfont{\sffamily\mdseries\upshape} % (See the fntguide.pdf for font help)
+
+
+%%% ToC (table of contents) APPEARANCE
+%\usepackage[]{tocbibind} % Put the bibliography in the ToC         opts:   nottoc,notlof,notlot
+\setcounter{tocdepth}{3} % set how many levels the table of contents displays default=3
+\usepackage[titles,subfigure]{tocloft} % Alter the style of the Table of Contents
+\renewcommand{\cftsecfont}{\rmfamily\mdseries\upshape}
+\renewcommand{\cftsecpagefont}{\rmfamily\mdseries\upshape} % No bold!
+
+\graphicspath{{./graphics/}}% alle \includegraphics kigger som default i /graphics/-mappen
+
+\numberwithin{equation}{section} % Equations numbered by section
+\numberwithin{figure}{section}
+\numberwithin{table}{section}
+
+
+%%%PARAGRAPH EDIT
+%\setlength{\parindent}{0pt}
+%\setlength{\parskip}{2ex plus 0.5ex minus 0.2ex}
+
+%%%\addtolength{\parskip}{\baselineskip}
+
+
+%%% FLOAT CONTROL
+\setcounter{topnumber}{2}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{3}
+\renewcommand{\topfraction}{0.85}
+\renewcommand{\bottomfraction}{0.85}
+\renewcommand{\textfraction}{0.15}
+\renewcommand{\floatpagefraction}{0.4}
+
+
+%%% FRONTPAGE INFO
+\title{Matematik eksamen DAT2}
+\author{Kim Lindberg Schwaner\\
+	160788-1797\\
+	\href{mailto:kschw10@student.sdu.dk}{\texttt{kschw10@student.sdu.dk}}\\\\
+	Det Tekniske Fakultet\\
+	Syddansk Universitet Odense}
+\date{15. juni 2011} % Activate to display a given date or no date (if empty), otherwise the current date is printed 
+
+
+
+%%%								%%%
+%%%	FRONT MATTER	%%%
+%%%								%%%
+\begin{document}
+\pagestyle{plain}
+\numberwithin{lstlisting}{section}		%sourcecode numbering by section
+
+
+
+%%% Forside
+\maketitle
+\vspace*{0.5in}
+
+\tableofcontents
+%\addcontentsline{toc}{section}{Indhold}
+
+
+
+
+
+%%%								%%%
+%%%	 MAIN MATTER	%%%
+%%%								%%%
+\clearpage
+
+
+
+\input{opgave1}
+\input{opgave2}
+\input{opgave3}
+\input{opgave4}\newpage
+\input{opgave5}
+\input{opgave6}
+\input{opgave7}
+
+
+
+
+%% Appendiks
+\clearpage
+\appendix
+
+
+%%% Litteraturliste
+\section{Referencer}
+%\nocite{*} % Inkluderer alle poster i bibl.bib-filen (dvs. kun skriv litteratur ind vi rent faktisk har brugt)
+\printbibliography[heading=bibempty]
+
+
+
+
+
+
+
+\end{document}

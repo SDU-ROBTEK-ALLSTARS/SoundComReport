@@ -1,0 +1,109 @@
+\section*{Opgave 4}\addcontentsline{toc}{section}{Opgave 4}\refstepcounter{section}
+Vi har vektorfeltet
+\[
+	\mathbf{F} = 
+	\begin{pmatrix}
+		axy+3yz \\
+		x^2+3xz+by^2z \\
+		bxy+cy^3
+	\end{pmatrix}
+\]
+
+hvor $a$, $b$ og $c$ er reelle konstanter. Det ønskes at bestemme integralet $I$
+\[
+	I = \int_{\mathcal{C}} \mathbf{F} \cdot d\mathbf{r}
+\]
+hvor $\mathcal{C}$ er en kurve fra $(0,1,-1)$ til $(2,1,1)$
+
+\subsection*{a)}\addcontentsline{toc}{subsection}{a)}\refstepcounter{subsection}
+Konstanterne $a$, $b$ og $c$ ønskes fundet, således at $I$ er uafhængig af kurvens vej. Vi ved, at hvis vektorfeltet $\mathbf{F}$ er konservativt, afhænger $I$ netop \textit{ikke} af kurvens vej\footcite[866]{adamsessex}.
+
+Hvis vektorfeltet $\mathbf{F}$ er konservativt eksisterer der en potentialefunktion $f$, så $\mathbf{F} = \nabla f$. $I$ kan, idet vi kender $f$ også skrives som\footcite[867]{adamsessex}
+\[
+	I = \int_{\mathcal{C}} \mathbf{F} \cdot d\mathbf{r} = \int_{\mathcal{C}} \nabla f \cdot d\mathbf{r} = f(P_1) - f(P_0)
+\]
+hvor kurven $\mathcal{C}$ går fra punktet $P_0$ til punktet $P_1$.
+
+For at bestemme $f$ undersøges ligheden $\mathbf{F} = \nabla f$
+\begin{align*}
+	\mathbf{F} &= \nabla f \implies \\
+	F_1 \mathbf{i} + F_2 \mathbf{j} + F_3 \mathbf{k} &= \frac{\partial f}{\partial x} \mathbf{i} + \frac{\partial f}{\partial y} \mathbf{j} + \frac{\partial f}{\partial z} \mathbf{k}
+\end{align*}
+
+Hvert led kan sættes lig hinanden, så
+\[
+	F_1 = \frac{\partial f}{\partial x}
+\]
+\[
+	F_2 = \frac{\partial f}{\partial y}
+\]
+\[
+	F_3 = \frac{\partial f}{\partial z}
+\]
+
+For at finde $f$ integreres den første lighed med respekt til $x$ for at give et muligt udtryk for $f$. Derefter sammenlignes $f$, partielt differentieret mht. $y$ og $z$, for at opnå et mere fuldkomment udtryk for $f$. I løbet af denne process kan konstanterne $a$, $b$ og $c$ samtidig bestemmes.
+\begin{align*}
+	\frac{\partial f}{\partial x} &= axy+3yz \implies\\
+	f &= \int (axy+3yz) dx\\
+	&= \frac{1}{2} ax^2y + 3xyz + g(y,z)
+\end{align*}
+Integrationskonstanten lader vi være en funktion $g$ af $y$ og $z$. Hvis $g(y,z)$ differentieres partielt mht. $x$ bliver den $0$ og ligheden gælder.
+
+Nu haves således et udtryk for $f$ som kan differentieres partielt mht. $y$
+\begin{align*}
+	\frac{\partial f}{\partial y} &= \frac{\partial}{\partial y} \left( \frac{1}{2} ax^2y + 3xyz + g(y,z) \right)\implies\\
+	&= \frac{1}{2} ax^2 + 3xz + \frac{\partial g(y,z)}{\partial y}
+\end{align*}
+
+Dette udtryk sammenlignes med $F_2$ for at bestemme konstanter
+\[
+	x^2+3xz+by^2z = \frac{1}{2} ax^2 + 3xz + \frac{\partial \, g(y,z)}{\partial y}
+\]
+
+Vi ser at det må betyde, at $a=2$ og 
+\begin{align*}
+	\frac{\partial \, g(y,z)}{\partial y} &= by^2z \implies\\
+	g(y,z) &= \int (by^2z) dy\\
+	&= \frac{1}{3}by^3z+h(z)
+\end{align*}
+Differentieres $g(y,z)$ mht. $y$ skal resultatet være 0, dvs. at $g$ højst kan være en funktion af $z$. Den kalder vi $h(z)$
+
+Nu kan $g(y,z)$ indsættes i $f$
+\[
+	f = \frac{1}{2} ax^2y + 3xyz + \frac{1}{3}by^3z+h(z)
+\]
+
+Slutteligt differentieres $f$ partielt mht. $z$
+\begin{align*}
+	\frac{\partial f}{\partial z} &= \frac{\partial}{\partial z} \left( \frac{1}{2} ax^2y + 3xyz + \frac{1}{3}by^3z+h(z) \right)\\
+	&= 3xy + \frac{1}{3}by^3 + \frac{\partial \, h(z)}{\partial z}
+\end{align*}
+
+og vi sammenligner med $F_3$
+\[
+	bxy+cy^3 = 3xy + \frac{1}{3}by^3 + \frac{\partial \, h(z)}{\partial z}
+\]
+hvor det ses, at $b=3$, $c=1$ og 
+\begin{align*}
+\frac{\partial \, h(z)}{\partial z} &= 0 \implies\\
+h(z) &= k
+\end{align*}
+Differentieres en konstant $k$ bliver den $0$
+
+Dermed kan et fuldkomment udtryk for potentialefunktionen $f$ opskrives idet konstanterne $h(z)$, $a$, $b$ og $c$ indsættes
+\[
+	f = x^2y + 3xyz + y^3z+k
+\]
+
+\subsection*{b)}\addcontentsline{toc}{subsection}{b)}\refstepcounter{subsection}
+I denne opgave skal integralet $I$ bestemmes. I opgave 4a opstilledes følgende lighed 
+\[
+	I = \int_{\mathcal{C}} \mathbf{F} \cdot d\mathbf{r} = f(P_1) - f(P_0)
+\]
+
+Potentialefunktionen $f$ er allerede bestemt og værdierne for $a$, $b$ og $c$ er indsat, så vi evaluerer blot udtrykket
+\begin{align*}
+	I &= f(2,1,1) - f(0,1,-1) \\
+	&= (2^2 + 3(2) + 1) - (-1)\\
+	&=12
+\end{align*}

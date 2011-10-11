@@ -1,0 +1,76 @@
+\section*{Opgave 5}\addcontentsline{toc}{section}{Opgave 5}\refstepcounter{section}
+Et vektorfelt er beskrevet ved
+\[
+	\mathbf{F} = 
+	\begin{pmatrix}
+		e^x - y^3 \\
+		e^y + x^3 \\
+		e^z
+	\end{pmatrix}
+\]
+
+Denne opgave går ud på, at beregne
+\[
+	\int_{\mathcal{C}} \mathbf{F} \cdot d\mathbf{r}
+\]
+
+hvor kurven $\mathcal{C}$ er givet ved
+\[
+	\mathbf{r}(t) = 
+	\begin{pmatrix}
+		\cos t \\
+		\sin t \\
+		\sin 2t
+	\end{pmatrix}
+\]
+og $0 \leq t \leq 2\pi$
+
+For at bestemme integralet vil vi benytte Stokes sætning, som relaterer et linjeintegrale til et overfladeintegrale\footcite[913]{adamsessex}:
+\[
+	\oint_{\mathcal{C}} \mathbf{F} \cdot d\mathbf{r} = \iint_{\mathcal{S}} \mathrm{curl}\,\mathbf{F} \cdot \hat{\mathbf{N}} \, dS
+\]
+
+For at kunne bruge Stokes sætning skal det vises, at kurven $\mathcal{C}$ ligger på overfladen $z=2xy$. Det kan vi gøre ved at substituere de parametriske ligninger for kurven ind på højresiden af ligningen for overfladen og anvende en trigonometrisk identitet
+\begin{align*}
+	z &= 2xy \implies \\
+	z &= 2 \cos t \sin t\\
+	&= \sin 2t
+\end{align*}
+Det ses, at alle punkter af kurven $\mathcal{C}$ tilfredsstiller ligningen for overfladen, så kurven må ligge på overfladen.
+
+For at evaluere integralet skal vi kende $\mathrm{curl}\,\mathbf{F}$
+\[
+	\mathrm{curl}\,\mathbf{F} = \mathbf{F} \times \nabla = \begin{vmatrix}
+			\mathbf{i} & \mathbf{j} & \mathbf{k} \\
+			\dfrac{\partial}{\partial x} & \dfrac{\partial}{\partial y} & \dfrac{\partial}{\partial z} \\
+			e^x - y^3 &	e^y + x^3 &	e^z
+		\end{vmatrix}
+\]
+\[
+	= \left( \dfrac{\partial}{\partial y}(e^z) - \dfrac{\partial}{\partial z}(e^y + x^3) \right) \mathbf{i} +
+		\left( \dfrac{\partial}{\partial z}(e^x - y^3) - \dfrac{\partial}{\partial x}(e^z) \right) \mathbf{j} +
+		\left( \dfrac{\partial}{\partial x}(e^y + x^3) - \dfrac{\partial}{\partial y}(e^x - y^3) \right) \mathbf{k}
+\]
+\[
+	= 3 \left( x^2 + y^2 \right) \mathbf{k}
+\]
+
+For en overflade med ligning $z=g(x,y)=2xy$ gælder\footcite[885]{adamsessex}
+\begin{align*}
+	\hat{\mathbf{N}} \, dS &= \pm \left( -\dfrac{\partial g}{\partial x}\mathbf{i} -\dfrac{\partial g}{\partial y}\mathbf{j} + \mathbf{k} \right) dA \\
+	&= (-2y\mathbf{i} - 2x\mathbf{j} + \mathbf{k}) \, dA
+\end{align*}
+
+Projektionen af kurven givet ved $\mathbf{r}(t)$ på regionen $R$ i $xy$-planet er en enhedscirkel med centrum i $(0,0)$. Dvs
+\begin{align*}
+	\oint_{\mathcal{C}} \mathbf{F} \cdot d\mathbf{r} &= \iint_{\mathcal{S}} \mathrm{curl}\,\mathbf{F} \cdot \hat{\mathbf{N}} \, dS\\
+	&= \iint_{R}3 \left( x^2 + y^2 \right)\mathbf{k} \cdot (-2y\mathbf{i} - 2x\mathbf{j} + \mathbf{k}) \, dA\\
+	&= \iint_{R}3 \left( x^2 + y^2 \right) dA
+\end{align*}
+
+Med integralet og grænserne omskrevet til cylindriske koordinater bliver det let at evaluere integralet
+\begin{align*}
+	\oint_{\mathcal{C}} \mathbf{F} \cdot d\mathbf{r} &= \iint_{R}3 \left( x^2 + y^2 \right) dA\\
+	&= \int_{0}^{2\pi} \int_{0}^{1} 3 r^2 \, r \, dr \, d\theta \\
+	&= \dfrac{3 \pi}{2}
+\end{align*}
