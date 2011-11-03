@@ -26,7 +26,7 @@
 *.mtc
 *.mtc0
 *.run.xml
-*.tcp
+#*.tcp (Kim commented this to share the texniccenter project file. It should be working cross-machine)
 *.tps
 *blx.bib
 
