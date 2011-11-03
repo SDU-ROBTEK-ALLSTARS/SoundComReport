@@ -26,9 +26,10 @@
 *.mtc
 *.mtc0
 *.run.xml
-*.tcp
+#.tcp
 *.tps
 *blx.bib
 
 #PDF
 *.pdf
+!graphics/*.pdf
