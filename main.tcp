@@ -4,9 +4,9 @@ Version=4
 
 [ProjectInfo]
 MainFile=main.tex
-UseBibTeX=0
+UseBibTeX=1
 UseMakeIndex=0
 ActiveProfile=LaTeX => PDF
-ProjectLanguage=da
-ProjectDialect=DK
+ProjectLanguage=en
+ProjectDialect=US
 
