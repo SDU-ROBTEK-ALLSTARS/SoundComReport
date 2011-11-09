@@ -1,10 +1,10 @@
-\section{Overview and considerations concerning data link layer}
+\section{Overview and considerations}% (data link layer)
 
 \begin{figure}[htb]
 	\begin{center}
-	\includegraphics[scale=0.5,trim=0 0 0 0]{bobler_dll.png} %trim=l b r t (can cut off from every side)
+	\includegraphics[scale=0.4,trim=0 0 0 0]{bobler_dll.png} %trim=l b r t (can cut off from every side)
 	\caption{Things to consider concerning data link layer}
-	\label{Things to consider concerning data link layer}			% figure labels are of the form \label{fig:*}
+	\label{fig:bobler_dll}
 	\end{center}
 \end{figure}
 
@@ -40,7 +40,7 @@ adding the rows and columns:
 	\end{tabular}
 	\end{center}
 	\caption{Two-dimensional parity check}
-	\label{tab:Two-dimensional parity check}
+	\label{tab:Two_dimensional_parity_check}
 \end{table}
 
 Instead of as normally done to increase the size of each row by one to contain
@@ -54,7 +54,7 @@ the case of this example the transmission would be:
 	\end{tabular}
 	\end{center}
 	\caption{Bytes to be transmitted}
-	\label{tab:Bytes to be transmitted}
+	\label{tab:Bytes_to_be_transmitted}
 \end{table}
 
 Each four bit nipple is now transmitted an a DTMF-tone. Should one of the tones
@@ -73,15 +73,13 @@ parity bits for example:
 	\end{tabular}
 	\end{center}
 	\caption{Failed parity check}
-	\label{tab:Failed parity check}
+	\label{tab:Failed_parity_check}
 \end{table}
-
 
 This will lead to the frame being discarded. Though in some cases it will be
 possible to correct the error and find the original nibble, this is not
 recommended, since more than one tone might be corrupted. Errors in the
 redundant byte will also lead to the discarding of the transmission.
-
 
 \subsection{Flowcontrol}
 The next thing to consider is flowcontrol. Since the DTMF-system
@@ -133,7 +131,7 @@ the token and indicating frame types. Rules must be implemented to keep the toke
 	\end{tabular}
 	\end{center}
 	\caption{Protocol for type field}
-	\label{tab:Protocol for type field}
+	\label{tab:Protocol_for_type_field}
 \end{table}
 
 This leads to the following format of a frame: 
@@ -147,5 +145,5 @@ This leads to the following format of a frame:
 	\end{tabular}
 	\end{center}
 	\caption{Final frame format}
-	\label{tab:Final frame format}
+	\label{tab:Final_frame_format}
 \end{table}

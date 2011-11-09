@@ -1,0 +1,125 @@
+% PAGE DIMENSIONS
+\usepackage{geometry}
+\geometry{a4paper}
+
+% PACKAGES
+\usepackage{graphicx} %support the \includegraphics command and options
+\usepackage{fancyhdr} % Headers/footers (should be set AFTER setting up the page geometry)
+\usepackage{eso-pic} %background pictures
+\usepackage[latin1]{inputenc}
+%\usepackage[danish]{babel}
+\usepackage{csquotes}
+\usepackage{booktabs} % for much better looking tables
+\usepackage{tabularx}
+\usepackage{slashbox}
+\usepackage{array} % for better arrays (eg matrices) in maths
+\usepackage{paralist} % very flexible & customisable lists (eg. enumerate/itemize, etc.)
+\usepackage{verbatim} % adds environment for commenting out blocks of text & for better verbatim
+\usepackage{alltt}
+%\usepackage{sectsty} %section title appearance
+\usepackage{hyperref} %til links, email etc - giver ogs bookmarks i pdf filen
+%\usepackage{dirtree} %directory trees
+\usepackage{subfig} %make it possible to include more than one captioned figure/table in a single float
+\usepackage{float} %float positioning etc
+\usepackage{amsmath,amsfonts,amssymb,amsthm} %AMS' packages for symbols, theorems etc.
+\usepackage{xfrac} %for nicefrac{}{}
+\usepackage{wrapfig}
+\usepackage{multicol}
+\usepackage{footnote}
+\usepackage{perpage}
+\usepackage{ctable}
+\usepackage{listings} %for source code listings
+\usepackage{marginnote} %Margin notes - use \marginnote{}
+\usepackage[parfill]{parskip} %Activate to begin paragraphs with an empty line rather than an indent
+
+% marginnote package options
+\renewcommand*{\marginfont}{\color{red}\sffamily} %red, sans-serif
+\reversemarginpar %margin notes on left side
+
+% makes footnotes in tables possible (perpage package)
+\MakePerPage{footnote}
+\makesavenoteenv{tabular}
+
+% listings package settings
+\lstset{
+	language=c++,
+	numbers=left,
+	numberstyle=\tiny,
+	numbersep=6pt,
+	captionpos=b,
+	tabsize=4,
+	basicstyle=\footnotesize\sffamily,
+	breaklines=true,                % sets automatic line breaking
+	escapeinside={(*&}{&*)},
+}
+%\renewcommand*\lstlistingname{Code}
+
+% hyperref package settings
+\hypersetup{
+    unicode=true,          % non-Latin characters in Acrobat’s bookmarks
+    pdftoolbar=true,        % show Acrobat’s toolbar?
+    pdfmenubar=true,        % show Acrobat’s menu?
+    pdffitwindow=false,     % window fit to page when opened
+    pdfstartview={FitH},    % fit page to the window Horizontal/Vertical
+    pdftitle={TITLE},    % title
+    pdfauthor={AUTHORS},     % author
+    pdfsubject={SUBJECT},   % subject of the document
+    pdfkeywords={keyword1} {keyword2} {SDU}, % list of keywords
+    pdfnewwindow=true,      % links in new window
+    colorlinks=false,       % false: boxed links; true: colored links
+    linkcolor=red,          % color of internal links
+    citecolor=green,        % color of links to bibliography
+    filecolor=magenta,      % color of file links
+    urlcolor=cyan,           % color of external links
+    plainpages=false
+}
+
+
+% Bibliography appearance
+\usepackage[style=authortitle-icomp,natbib=true,sortcites=true,block=space,backend=bibtex8]{biblatex}
+\setlength{\bibparsep}{10pt}
+\bibliography{bibl}
+
+% Headers and footers
+\pagestyle{fancy} % options: empty , plain , fancy
+\setlength{\headheight}{15pt}
+\lhead{\nouppercase{\rightmark}}%\lhead{\nouppercase{\leftmark}}
+\chead{}
+\rhead{}
+\lfoot{}
+\cfoot{}
+\rfoot{\thepage}
+
+\fancypagestyle{plain}{% Using the plain-style to number pages without including a header!
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[RO]{\thepage}
+}
+
+%%% Contents appearance
+\usepackage[]{tocbibind} % Put the bibliography in the ToC (Opts: nottoc,notlof,notlot)
+\setcounter{tocdepth}{3} % set how many levels the table of contents displays. default=3
+\usepackage[titles,subfigure]{tocloft} % Alter the style of the Table of Contents
+\renewcommand{\cftsecfont}{\rmfamily\mdseries\upshape}
+\renewcommand{\cftsecpagefont}{\rmfamily\mdseries\upshape} % No bold!
+
+% \includegraphics default folder
+\graphicspath{{content/graphics/}}
+
+% Number by section
+%\numberwithin{equation}{section}
+%\numberwithin{figure}{section}
+%\numberwithin{table}{section}
+
+% Paragraphs (handled by the parskip package currently?)
+%\setlength{\parindent}{0pt}
+%\setlength{\parskip}{2ex plus 0.5ex minus 0.2ex}
+
+% Float positioning control
+\setcounter{topnumber}{2}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{3}
+\renewcommand{\topfraction}{0.85}
+\renewcommand{\bottomfraction}{0.85}
+\renewcommand{\textfraction}{0.15}
+\renewcommand{\floatpagefraction}{0.4}
