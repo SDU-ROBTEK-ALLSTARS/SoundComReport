@@ -3,9 +3,8 @@
 \documentclass{report}
 \input{setup.tex}
 
-
 \begin{document}
-\numberwithin{lstlisting}{section} %sourcecode numbering by section (must happen after \begin{document}
+
 
 % Front page
 \pagenumbering{alph}
@@ -26,7 +25,7 @@
 \tableofcontents\thispagestyle{plain}
 \listoffigures
 \listoftables
-
+\lstlistoflistings\addcontentsline{toc}{chapter}{Listings}
 
 
 % MAIN CONTENT
@@ -43,10 +42,18 @@
 
 \chapter{Second chapter}
 \section{Chap two test}
-Hej hej
-
- 
- 
+Hej hej her er en test
+\begin{lstlisting}[caption={Descriptive Caption Text},label=DescriptiveLabel]
+//Distance Formula
+double Point::operator -(const Point& p2) const
+{
+  double t1, t2, d;
+  t1 = p2.xCoord - xCoord; //(x2-x1)
+  t2 = p2.yCoord - yCoord; //(y2-y1)
+  d = sqrt( pow(t1,2) + pow(t2,2) );
+  return d;
+}
+\end{lstlisting}
  
 
 % References

@@ -44,13 +44,13 @@
 \lstset{
 	language=c++,
 	numbers=left,
-	numberstyle=\tiny,
+	numberstyle=\scriptsize,
 	numbersep=6pt,
 	captionpos=b,
 	tabsize=4,
-	basicstyle=\footnotesize\sffamily,
+	basicstyle=\footnotesize,
 	breaklines=true,                % sets automatic line breaking
-	escapeinside={(*&}{&*)},
+	escapeinside={(*¤}{¤*)},
 }
 %\renewcommand*\lstlistingname{Code}
 
@@ -62,9 +62,9 @@
     pdffitwindow=false,     % window fit to page when opened
     pdfstartview={FitH},    % fit page to the window Horizontal/Vertical
     pdftitle={TITLE},    % title
-    pdfauthor={AUTHORS},     % author
+    pdfauthor={Alexander Adelholm Brandbyge, Frederik Hagelskjær, Rudi Hansen, Leon Bonde Larsen, Kent Stark Olsen, Kim Lindberg Schwaner},% author
     pdfsubject={SUBJECT},   % subject of the document
-    pdfkeywords={keyword1} {keyword2} {SDU}, % list of keywords
+    pdfkeywords={DTMF} {keyword2} {SDU}, % list of keywords
     pdfnewwindow=true,      % links in new window
     colorlinks=false,       % false: boxed links; true: colored links
     linkcolor=red,          % color of internal links
@@ -74,11 +74,10 @@
     plainpages=false
 }
 
-
 % Bibliography appearance
 \usepackage[style=authortitle-icomp,natbib=true,sortcites=true,block=space,backend=bibtex8]{biblatex}
 \setlength{\bibparsep}{10pt}
-\bibliography{bibl}
+\bibliography{content/bibliography}
 
 % Headers and footers
 \pagestyle{fancy} % options: empty , plain , fancy
