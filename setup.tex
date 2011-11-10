@@ -5,6 +5,7 @@
 % PACKAGES
 \usepackage{graphicx} %support the \includegraphics command and options
 \usepackage{fancyhdr} % Headers/footers (should be set AFTER setting up the page geometry)
+\usepackage{color}
 \usepackage{eso-pic} %background pictures
 \usepackage[latin1]{inputenc}
 %\usepackage[danish]{babel}
@@ -89,18 +90,16 @@
 \cfoot{}
 \rfoot{\thepage}
 
-\fancypagestyle{plain}{% Using the plain-style to number pages without including a header!
-\fancyhf{}
-\renewcommand{\headrulewidth}{0pt}
-\fancyfoot[RO]{\thepage}
+\fancypagestyle{plain}{% Using the plain-style to be able number pages, but with an empty header! (using the report document class makes this nearly obsolete)
+ \fancyhf{}
+ \renewcommand{\headrulewidth}{0pt}
+ \fancyfoot[RO]{\thepage}
 }
 
 %%% Contents appearance
 \usepackage[]{tocbibind} % Put the bibliography in the ToC (Opts: nottoc,notlof,notlot)
 \setcounter{tocdepth}{3} % set how many levels the table of contents displays. default=3
 \usepackage[titles,subfigure]{tocloft} % Alter the style of the Table of Contents
-\renewcommand{\cftsecfont}{\rmfamily\mdseries\upshape}
-\renewcommand{\cftsecpagefont}{\rmfamily\mdseries\upshape} % No bold!
 
 % \includegraphics default folder
 \graphicspath{{content/graphics/}}
@@ -122,3 +121,6 @@
 \renewcommand{\bottomfraction}{0.85}
 \renewcommand{\textfraction}{0.15}
 \renewcommand{\floatpagefraction}{0.4}
+
+% Header colour
+\definecolor{FrontpageHeadingColor}{RGB}{5,5,60}%Heading colour definition
