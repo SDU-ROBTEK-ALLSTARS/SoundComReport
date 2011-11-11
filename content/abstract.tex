@@ -1,2 +1,26 @@
 \chapter*{Abstract}\addcontentsline{toc}{chapter}{Abstract}
-Abstract
+\subsection{Abstract}
+The base of this project is a given assignment to build a network using DTMF
+tones. It is natural therefore to use the layers described in the OSI-model as
+phases of both the project and the report.
+
+\subsection{Physical layer}
+The probing of the physical layer forms a base for the entire project. It is
+given that the physical layer is to transport data via DTMF tones. A thorough
+examination of the physical layer is important since it defines the requirements
+for the rest of the system. This phase will contain experiments and theoretical
+proofs leading to a clear performance specification.
+
+\subsection{Data link and network layers}
+The focus of this phase is error correction and flow control. Since the system
+is exposed to noisy surroundings, it must be safe and reliable. The protocol
+must be build to make multi-point networking possible.
+
+\subsection{Transport and session layers}
+This layer opens and manages the connection and routes between different
+processes on the station. It is also responsible for segmentation and reassembly
+of packages.
+
+\subsection{Presentation and application layer}
+This layer acts as the facade of the system, connecting the user application to
+the network through an easy to use application programmer interface.
