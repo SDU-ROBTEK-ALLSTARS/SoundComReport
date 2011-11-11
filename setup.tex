@@ -29,6 +29,7 @@
 \usepackage{footnote}
 \usepackage{perpage}
 \usepackage{ctable}
+\usepackage[intoc]{nomencl} %for abbreviations list
 \usepackage{listings} %for source code listings
 \usepackage{marginnote} %Margin notes - use \marginnote{}
 \usepackage[parfill]{parskip} %Activate to begin paragraphs with an empty line rather than an indent
@@ -139,3 +140,15 @@
   {\normalfont\Large\scshape\chaptertitlename\ \huge\thechapter}%label
   {10pt}%sep
   {\Huge}%before
+
+% make nomenclature and change its heading/toc text (see nomencl package)
+\makenomenclature
+\renewcommand{\nomname}{Abbreviations}
+%
+%  * Pass this line to MakeIndex:
+%    %bm.nlo -s nomencl.ist -o %bm.nls
+%
+%  * Use \nomenclature{abbr}{discriptive text} to add an entry to the 
+%    abbreviations list (best done where the abbreviation first occurs in the text)
+%  * Example:
+%    \nomenclature{ADHD}{Attention Deficit Hyperactivity Disorder}
