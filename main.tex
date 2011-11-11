@@ -5,34 +5,34 @@
 \begin{document}
 
 % Front page
-\pagenumbering{alph}
+\pagenumbering{alph} %frontpage numbered with a letter
 \input{content/frontpage.tex}
 
-% Abstract (un-numbered section)
-\pagenumbering{roman}
+% Abstract (un-numbered chapter)
+\pagenumbering{roman} %until main content we use roman page numbering
 \input{content/abstract.tex}
 
-% Preface (un-numbered section)
+% Preface (un-numbered chapter)
 \input{content/preface.tex}
 
-% Table of contents (and figures, tables, listings?)
+% Table of contents and figures, tables and listings
 \clearpage
 \tableofcontents
 \listoffigures
 \listoftables
 \lstlistoflistings\addcontentsline{toc}{chapter}{Listings}
 
-% Abbreviations
+% Abbreviations (un-numbered chapter)
 \input{content/abbreviations.tex}
 
 
 % MAIN CONTENT
 \clearpage
-\pagenumbering{arabic}
+\pagenumbering{arabic} %''normal'' arabic numbering from here on out
 
 
 
-\input{content/introduction.tex}\newpage
+\input{content/introduction.tex}
 
 \chapter{Data link layer}
 \input{content/dll_ovrvw_cnsdrtn.tex}
@@ -54,6 +54,6 @@
 % Appendix
 \appendix %all sections below are numbered ''A, B, C,...''
 \chapter{Appendix section here}
-
+Jaa
 
 \end{document}
