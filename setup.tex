@@ -8,7 +8,6 @@
 \usepackage{color}
 \usepackage{eso-pic} %background pictures
 \usepackage[latin1]{inputenc}
-%\usepackage{fncychap} %fancy chapter headings - must be loaded before hyperref
 %\usepackage[danish]{babel}
 \usepackage{csquotes}
 \usepackage{booktabs} % for much better looking tables
@@ -17,8 +16,8 @@
 \usepackage{array} % for better arrays (eg matrices) in maths
 \usepackage{paralist} % very flexible & customisable lists (eg. enumerate/itemize, etc.)
 \usepackage{verbatim} % adds environment for commenting out blocks of text & for better verbatim
-\usepackage{alltt}
-%\usepackage{sectsty} %section title appearance
+\usepackage{alltt} %improved verbatim
+\usepackage{titlesec} %to modify \chapter, \section, etc appearance
 \usepackage{hyperref} %til links, email etc - giver ogs bookmarks i pdf filen
 %\usepackage{dirtree} %directory trees
 \usepackage{subfig} %make it possible to include more than one captioned figure/table in a single float
@@ -131,3 +130,12 @@
 
 % Header colour
 \definecolor{FrontpageHeadingColor}{RGB}{5,5,60}%Heading colour definition
+
+% Chapter name formatting
+\titleformat
+  {\chapter}%command
+  [display]%shape
+  {\normalfont\huge\bfseries}%format
+  {\normalfont\Large\scshape\chaptertitlename\ \huge\thechapter}%label
+  {10pt}%sep
+  {\Huge}%before
