@@ -30,5 +30,6 @@
 *.tps
 *blx.bib
 *.lol
+*.synctex.gz(busy)
 
 main.pdf
