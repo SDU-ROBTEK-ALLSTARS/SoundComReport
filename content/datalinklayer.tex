@@ -1,10 +1,19 @@
-\section{Overview and considerations}% (data link layer)
+\documentclass[letterpaper]{article}
+\usepackage{graphicx}
+\author{Leon Bonde Larsen}
+\title{Overview and considerations concerning data link layer}
+\begin{document}
+\setlength{\baselineskip}{1.6\baselineskip}
+\setlength{\parskip}{2ex}
+\maketitle
+
+\section{Overview and considerations concerning data link layer}
 
 \begin{figure}[htb]
 	\begin{center}
-	\includegraphics[scale=0.4,trim=0 0 0 0]{bobler_dll.png} %trim=l b r t (can cut off from every side)
+	\includegraphics[scale=0.5,trim=0 0 0 0]{content/graphics/dll_bobler.png}
 	\caption{Things to consider concerning data link layer}
-	\label{fig:bobler_dll}
+	\label{Things to consider concerning data link layer}
 	\end{center}
 \end{figure}
 
@@ -27,6 +36,7 @@ Example: We want to transmit the two bytes 0011 0101 and 0101 1110. The data
 link layer puts these in a four by four matrix and calculates the parity bits by
 adding the rows and columns:
 
+
 \begin{table}[htb]
 	\begin{center}
 	\begin{tabular}{c|c}
@@ -39,7 +49,7 @@ adding the rows and columns:
 	\end{tabular}
 	\end{center}
 	\caption{Two-dimensional parity check}
-	\label{tab:Two_dimensional_parity_check}
+	\label{tab:Two-dimensional parity check}
 \end{table}
 
 Instead of as normally done to increase the size of each row by one to contain
@@ -53,7 +63,7 @@ the case of this example the transmission would be:
 	\end{tabular}
 	\end{center}
 	\caption{Bytes to be transmitted}
-	\label{tab:Bytes_to_be_transmitted}
+	\label{tab:Bytes to be transmitted}
 \end{table}
 
 Each four bit nipple is now transmitted an a DTMF-tone. Should one of the tones
@@ -72,13 +82,15 @@ parity bits for example:
 	\end{tabular}
 	\end{center}
 	\caption{Failed parity check}
-	\label{tab:Failed_parity_check}
+	\label{tab:Failed parity check}
 \end{table}
+
 
 This will lead to the frame being discarded. Though in some cases it will be
 possible to correct the error and find the original nibble, this is not
 recommended, since more than one tone might be corrupted. Errors in the
 redundant byte will also lead to the discarding of the transmission.
+
 
 \subsection{Flowcontrol}
 The next thing to consider is flowcontrol. Since the DTMF-system
@@ -89,27 +101,27 @@ other words a selective repeat system is preferred
 
 To introduce a selective repeat system, additional redundancy is needed.
 
-By using only two bits for the sequence number, redundancy is kept as low as
-possible while still benefiting from pipelining. The sender transmits four
-frames (twentyfour tones) and then waits for the receiver to reply with one frame (six
-tones).
+By using three bits for the sequence number, redundancy is kept as low as
+possible while still benefiting from pipelining. The sender transmits eight
+frames (fourtyeight tones) and then waits for the receiver to reply with one
+frame (six tones).
 
 \subsection{Framing}
 It is presumed that the physical layer will provide a starting point for each
-transmission, probably in the form of silence. If this is not the case,
+transmission. If this is not the case,
 additional flags will be needed in between the frames, again leading to the need
 of stuffing.
 
 Next thing to consider is multipoint. There are three options: A token
 network, a time division network or a code division network. Time division
-requires a level of timing the interface layer is not able to deliver.
+requires a level of timing the interface layer is unable to deliver.
 Code division leads to the need for larger frames or if implemented with the
 proposed frame size, a lot of unused frames in a small network. This leaves us
 with a token passing network, so this is the choice.
 
-Four bits will control the adressing. The first two
-bits identifies the receiver and the next two identifies the sender. Thereby the
-protocol allows networks of up to four stations.
+Three bits will control the adressing, all identifying the receiver, since info
+about sender is not needed at this level. Thereby the protocol allows networks
+of up to eight stations.
 
 The selective repeat system and the token network introduces the need for different frame types.
 The type field will consist of two bits, at the same time controlling
@@ -121,17 +133,33 @@ the token and indicating frame types. Rules must be implemented to keep the toke
 		\hline
 		00 & Has no token & Reply from receiver \\
 		\hline
-		01 & Has no token & Passes token to receiveradress \\
+		01 & Has no token & Passes token to addressed station \\
 		\hline
-		10 & Has token & Accepts token from receiveradress \\
+		10 & Has token & Accepts token from addressed station \\
 		\hline
-		11 & Has token & Data frame for receiveradress \\
+		11 & Has token & Data frame for addressed station \\
 		\hline
 	\end{tabular}
 	\end{center}
 	\caption{Protocol for type field}
-	\label{tab:Protocol_for_type_field}
+	\label{tab:Protocol for type field}
 \end{table}
+
+
+Reply frames has type 00 and sequence number 111 (to prevent legal 0:0:0
+frames). Each bit of the data byte corresponds to a sequence number and has
+value 1 for accepted and 0 for resend.
+
+Token passing is controlled by the backbone architecture of the system and is
+implemented in the data link layer. When the token is offered,
+there is a window of response time, wherein the station must reply by accepting
+the token. If there are no reply during the window, the token is offered to the
+next station. 
+
+The backbone has a routine for asking the data link layer whether
+it has the token or not. If there are data to send, this is initialized by the
+backbone, else the token is passed to the next station. Theese functionalities
+are implemented as public methods in the data link layer.
 
 This leads to the following format of a frame: 
 
@@ -139,10 +167,40 @@ This leads to the following format of a frame:
 	\begin{center}
 	\begin{tabular}{|ccc|c|c|}
 		\hline
-		type (2 bits) & address (4 bits) & sequence (2 bits) & data (8 bits) & parity (8 bits)  \\
+		type (2 bits) & address (3 bits) & sequence (3 bits) & data (8 bits) & parity
+		(8 bits)  \\
 		\hline
 	\end{tabular}
 	\end{center}
 	\caption{Final frame format}
-	\label{tab:Final_frame_format}
+	\label{tab:Final frame format}
 \end{table}
+
+\section{Implementation}
+The data link layer is implemented in the form of two classes. The DataLinkLayer
+object is instanciated by the backbone and the Frame and Datagram objects are
+instanciated by the DataLinkLayer and destructed by it when processed.
+
+\begin{figure}[htb]
+	\begin{center}
+	\includegraphics[scale=0.5,trim=0 0 0
+	0]{content/graphics/dll_class_diagram.pdf}
+	\caption{Class diagram for data link layer (incomplete)}
+	\label{Class diagram for data link layer (incomplete)}	
+	\end{center}
+\end{figure}
+
+The methods of the classes are developed to realize the flowchart of the data
+link layer. Decisions on whether to implement a method in one class or another
+is done using the expert pattern.
+
+\begin{figure}[htb]
+	\begin{center}
+	\includegraphics[scale=0.5,trim=0 0 0
+	0]{content/graphics/dll_flowchart.pdf}
+	\caption{Flowchart for data link layer}
+	\label{Flowchart for data link layer}	
+	\end{center}
+\end{figure}
+
+\end{document}
