@@ -3,60 +3,58 @@
 \documentclass{report}
 \input{setup.tex}
 \begin{document}
-
+%
 % Front page
 \pagenumbering{alph} %frontpage numbered with a letter
-\input{content/frontpage.tex}
-
+\input{content/0_frontmatter/frontpage.tex}
+%
 % Abstract (un-numbered chapter)
 \pagenumbering{roman} %until main content we use roman page numbering
-\input{content/abstract.tex}
-
+\input{content/0_frontmatter/abstract.tex}
+%
 % Preface (un-numbered chapter)
-\input{content/preface.tex}
-
-% Table of contents and figures, tables and listings
+\input{content/0_frontmatter/preface.tex}
+%
+% Table of contents, figures, tables, listings and abbreviations
 \clearpage
 \tableofcontents
 \listoffigures
 \listoftables
 \lstlistoflistings\addcontentsline{toc}{chapter}{Listings}
-
-% Abbreviations (un-numbered chapter)
 \printnomenclature[2cm]
-
-
+%
+%
 % MAIN CONTENT
 \clearpage
 \pagenumbering{arabic} %''normal'' arabic numbering from here on out
-
-
-
-\input{content/introduction.tex}
-
-\chapter{Data link layer}
-\input{content/dll_ovrvw_cnsdrtn.tex}
-
-%test:
-\nomenclature{ADHD}{Attention Deficit Hyperactivity Disorder}
-%test end
-
-\input{content/discussion.tex}
-\input{content/conclusion.tex}
- 
-
- 
-
+%
+%
+\input{content/1_introduction/intro.tex}
+\input{content/1_introduction/background.tex}
+\input{content/1_introduction/problemdescr.tex}
+\input{content/1_introduction/reportstruct.tex}
+%
+\input{content/2_generalconcepts/intro.tex}
+%
+\input{content/3_designdecisions/intro.tex}
+\input{content/3_designdecisions/dll_overview.tex}
+%
+\input{content/4_implementation/intro.tex}
+%
+\input{content/5_experiments/intro.tex}
+%
+\input{content/7_discussion/discussion.tex}
+\input{content/8_conclusion/conclusion.tex}
+%
+% 
 % References
 \clearpage
 \nocite{*} % Inkluderer alle poster i bibl.bib-filen (dvs. kun skriv litteratur ind vi rent faktisk har brugt)
 \printbibliography
 \addcontentsline{toc}{chapter}{Bibliography}
-
-
+%
 % Appendix
-\appendix %all sections below are numbered ''A, B, C,...''
-\chapter{Appendix section here}
-Jaa
-
+\appendix %all sections below are numbered A, B, C,...
+\input{content/9_appendix/example.tex}
+%
 \end{document}
