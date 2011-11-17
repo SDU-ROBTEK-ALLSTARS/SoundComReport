@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<txcop:outputProfiles version="1" xmlns:txcop="http://schemas.ToolsCenter.org/TeXnicCenter/OutputProfiles.xsd">
+	<outputProfileList>
+		<outputProfile name="LaTeX =&gt; PDF" stopOnLatexError="false">
+			<texCommand execute="true" path="pdflatex.exe" arguments="-synctex=1 -interaction=nonstopmode -max-print-line=120 &quot;%pm&quot;"/>
+			<bibTexCommand execute="true" path="bibtex.exe" arguments="&quot;%bm&quot;"/>
+			<makeIndexCommand execute="true" path="makeindex.exe" arguments="&quot;%bm.nlo&quot; -s &quot;nomencl.ist&quot; -o &quot;%bm.nls&quot;"/>
+			<postProcessors/>
+			<viewer path="&quot;&quot;" closeBeforeCompilation="false">
+				<viewProjectCommand type="dde">
+					<commandLineCommand path="&quot;&quot;" arguments=""/>
+					<ddeCommand path="&quot;&quot;" server="SUMATRA" topic="control" command="[Open(&quot;%bm.pdf&quot;,0,1,1)]"/>
+				</viewProjectCommand>
+				<viewCurrentFileCommand type="dde">
+					<commandLineCommand path="&quot;&quot;" arguments=""/>
+					<ddeCommand path="&quot;&quot;" server="SUMATRA" topic="control" command="[ForwardSearch(&quot;%bm.pdf&quot;,&quot;%Wc&quot;,%l,0,0,1)]"/>
+				</viewCurrentFileCommand>
+				<viewCloseCommand type="dde">
+					<commandLineCommand path="&quot;&quot;" arguments=""/>
+					<ddeCommand path="" server="" topic="System" command=""/>
+				</viewCloseCommand>
+			</viewer>
+		</outputProfile>
+	</outputProfileList>
+</txcop:outputProfiles>

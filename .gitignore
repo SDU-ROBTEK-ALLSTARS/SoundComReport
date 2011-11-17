@@ -31,6 +31,7 @@
 *blx.bib
 *.lol
 *.synctex.gz(busy)
+*.synctex
 *.nls
 
 main.pdf
