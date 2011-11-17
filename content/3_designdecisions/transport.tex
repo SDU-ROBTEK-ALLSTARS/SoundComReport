@@ -1,10 +1,14 @@
 \section{Transport layer}
-In the OSI model, the session and transport layers handle process-to-process sessions (chiefly used when a more permanent connection is required for synchronous transfer, for example) and communication, respectively. When initially exploring ideas for this networking protocol, one wish was that it should be able to serve more than just one application at a time. This brings a need for such process-to-process delivery, that the transport layer protocols provide.
+In the OSI model, the session and transport layers handle process-to-process sessions (chiefly used when a more permanent connection is required for synchronous transfer, for example) and communication, respectively. When initially exploring ideas for this networking protocol, one wish was that it should be able to serve more than just one application at a time. This brings a need for such process-to-process delivery that the transport layer protocols provide.
 
 \subsection{Addressing processes}
-The data link layer in our model takes care of the node-to-node delivery, where each node has a different address. This address is, however, not at all useful \textit{after} a node's data link layer has received data and passed it on to the transport layer. Thus, we need a different addressing method: A port number.\footnote{Port number, in this text, is seperate from the port number associated with a process by it \textit{binding} via some kind of internet socket. Still, the term is used, as it's purpose is identical to the ''normal'' port number.}
+The data link layer in our model takes care of the node-to-node delivery, where each node has an address. This address is, however, not at all useful \textit{after} a node's data link layer has received data and passed it on to the transport layer. Thus, we need a different addressing method: A port number.\footnote{Port number, in this text, is separate from the port number associated with a process by it \textit{binding} via some kind of Internet socket. Still, the term is used, as it's purpose is identical to the ''normal'' port number.}
 
-The port number assigned to a certain remote host application must be known to the client before sending anything. That is the only way the local process will know where to send data. Here, we select the port number to be eight bits long.
+The port number assigned to a certain server\marginnote{Define server and client as used here} application must be known to the client before it sends anything. That is the only way the . Here, we select the port number to be eight bits long. This reasoning behind this choice is, that we will not at all be able to serve more than a couple of applications at a time, at the most. Add to that, that we wish to keep a minimal overhead size (a higher port number would add more bits to the header), as we don't have a lot of bandwidth to begin with.
+
+\subsection{Datagram}
+
+Much like UDP
 
 \nomenclature{UDP}{User datagram protocol}
 \nomenclature{TCP}{Transmission control protocol}
@@ -16,11 +20,11 @@ From the application, the transport layer expects to just receive a stream of by
 
 \begin{table}[htb]
  \centering
-  \begin{tabular}{c}
-   
-  \end{tabular}
+ \begin{tabular}{c}
+  
+ \end{tabular}
  \caption{Datagram format}
- \label{tab:DatagramFormat}
+ \label{tab:Datagram_format}
 \end{table}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % IN:
@@ -48,6 +52,9 @@ From the application, the transport layer expects to just receive a stream of by
 % unrealiable sending ?
 % connectionless service ?
 % congestion, we dont care?
+
+
+% socket address = ''data link layer''-address + port number
 
 
 %\section*{Transport and session layers}
