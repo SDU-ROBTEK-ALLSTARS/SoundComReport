@@ -1,31 +1,67 @@
-\section{Transport layer}
+\section{Transport layer protocol}
 In the OSI model, the session and transport layers handle process-to-process sessions (chiefly used when a more permanent connection is required for synchronous transfer, for example) and communication, respectively. When initially exploring ideas for this networking protocol, one wish was that it should be able to serve more than just one application at a time. This brings a need for such process-to-process delivery that the transport layer protocols provide.
 
 \subsection{Addressing processes}
 The data link layer in our model takes care of the node-to-node delivery, where each node has an address. This address is, however, not at all useful \textit{after} a node's data link layer has received data and passed it on to the transport layer. Thus, we need a different addressing method: A port number.\footnote{Port number, in this text, is separate from the port number associated with a process by it \textit{binding} via some kind of Internet socket. Still, the term is used, as it's purpose is identical to the ''normal'' port number.}
 
-The port number assigned to a certain server\marginnote{Define server and client as used here} application must be known to the client before it sends anything. That is the only way the . Here, we select the port number to be eight bits long. This reasoning behind this choice is, that we will not at all be able to serve more than a couple of applications at a time, at the most. Add to that, that we wish to keep a minimal overhead size (a higher port number would add more bits to the header), as we don't have a lot of bandwidth to begin with.
+The port number assigned to a certain server\marginnote{Define server and client as used here} application must be known to the client before it sends anything. That is the only way the local process will know where to send data. Here, we select the port number to be eight bits long. This reasoning behind this choice is, that we will not at all be able to serve more than a couple of applications at a time, at the most. Add to that, that we wish to keep a minimal overhead size (a higher port number would add more bits to the header), as we don't have a lot of bandwidth available to begin with.
 
-\subsection{Datagram}
-
-Much like UDP
-
-\nomenclature{UDP}{User datagram protocol}
-\nomenclature{TCP}{Transmission control protocol}
-
-\subsection{Placeholder}
-From the application, the transport layer expects to just receive a stream of bytes. The order in which the bytes are received is significant, but the data they contain is not.
-
-%\subsection{Segmentation?}
+A number of port addresses (0-19) are going to be reserved for control messages. See Table \ref{tab:transp_well_known} for a list of reserved ports in use for special operations.
 
 \begin{table}[htb]
  \centering
- \begin{tabular}{c}
-  
+ \begin{tabular}{ll}
+  Port & Description\\
+  \hline
+  10 & Does seomthing?
+ \end{tabular}
+ \caption{Well-known ports}
+ \label{tab:transp_well_known}
+\end{table}
+
+\subsection{Operation}
+Much like the UDP\footnote{User datagram protocol}\nomenclature{UDP}{User datagram protocol} this transport layer protocol provides a connectionless service, meaning packets are sent without having to first establish a connection. Also they are sent without sequence numbers, though in our case this is not a problem. This protocol will only be used on a half-duplex line, and there is no routing from one network to another: The packets can only go one way, and there is only one packet on the line at a time, thus packets cannot be ''out of order''.
+
+In this protocol, no flow or error control is incorporated.\marginnote{If needed we can implement error or flow ctrl anyway} This is mainly due to the reason that the data link layer and transport layer communicate directly, and not across networks where another protocol might provide an unreliable service (as with the IP\footnote{Internet protocol}\nomenclature{IP}{Internet protocol} which is provides \textit{best effort} delivery). With no error or flow control we save yet some more overhead space.
+
+With each application getting a different port number, the transport layer protocol being developed provides application multiplexing. That is, more than one application can use the protocol at the same time on each node. 
+
+\subsection{Datagram}
+From the application, the transport layer protocol expects to just receive a stream of bytes. The order in which the bytes are received is significant, but the data they contain is not. When received, the bytes will be packed into datagrams of variable, but a maximum of 256 bytes, length\marginnote{Datagram length is subject to change}. Those datagrams are then passed on to the data link layer.
+
+\begin{table}[htb]
+ \centering
+ \begin{tabular}{r|cccc}
+  Bits & 0-7 & 8-15 & 16-23 & 24-255\\
+  \hline
+   & Source port & Dest. port & Length & Data
  \end{tabular}
  \caption{Datagram format}
- \label{tab:Datagram_format}
+ \label{tab:datagram_format}
 \end{table}
+
+The datagram format is shown in Table \ref{tab:datagram_format} where it becomes evident that the overhead is very small. Each field is briefly described:
+\begin{description}
+ \item[Source port] is the port number used by the application running on the client.
+ \item[Destination port] is the port number used by the application running on the server.
+ \item[Length]. This is the complete length of the whole datagram.
+\end{description}
+
+
+\nomenclature{TCP}{Transmission control protocol}
+
+
+%error control
+%multiplexing
+%well known ports (for ''control'')
+%datagrams (variable length, but with max.)
+
+%As a low overhead is preferred, it is natural to look to the UDP\footnote{User datagram protocol}\nomenclature{UDP}{User datagram protocol}. The UDP transport layer protocol provides a connectionless service and unreliable service.
+%
+%Also they are sent without sequence numbers, though in our case this is not a problem. This protocol will only be used on a half-duplex line, and there is no routing from one network to another: The packets can only go one way, and there is only one packet on the line at a time, thus packets cannot be ''out of order''.
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % IN:
 % ----
@@ -55,6 +91,9 @@ From the application, the transport layer expects to just receive a stream of by
 
 
 % socket address = ''data link layer''-address + port number
+
+
+%variabel datalængde, sekvensnummer, sessionID,modtager, afsender,flag
 
 
 %\section*{Transport and session layers}
