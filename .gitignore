@@ -26,10 +26,12 @@
 *.mtc
 *.mtc0
 *.run.xml
-*.tcp
+#*.tcp
 *.tps
 *blx.bib
+*.lol
+*.synctex.gz(busy)
+*.synctex
+*.nls
 
-#PDF
-*.pdf
-!graphics/*.pdf
+main.pdf
