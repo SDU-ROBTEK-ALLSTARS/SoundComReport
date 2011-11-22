@@ -1,10 +1,10 @@
-\section{Overview and considerations}% (data link layer)
+\section{Data link layer} %Overview and considerations concerning -
 
-\begin{figure}[htb]
+\begin{figure}[htb]%%PDF figure if possible
 	\begin{center}
-	\includegraphics[scale=0.4,trim=0 0 0 0]{bobler_dll.png} %trim=l b r t (can cut off from every side)
+	\includegraphics[scale=0.4,trim=0 0 0 0]{dll_bobler.png}%trim=l b r t
 	\caption{Things to consider concerning data link layer}
-	\label{fig:bobler_dll}
+	\label{fig:dll_bobler}
 	\end{center}
 \end{figure}
 
@@ -39,7 +39,7 @@ adding the rows and columns:
 	\end{tabular}
 	\end{center}
 	\caption{Two-dimensional parity check}
-	\label{tab:Two_dimensional_parity_check}
+	\label{tab:two_dimensional_parity_check}
 \end{table}
 
 Instead of as normally done to increase the size of each row by one to contain
@@ -53,7 +53,7 @@ the case of this example the transmission would be:
 	\end{tabular}
 	\end{center}
 	\caption{Bytes to be transmitted}
-	\label{tab:Bytes_to_be_transmitted}
+	\label{tab:bytes_to_be_transmitted}
 \end{table}
 
 Each four bit nipple is now transmitted an a DTMF-tone. Should one of the tones
@@ -72,7 +72,7 @@ parity bits for example:
 	\end{tabular}
 	\end{center}
 	\caption{Failed parity check}
-	\label{tab:Failed_parity_check}
+	\label{tab:failed_parity_check}
 \end{table}
 
 This will lead to the frame being discarded. Though in some cases it will be
@@ -80,8 +80,8 @@ possible to correct the error and find the original nibble, this is not
 recommended, since more than one tone might be corrupted. Errors in the
 redundant byte will also lead to the discarding of the transmission.
 
-\subsection{Flowcontrol}
-The next thing to consider is flowcontrol. Since the DTMF-system
+\subsection{Flow control}
+The next thing to consider is flow control. Since the DTMF-system
 cannot be used as full-duplex, piggybacking is impossible. This means that at
 some point the receiver must reply. This reply will also be of six-tones, and
 therefore it might as well contain information about witch frames to resend. In
@@ -89,27 +89,27 @@ other words a selective repeat system is preferred
 
 To introduce a selective repeat system, additional redundancy is needed.
 
-By using only two bits for the sequence number, redundancy is kept as low as
-possible while still benefiting from pipelining. The sender transmits four
-frames (twentyfour tones) and then waits for the receiver to reply with one frame (six
-tones).
+By using three bits for the sequence number, redundancy is kept as low as
+possible while still benefiting from pipelining. The sender transmits eight
+frames (fourty eight tones) and then waits for the receiver to reply with one
+frame (six tones).
 
 \subsection{Framing}
 It is presumed that the physical layer will provide a starting point for each
-transmission, probably in the form of silence. If this is not the case,
+transmission. If this is not the case,
 additional flags will be needed in between the frames, again leading to the need
 of stuffing.
 
 Next thing to consider is multipoint. There are three options: A token
 network, a time division network or a code division network. Time division
-requires a level of timing the interface layer is not able to deliver.
+requires a level of timing the interface layer is unable to deliver.
 Code division leads to the need for larger frames or if implemented with the
 proposed frame size, a lot of unused frames in a small network. This leaves us
 with a token passing network, so this is the choice.
 
-Four bits will control the adressing. The first two
-bits identifies the receiver and the next two identifies the sender. Thereby the
-protocol allows networks of up to four stations.
+Three bits will control the addressing, all identifying the receiver, since info
+about sender is not needed at this level. Thereby the protocol allows networks
+of up to eight stations.
 
 The selective repeat system and the token network introduces the need for different frame types.
 The type field will consist of two bits, at the same time controlling
@@ -121,17 +121,32 @@ the token and indicating frame types. Rules must be implemented to keep the toke
 		\hline
 		00 & Has no token & Reply from receiver \\
 		\hline
-		01 & Has no token & Passes token to receiveradress \\
+		01 & Has no token & Passes token to addressed station \\
 		\hline
-		10 & Has token & Accepts token from receiveradress \\
+		10 & Has token & Accepts token from addressed station \\
 		\hline
-		11 & Has token & Data frame for receiveradress \\
+		11 & Has token & Data frame for addressed station \\
 		\hline
 	\end{tabular}
 	\end{center}
 	\caption{Protocol for type field}
-	\label{tab:Protocol_for_type_field}
+	\label{tab:protocol_for_type_field}
 \end{table}
+
+Reply frames has type 00 and sequence number 111 (to prevent legal 0:0:0
+frames). Each bit of the data byte corresponds to a sequence number and has
+value 1 for accepted and 0 for resend.
+
+Token passing is controlled by the backbone architecture of the system and is
+implemented in the data link layer. When the token is offered,
+there is a window of response time, wherein the station must reply by accepting
+the token. If there are no reply during the window, the token is offered to the
+next station. 
+
+The backbone has a routine for asking the data link layer whether
+it has the token or not. If there are data to send, this is initialized by the
+backbone, else the token is passed to the next station. These functionalities
+are implemented as public methods in the data link layer.
 
 This leads to the following format of a frame: 
 
@@ -139,10 +154,11 @@ This leads to the following format of a frame:
 	\begin{center}
 	\begin{tabular}{|ccc|c|c|}
 		\hline
-		type (2 bits) & address (4 bits) & sequence (2 bits) & data (8 bits) & parity (8 bits)  \\
+		type (2 bits) & address (3 bits) & sequence (3 bits) & data (8 bits) & parity
+		(8 bits)  \\
 		\hline
 	\end{tabular}
 	\end{center}
 	\caption{Final frame format}
-	\label{tab:Final_frame_format}
+	\label{tab:final_frame_format}
 \end{table}
