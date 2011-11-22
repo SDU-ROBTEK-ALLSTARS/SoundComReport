@@ -1,0 +1,45 @@
+\chapter{Sound library selection}
+Requirements\marginnote{This part requires expansion/corrections}
+\begin{itemize}
+\item Multi platform (WIndows, Linux, Mac)
+\item Fast
+\item Access to raw sample data (PCM)
+\item Both sound in and sound out
+\item(OpenSource)
+\item(Variable sample speed)
+\item(Resolution of samples)
+\item Pros/Cons on found libraries
+\end{itemize}
+
+\begin{table}
+\centering
+\begin{tabularx}{\textwidth}{lXX}
+Library & Pros & Cons\\
+\midrule
+CLAM (C++) & Framework for audio analysis. Has a prototype application. Built-in FFT & Many dependencies, Big framework\\
+\multicolumn{3}{l}{http://clam-project.org}\\
+\midrule
+fmod & & Commercial product/Closed source\\
+\multicolumn{3}{l}{http://www.fmod.org}\\
+\midrule
+portAudio (C) & & At first glance; no support for multi-channel streams\\
+\multicolumn{3}{l}{http://www.portaudio.com}\\
+\midrule
+OpenAL (C++)& & Emphasizes on using sound sources in a ''3D'' arrangement around a user\\
+\multicolumn{3}{l}{http://connect.creativelabs.com/openal}\\
+\midrule
+SDL (C) & & PCM, seems easy to work with \\
+\multicolumn{3}{l}{http://www.libsdl.org/}\\
+\midrule
+BASS & Custom samples, DSP,  any add-ons for encodings/multi-channel, Well-documented & No direct PCM (must read/written to files)\\
+\multicolumn{3}{l}{http://www.un4seen.com/}\\
+\midrule
+RTAudio (C++) & Capablility probing, free-to-use-and-modify license & \\
+\multicolumn{3}{l}{http://www.music.mcgill.ca/\texttildelow gary/rtaudio/}\\
+\midrule
+QTMultimedia (C++) & & Requires core funtions from QT lib\\
+\multicolumn{3}{l}{http://doc.qt.nokia.com/latest/qtmultimedia.html}\\
+\midrule
+SFML (C++) & & 
+\end{tabularx}
+\end{table}
