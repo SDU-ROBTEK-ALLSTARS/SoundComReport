@@ -2,6 +2,6 @@
 * main.tex is the main file to compile the whole report.
 * main.tcp is the TeXnicCenter project file
 * Compile with pdflatex
-* The file tc_prof_one.tco is a TeXnicCenter output profile for use with
+* The file profile_tc_sumatra.tco is a TeXnicCenter output profile for use with
   SumatraPDF (with synctex; meaning DDE support and forward/inverse search to/from .tex and .pdf documents).
   Also, it uses MakeIndex for an abbreviations list (possible through the nomencl package)
