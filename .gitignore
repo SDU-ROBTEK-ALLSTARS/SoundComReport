@@ -32,8 +32,7 @@
 *.synctex.gz(busy)
 *.synctex
 *.nls
-*.tcp
-*.project
+/*.tcp
+/*.project
 *.orig
-
-main.pdf
+/*.pdf
