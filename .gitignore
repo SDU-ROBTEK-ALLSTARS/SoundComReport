@@ -34,5 +34,6 @@
 *.nls
 *.tcp
 *.project
+*.orig
 
 main.pdf
