@@ -1,0 +1,74 @@
+\section{Application programming interface} %Overview and considerations concerning -
+The application programming interface (API) layer is designed with the goal of presenting an easy-to-use interface for the Dtmf library. Threading is used to avoid stalling the front end application when sending and receiving data. 
+\subsection{Method description}
+\subsubsection{Public DtmfApi(unsigned char myAddress,bool hasToken, DtmfApiMsgInCallback * callback);}
+This is the constructor method of the API class. This method is called when the class is to be used.
+When this method is called, two threads are started. One for sending/receiving data and one for user callback. These threads ensure that the end application don’t have to wait for the sending a receiving algorithms that needs to be running.
+
+\subsubsection{Public void makeToken();}
+In case the token will get lost in the network, it is possible to manually insert a token with this method. When called the node on which it’s called gets the token. Token passing method is documented here ?? (This method might be obsolete, as this is may be handled automatically by DDL)
+
+\subsubsection{Public DtmfOutMessage newMessage();}
+This method is used when sending data. It returns a empty message, and enables the user to fill ind the message data manually. A reference is keept to the DtmfApi, so the message can be send by the build in method DtmfOutMessage::send();
+
+\subsubsection{Public void sendMessage(unsigned char rcvAddress, char * data, unsigned long dataLength);}
+When this method is called with arguments, the message is created internally and send right away.
+
+\subsection{Thread description}
+Two threads are spawned when the API layer is initialized. The general idea behind these threads is to avoid interference between the Dtmf lib and user application. The Dtmf needs to constantly monitor the surrounding sounds to be able to reply in time. Using sperate threads avoids user algorithms stalling these important processes.
+
+\subsubsection{Callback thread}
+This thread is only used for calling the user specified callback function when data is received. 
+
+\subsubsection{Backbone thread}
+The backbone thread is responsible for controlling internal buffers and send/receive logic. This is described in ?? 
+
+
+\subsection{Usage example}
+\subsubsection{Creating instance}
+\begin{lstlisting}[caption={Creating instance example},label=CreatingInstanceEx]
+// Declare callback function
+void function MyClass::messageInCallback(DtmfInMessage m)
+{
+    // This function is called everytime data arrives. The incoming message only exist inside this method, so it’s recomended to copy all neded information before exiting the function.
+    return;
+}
+int main()
+{
+unsigned char myAddress = 1; // My address is 1
+bool hasToken = true; // When starting I have the token. Only one node should have this flag set. When connection to an already running DTMF network this should be set to false.
+
+DtmfApi *api = new DtmfApi(myAddress, hasToken, &MyClass::messageInCallback);
+// DTMF API is now running.
+(...)
+\end{lstlisting}
+
+\subsubsection{Sending data}
+(This example assumes that an instance of API already has been created. See example \ref{CreatingInstanceEx})
+The library support two ways of sending a message. Each with different advantages.
+First method - the fast way:
+\begin{lstlisting}[caption={Sending data example 1},label=SendingDataEx1]
+api->sendMessage(unsigned char rcvAddress, char * data, unsigned long dataLength);
+\end{lstlisting}
+
+Second method - building a custom message:
+\begin{lstlisting}[caption={Sending data example 2},label=SendingDataEx2]
+DtmfOutMessage message = api->newMessage(); // Create an empty message
+message.setData(char * data, unsigned long startAdress, unsigned long dataLength);
+message.send();
+\end{lstlisting}
+
+
+\subsubsection{Receiving data}
+(This example assumes that an instance of API already has been created. See example \ref{CreatingInstanceEx})
+\begin{lstlisting}[caption={Receiving data example},label=ReceivingDataEx]
+void function MyClass::messageInCallback(DtmfInMessage m)
+{
+    // This method is called when new data arrives.
+    // Fetch data from DTMF class to local memory (Assuming we have a dataContainer available in the MyClass)
+    m.getData(this->dataContainer*, 0, m.getMessageLength());
+    return;
+}
+\end{lstlisting}
+
+
