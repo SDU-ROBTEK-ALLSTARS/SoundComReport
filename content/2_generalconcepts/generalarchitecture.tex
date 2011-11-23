@@ -1,0 +1,118 @@
+\subsection{Architectural goals}
+
+
+
+
+
+The user-application thread will spend as little as possible execution time in the network library code.
+The network library is completely autonomous, and should be able to function with only minimal interaction from the calling application.
+The user should not need to consider any extra memory allocation in the use of this library, ie. message objects should be handled exclusively by the library.
+
+\subsection{Overall system architecture}
+The general idea of this library is to have one, maybe two centralised backbone constructs, which are the only parts of the library to have any long term data storage and awareness of the network state. In the case of sending a network message, the data storage can be regarded as an assembly line, where data is taken from one buffer, transformed and put into the next buffer, in order to apply all the necessary packaging that network communication requires, before the “end data” is sent to the audio library.
+Each transformation will be done through a separate layer object, that has knowledge of how to encode and decode specific data structures.
+
+Therefore the backbone object is more than just an aggregator of data, its primary function will be to monitor each buffer and control, that transformation of data is done in a way that eliminates congestion as much as possible and ensures no data is lost. Since the backbone must be able to operate autonomously, it will be instantiated with its own execution thread.
+
+In order to ensure that the user application spend as little execution time as possible in the network code, the methods to send and receive data, are designed to be little more than to block copy data to and from the user and the network library.
+
+Each of the selected layers of the OSI model, is represented by an object that can encode or decode a sequence of bytes according to its rules. For instance the Data Link Layer can take a sequence of bytes representing a datagram, and encode it to the form of frames.
+However each of the different layer representation has no way of controlling when it is being used, no contextual information(i.e. knowledge of any other object in the system), and are therefore considered pure function objects.
+
+Aside of controlling the execution flow, the backbone will also be responsible for any error reporting, and timing in the application. This will ensure high cohesion and low coupling.
+
+\subsubsection{The backbone class}
+The backbone class controls the overall flow of the system by repeatedly checking the state of all buffers and deciding witch needs attention, if more than two buffers have accumulated a sufficient amount of data, it is up to the backbone to choose the most urgent of the two buffers to work with.
+The end user application, does not decide how the backbone is allocated explicitly, instead, it will be created upon loading the library and instantiating the API layer. This means that the startup of the library implicitly will be part of the facade pattern.
+The backbone class is also responsible for creation of the buffers and for handling settings and errors. The sizes of the buffers may be exposed through the api layer, for the end user to explicitly define buffersizes, but the library should contain good default values, so the user does not need to configure this manually under most circumstances.
+
+To prevent stalling other processes in the user application, the backbone runs in a separate thread. This introduces concurrency problems at the api layer, when the user application wishes to send and retreive a message, therefore the buffer must be constructed with this in mind.
+The same can happen at the PCM I/O layer, but it is not the responsibility of the backbone to handle this.
+
+The method for determining which buffer to work with, is based on the following criteria.
+In the case of sending messages, the portAudio(PCM) buffer should never be empty, unless all the other buffers are empty. Otherwise there will be unnescecary gaps in the audio output.
+Likewise, in the case of receiving messages, the backbone should aim to empty the portAudio(PCM) buffer, so there are no “missed” samples.
+The message receiving part, has a higher priority, since a gap in the listening sequence could potentially result in data loss, where a gap in the output would result in a longer data transfer time (but not nescecarily lost packages).
+
+Each downstream buffer has an assosiated maximum threshold value, and each upstream buffer has a minimum value, which indicates the stable of the library. If there are more data than the max. value, or less data then the min. the backbone will prioritize moving data through the buffers which has passed their threshold values. This mechanism will ensure that buffers who fill up faster will get more processing time.
+
+\subsubsection{Facade class}
+Any calls from the user goes through the API class and are passed on to the backbone. Data packages to and from the user also passes through the backbone to ensure low coupling. Since this is the only class the user can instantiate, it also has the responsibility of initialising the rest of the library upon creation.
+When a user application wishes to send a message, the API will provide a “message” dataholder, which can be filled and passed back to the api, this removes the need to do memory handling from the user application.
+In order to receive messages from other systems, the user must register a callback function, that will be called by the network library when system has received a complete message. The lifetime of this message will be limited to the scope of the callback function.
+
+\subsubsection{The buffer class}
+To ensure maximum reuse of code a generalized buffer class is developed. This class provides one buffer for downwards data and one for upwards. Each buffer is a two-dimensional circular buffer provided by the included boost library. The buffer class contains methods for calling the layers and for providing information to the backbone.
+By making the buffer two dimensional, it is possible to apply locks to individual sections of the data instead of a complete read/write lock, and thereby vastly increasing insert/delete operations.
+
+Three  buffer objects are instantiated: A package buffer, a datagram buffer and a frame buffer. Each buffer is accessible from both the overlying and the underlying layer. And when a buffer is attended by the backbone it calls the appropriate function in the responsible layer.
+
+\subsubsection{The layer classes}
+The three layer classes reads data from a buffer, works on the data and writes it into the next buffer in the chain. Each layer may instantiate temporary internal buffers to store partially processed data between attention. Some of the layers will need to send a message to the layer before it, and when executing an encode or decode function, the layer is given access to both the appropriate send and receive buffers.
+
+\subsubsection{The interface class and portAudio}
+The interface class implements its own circular buffer, since portaudio resides in the core memory bla bla
+
+
+\subsubsection{Overview of the send/receive process}
+
+\textbf{Sending Application}
+Duty: The application calls the API, providing data and relevant delivery information
+Output: Data and destination.
+\textbf{
+Sending API layer}
+Input: Data and destination.
+Duty: The API layer encloses the message into a package, adding a header containing info about receiving process.
+Output: A package.
+
+\textbf{Sending session layer}
+Input: A package
+Duty: The session layer opens, negotiates and maintains the connection. It segmentates the data, adding destination and sender addresses, SessionID, flags, total length and sequence number to each datagram.
+Output: A datagram
+
+\textbf{Sending data link layer}
+Input: A datagram
+Duty: The data link layer segmentates the datagram and encodes each with a header containing sequence number, address, frame type and checksum.
+Output: Frames
+
+\textbf{Sending physical layer}
+Input: A frame
+Duty: The physical layer translates each four bit sequence into DTMF tone data.
+Output: PCM string
+
+\textbf{Sending sound system interface}
+Input: PCM string
+Duty: To parse data to the sound system
+Output: DTMF tones
+
+
+\textbf{Receiver side}
+
+Receiving sound system interface
+Input: DTMF tones
+Duty: Record sound input into a buffer.
+Output: PCM bytes
+
+\textbf{Physical layer}
+Input: PCM bytes
+Duty: The physical layer reads the buffered data and interprets any DTMF tone data into four bit sequences. When six tones are received the corresponding 3 byte frame is buffered.
+Output: A frame
+
+\textbf{Data link layer}
+Input: Frames
+Duty: The data link layer checks the received frame and discards it if errors have occurred. It then gathers the frames, removes the headers and reassembles them into a datagram. If frames are missing, resending is requested from the sending data link layer.
+Output: A datagram
+
+\textbf{Network layer}
+Input: A datagram
+Duty: Negotiates and maintains the connection. Removes the header and reassemble the data into a package.
+Output: A package
+
+\textbf{API layer}
+Input: A package.
+Duty: The API layer removes the header and presents the final message to the receiving process.
+Output: Data
+
+\textbf{Application}
+Input: Data
+Duty: The application interprets and uses the received data
