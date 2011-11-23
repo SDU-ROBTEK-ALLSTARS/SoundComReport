@@ -1,8 +1,19 @@
 \section{Transport layer protocol}
-In the OSI model, the session and transport layers handle process-to-process sessions (chiefly used when a more permanent connection is required for synchronous transfer, for example) and communication, respectively. When initially exploring ideas for this networking protocol, one wish was that it should be able to serve more than just one application at a time. This brings a need for such process-to-process delivery that the transport layer protocols provide.
+In the OSI model, the session and transport layers handle process-to-process sessions (chiefly used when a more permanent connection is required for synchronous transfer, for example) and communication, respectively. When initially exploring ideas for this networking protocol, one wish was that it should be able to serve more than just one application at a time. This brings a need for such process-to-process delivery that the transport layer protocols provide. In this section a transport layer protocol design is described.
+
+\subsection{Speed versus reliability}
+A dilemma, when formulating how the transport layer should function, is that as high as possible speed is desired. On the other hand, one must remember, that we wish to make it as painless as possible for the user application to use the connection.\marginnote{Ref til ''Ideer til hvad projektet skal omhandle''-dokumentet} On this layer, the underlying layers (the data link- and physical layers) are not considered to the extent possible. An exception is made, though, as this transport layer protocol is a part of a system, which will not be used on any other medium than sound.
+
+A UDP\footnote{User datagram protocol}\nomenclature{UDP}{User datagram protocol}-like protocol design would no doubt be one of the best ways to achieve high transfer speeds. The UDP protocol provides a connectionless service, where datagrams are sent and then forgotten. That way the receiver does not have to spend bandwidth to acknowledge successful reception. Additionally, the header size of a datagram is quite small, as there is not any error- or flow control. There is not any sequence number either, so datagrams are sent without any way of know whether they are received in-order.
+
+Using a TCP\footnote{Transmission control protocol}\nomenclature{TCP}{Transmission control protocol} inspired protocol instead would, compared to UDP, provide a much more reliable service from the transport layer. Now, with the TCP protocol flow- and error control is added, as well as congestion control. Every packet is assigned a sequence number, ensuring they are passed on the the server application correctly, by the receiving transport layer protocol. Every packet is also acknowledged by the receiver, if it is successfully recorded. if not, the sender re-sends them. All these things combined makes TCP a lot more reliable, but it also increases it's header size to around three times the size of the UDP header. Especially if one is not sending a lot of data in each packet, the header can take up a large percentage of the combined (header plus data) package size.
+
+The application, making use of the transport layer protocol, should not have to worry about data loss. Therefore a certain level of error control, as well as sequencing, is requested. Since the transfer in general is not very fast, in the combined system\marginnote{Needs ref}, flow control can safely be ignored in this design. Congestion control is not needed either, as only two nodes will communicate with each other at a time across a half-duplex\marginnote{Needs ref} line.
+
+Thus, the transport protocol design will contain a mixture of the properties described above. A more detailed portrayal of each feature, and how they are used, follows.
 
 \subsection{Addressing processes}
-The data link layer in our model takes care of the node-to-node delivery, where each node has an address. This address is, however, not at all useful \textit{after} a node's data link layer has received data and passed it on to the transport layer. Thus, we need a different addressing method: A port number.\footnote{Port number, in this text, is separate from the port number associated with a process by it \textit{binding} via some kind of Internet socket. Still, the term is used, as it's purpose is identical to the ''normal'' port number.}
+The data link layer in our model takes care of the node-to-node delivery, where each node has an address. This address is, however, not at all useful to the transport layer \textit{after} a node's data link layer has received data and passed it on. Thus, we need a different addressing method to distinguish processes from each other: A port number.\footnote{Port number, in this text, is separate from the port number associated with a process by it \textit{binding} via some kind of Internet socket. Still, the term is used, as it's purpose is identical to the ''normal'' port number.}
 
 The port number assigned to a certain server\marginnote{Define server and client as used here} application must be known to the client before it sends anything. That is the only way the local process will know where to send data. Here, we select the port number to be eight bits long. This reasoning behind this choice is, that we will not at all be able to serve more than a couple of applications at a time, at the most. Add to that, that we wish to keep a minimal overhead size (a higher port number would add more bits to the header), as we don't have a lot of bandwidth available to begin with.
 
@@ -11,20 +22,23 @@ A number of port addresses (0-19) are going to be reserved for control messages.
 \begin{table}[htb]
  \centering
  \begin{tabular}{ll}
-  Port & Description\\
+  \textbf{Port} & \textbf{Description}\\
   \hline
-  10 & Does seomthing?
+  1 & Does something?\\
+  3 & Does something else
  \end{tabular}
  \caption{Well-known ports}
  \label{tab:transp_well_known}
 \end{table}
 
+\subsection{Sequencing}
+
 \subsection{Operation}
-Much like the UDP\footnote{User datagram protocol}\nomenclature{UDP}{User datagram protocol} this transport layer protocol provides a connectionless service, meaning packets are sent without having to first establish a connection. Also they are sent without sequence numbers, though in our case this is not a problem. This protocol will only be used on a half-duplex line, and there is no routing from one network to another: The packets can only go one way, and there is only one packet on the line at a time, thus packets cannot be ''out of order''.
+%connection-oriented
+%handshake
+%data push?
 
-In this protocol, no flow or error control is incorporated.\marginnote{If needed we can implement error or flow ctrl anyway} This is mainly due to the reason that the data link layer and transport layer communicate directly, and not across networks where another protocol might provide an unreliable service (as with the IP\footnote{Internet protocol}\nomenclature{IP}{Internet protocol} which is provides \textit{best effort} delivery). With no error or flow control we save yet some more overhead space.
-
-With each application getting a different port number, the transport layer protocol being developed provides application multiplexing. That is, more than one application can use the protocol at the same time on each node. 
+\subsection{Error control}
 
 \subsection{Datagram}
 From the application, the transport layer protocol expects to just receive a stream of bytes. The order in which the bytes are received is significant, but the data they contain is not. When received, the bytes will be packed into datagrams of variable, but a maximum of 256 bytes, length\marginnote{Datagram length is subject to change}. Those datagrams are then passed on to the data link layer.
@@ -48,8 +62,19 @@ The datagram format is shown in Table \ref{tab:datagram_format} where it becomes
 \end{description}
 
 
-\nomenclature{TCP}{Transmission control protocol}
 
+
+%\subsection{Operation}
+%Much like the UDP\nomenclature{UDP}{User datagram protocol} this transport layer protocol provides a connectionless service, meaning packets are sent without having to first establish a connection. Also they are sent without sequence numbers, though in our case this is not a problem. This protocol will only be used on a half-duplex line, and there is no routing from one network to another: The packets can only go one way, and there is only one packet on the line at a time, thus packets cannot be ''out of order''.
+%
+%In this protocol, no flow or error control is incorporated.\marginnote{If needed we can implement error or flow ctrl anyway} This is mainly due to the reason that the data link layer and transport layer communicate directly, and not across networks where another protocol might provide an unreliable service (as with the IP\footnote{Internet protocol}\nomenclature{IP}{Internet protocol} which is provides \textit{best effort} delivery). With no error or flow control we save yet some more overhead space.
+%
+%With each application getting a different port number, the transport layer protocol being developed provides application multiplexing. That is, more than one application can use the protocol at the same time on each node. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Kims ''thinking'' ^o~
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %error control
 %multiplexing
@@ -61,8 +86,6 @@ The datagram format is shown in Table \ref{tab:datagram_format} where it becomes
 %Also they are sent without sequence numbers, though in our case this is not a problem. This protocol will only be used on a half-duplex line, and there is no routing from one network to another: The packets can only go one way, and there is only one packet on the line at a time, thus packets cannot be ''out of order''.
 
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % IN:
 % ----
 % * Byte-array
@@ -79,7 +102,7 @@ The datagram format is shown in Table \ref{tab:datagram_format} where it becomes
 % sekvensering
 % process-process
 % process ID (PID) / ''port'' number
-% (de)-multiplexing
+% (de)multiplexing
 % in/out queue-buffer (one for each port)
 %   overflow
 %   unreachable/queue non-existant
@@ -94,9 +117,3 @@ The datagram format is shown in Table \ref{tab:datagram_format} where it becomes
 
 
 %variabel datalængde, sekvensnummer, sessionID,modtager, afsender,flag
-
-
-%\section*{Transport and session layers}
-%This layer opens and manages the connection and routes between different
-%processes on the station. It is also responsible for segmentation and reassembly
-%of packages.
