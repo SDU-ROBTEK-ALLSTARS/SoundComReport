@@ -1,0 +1,215 @@
+\section{Physical Layer}
+
+	\subsection{Overview}
+	This chapter will contain an analysis of how its possible to let DTMF tones
+	enter into data communication through air.
+	
+	This analysis will be based on a minimal understanding of the physical aspects
+	of sound waves travelling through air, and on how to make an software
+	implementation of the physical layer which is an part of the OSI model.
+	
+	After ward this will be tested for stability issues and performance capabilities.
+	
+	The results will be discussed and this will lead to several inferences which will
+	tell how the goal of using DTMF as information carrier was best achieved.
+
+	\subsection{Physical Layer}
+	In data communication and networking theory the physical layer is the lowermost
+	layer in the OSI model. The OSI model consist of seven different layers which all
+	defines specific tasks for data communication can appear throughout the layers.\newline
+	
+	The task of the physical layer is getting a physical signal translated into a data which
+	then can be delivered as a frame to the above lying layer which is the data link layer,
+	all this is happening at the receiving side of the physical layer. Communication through
+	the physical layer would not be usable if the physical layer is not able to send any signal,
+	so the physical layer would obviously have to define a set of tasks to translate frames from
+	the data link layer into signals that can be transmitted. Thus, the physical layer defines
+	electrical and physical framework for receiving and transmitting signals through the media,
+	and furthermore it defines encoding/decoding and alignment schemes for translating
+	frames into signals and visa versa.\newline
+	
+	This project requires the use of DTMF tones as information carrier, and furthermore it is
+	required that transmission are broadcast through the air. These requirements decides some
+	of the properties of the physical layer, the media became air and the signals that will be
+	translated are DTMF tones.
+	
+		\subsubsection{How can DTMF enter into data communication through Air?}
+		DTMF is an abbreviation for Dual Tone Multiple Frequency. It is a system of tones that are used by
+		telephones when dialing a number. The system is an arrangement of four low tones and four high tones,
+		it is arranged in a four-by-four matrix which gives the system sixteen combinations.\newline
+		
+		The idea is that these sixteen combinations formed by the DTMF matrix is used in some kind of data
+		communication between two or more computers. To let DTMF tones enter into data communication we have
+		to apply the property of  waves to carry bits. This can be done by letting each entry in the matrix
+		consist of four bits. Four bits gives sixteen combinations which each can be assigned to an entry in
+		the matrix. Below is shown the DTMF map which will be used in the physical layer for encoding and decoding.
+		
+		\begin{table}[htb]
+			\begin{center}
+				\begin{tabular}{c|c c c c}
+				 & 1209 Hz & 1336 Hz & 1477 Hz & 1633 Hz \\
+				\hline
+				697 Hz & 0000 & 0001 & 0010 & 0011 \\
+				770 Hz & 0100 & 0101 & 0110 & 0111 \\
+				852 Hz & 1000 & 1001 & 1010 & 1011 \\
+				941 Hz & 1100 & 1101 & 1110 & 1111 \\
+				\end{tabular}
+			\end{center}
+			\caption{Table of the matrix with the bit combinations assigned to each entry.}
+			\label{tab:DTMF_mapping}
+		\end{table}
+		
+		Now by letting one computer play the tones through a speaker and another computer record it from
+		a microphone then data is transmitted through air. The exchange of data is essentially an exchange
+		of information and it is not satisfying exchanging information of the size of four bits alone,
+		cause this would make the system inefficient. The system need to be able to transmit a sequence
+		of tones matching a given bit pattern. The number of tones played each second will determine the
+		bitrate of the communication. The bitrate will of course be dependent on how fast the sampling and
+		recognition of tones can be handled at the receiving end.
+		
+		\subsubsection{Physics}
+		As sound waves are considered to be a mechanical waves, the physics of mechanical waves therefore
+		applies to the sound of DTMF tones. Intentionally this section will not give at deeper understanding
+		of the physics, but just state some of the constants involved. This is done to state delays in the
+		communication system. Delays should not be a problem as the physical layer will implement a
+		synchronisation method between sender and receiver site.\newline
+		
+		Sound waves travels at a velocity of
+		\begin{center}\begin{equation}v_{s} = 343 \frac{m}{s}\end{equation}\end{center}
+		in air with the temperature of 20 degrees Celsius.
+		
+		\subsubsection{Port Audio Interface}
+		It was decided in the initial phase of the project to use Port Audio (http://www.portaudio.com/)
+		as the interface between the developed API and the soundcard in a computer. Several points
+		was taken into account for this decision, it has to be easy to use, it has access to the recorded
+		samples and output sample buffer, and it has to be cross platform. Port Audio is satisfying all these needs.\newline
+
+		The interface that is developed for this project will implement Port Audio in its simplest
+		form along side with a buffer system for incoming samples and outgoing samples.
+		
+		For the receiving part the buffer that will be implemented is a FILO\footnote{First In Last Out}
+		buffer which hold identifiers of a certain DTMF tone and each time a DTFM tone is detected it is added
+		to the buffer. The size of this buffer will be the size of a data link layer frame plus the size of some
+		preamble which will indicate a transmission is about to start.
+		
+		The buffer which will support the outgoing data will be build as a two dimensional buffer. This
+		is done because as outgoing data needs to be a sequence of DTMF tones, but in discrete time each
+		tone will be a sequence of samples. This leads to the two dimensional data structure of the size N times M.
+		
+		\begin{table}[htb]
+			\begin{center}
+				\begin{tabular}{c|c c c c c c c}
+				 & n = 0 & n = 1 & n = 2 & n = 3 & n = 4 & \ldots & n = N - 1 \\
+				\hline
+				Tone 1 & 1.0 & 0.83 & 0.3 & 0.01 & -0.5 & \ldots & -1.0 \\
+				Tone 2 & 0.0 & -0.83 & 0.43 & & & & \\
+				Tone 3 &  &  &  &  &  &  & \\
+				\vdots &  &  &  &  &  & $\ddots$ & \\
+				Tone M &  &  &  &  &  &  & \\
+				\end{tabular}
+			\end{center}
+			\caption{Table of how the two dimensional buffer could look like at the sending site of the interface.}
+			\label{tab:2d_buffer}
+		\end{table}
+		
+		\subsubsection{Goertzel Algorithm}
+		To be able to detect if tones have been transmitted some algorithm for detection of tones have to be implemented.
+		For this purpose the Goertzel algorithm is used, this algorithm has the ability to detect if a signal contain a
+		specific frequency. Other algorithms exist which would provide the same information but those would be
+		much more expensive regarding the computational complexity. Those other algorithms are called Discrete Fourier Transform (DFT)
+		and the other is called Fast Fourier Transform (FFT) which is a more efficient way to obtain the same information
+		as the DFT algorithm. The computational complexity of DFT\footnote{[124] Li Tan} is $N^2$, where N is the number of samples.
+		For FFT\footnote{[124] Li Tan} the computational complexity is calculated to be $\frac{N}{2}\cdot log_{2}(N)$,
+		where N is the number of samples.\newline
+		
+		As the detection of tones has to occur as fast as possible it is desired to lower the cost of cpu power by using 
+		an algorithm which has the least computational complexity. The Goertzel algorithm therefore suit this need very well.
+		The reason for this is that with a few pre-calculated constants and N iterations over N samples, a value is returned
+		which indicate if a specific frequency is present in the incoming signal.
+		
+		Essentially the Goertzel algorithm is a second order IIR filter which is dependent on current input and previous
+		output, the filter is given as the sequence shown below:
+		\begin{center}\begin{equation}y(n) = x(n) + 2\cdot cos(2\pi \cdot f_{0})\cdot y(n - 1) - y(n - 2),\end{equation}\end{center}
+		where $f_{0}$ is the frequency of interest.\newline
+		
+		By Z-transform the following is obtained:
+		\begin{center}\begin{equation}H(z) = \frac{Y(z)}{X(z)} = \frac{1}{1 - 2\cdot cos(2\pi \cdot f_{0})\cdot z^{-1} + z^{-2}}\end{equation}\end{center}
+		
+		As the above equation show, it is a second order IIR filter. This then have to be implemented as a direct form-II structure
+		where the point W is of interest.\newline
+		
+		\textbf{\textit{\underline{Picture of direct form-II here!}}}\newline
+		
+		The point W will be used for calculating the frequency response at a specific frequency of interest. As this is taking
+		place in discrete time, an expression of the frequency of interest is needed. In discrete time the frequency spectrum
+		is divided into frequency bins, the size of these bins is determined by the number of samples and the sample rate.
+		Obtaining the k'th bin can be done as shown below:
+		\begin{center}\begin{equation}k = \frac{f_{0}}{f_{s}}\cdot N\end{equation}\end{center}
+		where $f_{0}$ is the frequency of interest, $f_{s}$ is the sampling frequency, and N is the number of samples.
+		
+		Now it is possible to calculate the filter coefficients, which in the case with the Goertzel algorithm reduces 
+		to one single coefficient. This coefficient have to be calculated for each tone that want to be identified, but can 
+		be calculated in advance because its only dependent on the frequency of interest.
+		
+		The coefficient is calculated with:
+		\begin{center}\begin{equation}c = 2\cdot cos(2\pi \cdot \frac{k}{f_{s}})\end{equation}\end{center}
+		
+		Now that all constants can be calculated in advance the detection system only have to calculate the filter output, calculate
+		the magnitude of the frequency and then it is able to decide based on the result if the frequency exist in a incoming signal.
+		As detection of DTMF tones is needed for this application it needs to determine if two specific frequencies is present at the
+		same time. But this wont be much of a problem as the constants for each frequency can be calculated in advance.
+		The algorithm are implemented as a direct form-II structure, and need to iterate over the array of collected samples to be
+		able to detect if a given frequency is present in a signal.\newline
+		
+		The computational complexity can therefore be written as one multiplication plus two additions per iteration per tone.
+
+		This leads to:
+		\begin{center}\begin{equation}complexity = 3\cdot N\cdot M,\end{equation}\end{center}
+		where N is the number of samples and M is the number of tones.\newline
+		
+		For one tone detection over 205 samples this is around 600 calculations, for detection of 8 tones simultaneously the equation
+		above result in around 5000 calculation, and these real calculations where as for DFT and FFT the computational complexity 
+		is much higher and the calculations are carried out with complex numbers.\newline
+		
+		This is the reason for choosing the Goertzel algorithm for detection of frequencies.
+		
+		\subsubsection{Synchronisation}
+		To be able to identify if the recorded sound leads to the reception of data a frame from the data link
+		layer need to be wrapped in a header which consist of a preamble and possible a tail to indicate transmission has ended.
+		As a stream of data is emulated by sending a sequence of DTMF tones, what happens if the data stream give rise to two identical
+		DTFM tones in a row, how is this handled? 
+		
+		There is several possibilities to encounter this problem. The first solution could be to stuff the frame with a given bit
+		pattern to indicate that on each side of stuffed bits is identical bit patterns. This solution would only affect the data 
+		link layer implementation.
+		
+		The second solution is to introduce a new frequency so another DTMF tone would appear outside the four by four matrix.
+		This tone could then be stuffed into the sequence of DTMF tones to indicate that on each side of this tone is two identical
+		tones. This solution affects the physical layer implementation.
+		
+		The third option is to make a little silence between each tone to indicate a new tone is about to be played at the sending computer.\newline
+		
+		To avoid tampering with the data link layer as the synchronisation is a part of the physical layer option number one is not commendable. Option
+		number three on the other hand would require an implementation of a silence detection system.
+		
+		Option number two requires that a single frequency is added to the table of tones, and the detection of this tone is added to the implemented
+		detection system. Every time this tone is detected, it is not added to frames that is about to be received, but it will indicate a that two
+		identical bit stream are received one after another.\newline
+		
+		Option number two would be recommended as this solution is independent of detection of silence, which essentially would be an detection of
+		white noise. Furthermore it seems that the implementation of this solution would require a minimum of effort to work.		
+		
+		\subsubsection{Encoding scheme}
+		
+		
+		\subsubsection{Software flow}
+				
+		\subsubsection{? What Else ?}
+		
+	\subsection{Test}
+	
+	\subsection{Results}
+	
+	\subsection{Interpretation}
+	
+	\subsection{Conclusion}
