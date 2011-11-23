@@ -26,12 +26,13 @@
 *.mtc
 *.mtc0
 *.run.xml
-#*.tcp
 *.tps
 *blx.bib
 *.lol
 *.synctex.gz(busy)
 *.synctex
 *.nls
+*.tcp
+*.project
 
 main.pdf
