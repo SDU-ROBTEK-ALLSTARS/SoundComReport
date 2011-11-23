@@ -5,7 +5,7 @@
 	enter into data communication through air.
 	
 	This analysis will be based on a minimal understanding of the physical aspects
-	of sound waves travelling through air, and on how to make an software
+	of sound waves traveling through air, and on how to make an software
 	implementation of the physical layer which is an part of the OSI model.
 	
 	After ward this will be tested for stability issues and performance capabilities.
@@ -64,7 +64,7 @@
 		of information and it is not satisfying exchanging information of the size of four bits alone,
 		cause this would make the system inefficient. The system need to be able to transmit a sequence
 		of tones matching a given bit pattern. The number of tones played each second will determine the
-		bitrate of the communication. The bitrate will of course be dependent on how fast the sampling and
+		bit rate of the communication. The bit rate will of course be dependent on how fast the sampling and
 		recognition of tones can be handled at the receiving end.
 		
 		\subsubsection{Physics}
@@ -72,7 +72,7 @@
 		applies to the sound of DTMF tones. Intentionally this section will not give at deeper understanding
 		of the physics, but just state some of the constants involved. This is done to state delays in the
 		communication system. Delays should not be a problem as the physical layer will implement a
-		synchronisation method between sender and receiver site.
+		synchronization method between sender and receiver site.
 		
 		Sound waves travels at a velocity of
 		\begin{equation}v_{s} = 343 \frac{m}{s}\end{equation}
@@ -80,7 +80,7 @@
 		
 		\subsubsection{Port Audio Interface}
 		It was decided in the initial phase of the project to use Port Audio \url{http://www.portaudio.com/}
-		as the interface between the developed API and the soundcard in a computer. Several points
+		as the interface between the developed API and the sound card in a computer. Several points
 		was taken into account for this decision, it has to be easy to use, it has access to the recorded
 		samples and output sample buffer, and it has to be cross platform. Port Audio is satisfying all these needs.
 
@@ -173,7 +173,7 @@
 		
 		This is the reason for choosing the Goertzel algorithm for detection of frequencies.
 		
-		\subsubsection{Synchronisation}
+		\subsubsection{Synchronization}
 		To be able to identify if the recorded sound leads to the reception of data a frame from the data link
 		layer need to be wrapped in a header which consist of a preamble and possible a tail to indicate transmission has ended.
 		As a stream of data is emulated by sending a sequence of DTMF tones, what happens if the data stream give rise to two identical
@@ -189,7 +189,7 @@
 		
 		The third option is to make a little silence between each tone to indicate a new tone is about to be played at the sending computer.
 		
-		To avoid tampering with the data link layer as the synchronisation is a part of the physical layer option number one is not commendable. Option
+		To avoid tampering with the data link layer as the synchronization is a part of the physical layer option number one is not commendable. Option
 		number three on the other hand would require an implementation of a silence detection system.
 		
 		Option number two requires that a single frequency is added to the table of tones, and the detection of this tone is added to the implemented

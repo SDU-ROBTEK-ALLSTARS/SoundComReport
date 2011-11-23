@@ -1,11 +1,10 @@
 \section{Architectural goals}
-
 The user-application thread will spend as little as possible execution time in the network library code.
 The network library is completely autonomous, and should be able to function with only minimal interaction from the calling application.
-The user should not need to consider any extra memory allocation in the use of this library, ie. message objects should be handled exclusively by the library.
+The user should not need to consider any extra memory allocation in the use of this library, i.e. message objects should be handled exclusively by the library.
 
 \subsection{Overall system architecture}
-The general idea of this library is to have one, maybe two centralised backbone constructs, which are the only parts of the library to have any long term data storage and awareness of the network state. In the case of sending a network message, the data storage can be regarded as an assembly line, where data is taken from one buffer, transformed and put into the next buffer, in order to apply all the necessary packaging that network communication requires, before the ''end data'' is sent to the audio library.
+The general idea of this library is to have one, maybe two centralized backbone constructs, which are the only parts of the library to have any long term data storage and awareness of the network state. In the case of sending a network message, the data storage can be regarded as an assembly line, where data is taken from one buffer, transformed and put into the next buffer, in order to apply all the necessary packaging that network communication requires, before the ''end data'' is sent to the audio library.
 
 Each transformation will be done through a separate layer object, that has knowledge of how to encode and decode specific data structures.
 
@@ -21,21 +20,21 @@ Aside of controlling the execution flow, the backbone will also be responsible f
 \subsubsection{The backbone class}
 The backbone class controls the overall flow of the system by repeatedly checking the state of all buffers and deciding witch needs attention, if more than two buffers have accumulated a sufficient amount of data, it is up to the backbone to choose the most urgent of the two buffers to work with.
 The end user application, does not decide how the backbone is allocated explicitly, instead, it will be created upon loading the library and instantiating the API layer. This means that the startup of the library implicitly will be part of the facade pattern.
-The backbone class is also responsible for creation of the buffers and for handling settings and errors. The sizes of the buffers may be exposed through the api layer, for the end user to explicitly define buffersizes, but the library should contain good default values, so the user does not need to configure this manually under most circumstances.
+The backbone class is also responsible for creation of the buffers and for handling settings and errors. The sizes of the buffers may be exposed through the API layer, for the end user to explicitly define buffer sizes, but the library should contain good default values, so the user does not need to configure this manually under most circumstances.
 
-To prevent stalling other processes in the user application, the backbone runs in a separate thread. This introduces concurrency problems at the api layer, when the user application wishes to send and retreive a message, therefore the buffer must be constructed with this in mind.
+To prevent stalling other processes in the user application, the backbone runs in a separate thread. This introduces concurrency problems at the API layer, when the user application wishes to send and retrieve a message, therefore the buffer must be constructed with this in mind.
 The same can happen at the PCM I/O layer, but it is not the responsibility of the backbone to handle this.
 
 The method for determining which buffer to work with, is based on the following criteria.
-In the case of sending messages, the portAudio(PCM) buffer should never be empty, unless all the other buffers are empty. Otherwise there will be unnescecary gaps in the audio output.
+In the case of sending messages, the portAudio(PCM) buffer should never be empty, unless all the other buffers are empty. Otherwise there will be unneccesary gaps in the audio output.
 Likewise, in the case of receiving messages, the backbone should aim to empty the portAudio(PCM) buffer, so there are no ''missed''' samples.
-The message receiving part, has a higher priority, since a gap in the listening sequence could potentially result in data loss, where a gap in the output would result in a longer data transfer time (but not nescecarily lost packages).
+The message receiving part, has a higher priority, since a gap in the listening sequence could potentially result in data loss, where a gap in the output would result in a longer data transfer time (but not necessarily lost packages).
 
-Each downstream buffer has an assosiated maximum threshold value, and each upstream buffer has a minimum value, which indicates the stable of the library. If there are more data than the max. value, or less data then the min. the backbone will prioritize moving data through the buffers which has passed their threshold values. This mechanism will ensure that buffers who fill up faster will get more processing time.
+Each downstream buffer has an associated maximum threshold value, and each upstream buffer has a minimum value, which indicates the stable of the library. If there are more data than the max. value, or less data then the min. the backbone will prioritize moving data through the buffers which has passed their threshold values. This mechanism will ensure that buffers who fill up faster will get more processing time.
 
 \subsubsection{Facade class}
-Any calls from the user goes through the API class and are passed on to the backbone. Data packages to and from the user also passes through the backbone to ensure low coupling. Since this is the only class the user can instantiate, it also has the responsibility of initialising the rest of the library upon creation.
-When a user application wishes to send a message, the API will provide a ''message'' dataholder, which can be filled and passed back to the api, this removes the need to do memory handling from the user application.
+Any calls from the user goes through the API class and are passed on to the backbone. Data packages to and from the user also passes through the backbone to ensure low coupling. Since this is the only class the user can instantiate, it also has the responsibility of initializing the rest of the library upon creation.
+When a user application wishes to send a message, the API will provide a ''message'' data holder, which can be filled and passed back to the API, this removes the need to do memory handling from the user application.
 In order to receive messages from other systems, the user must register a callback function, that will be called by the network library when system has received a complete message. The lifetime of this message will be limited to the scope of the callback function.
 
 \subsubsection{The buffer class}
@@ -62,7 +61,7 @@ Duty: The API layer encloses the message into a package, adding a header contain
 Output: A package.
 \item[Sending session layer]
 Input: A package
-Duty: The session layer opens, negotiates and maintains the connection. It segmentates the data, adding destination and sender addresses, SessionID, flags, total length and sequence number to each datagram.
+Duty: The session layer opens, negotiates and maintains the connection. It segmentates the data, adding destination and sender addresses, session ID, flags, total length and sequence number to each datagram.
 Output: A datagram
 \item[Sending data link layer]
 Input: A datagram

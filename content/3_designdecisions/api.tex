@@ -9,13 +9,13 @@ When this method is called, two threads are started. One for sending/receiving d
 In case the token will get lost in the network, it is possible to manually insert a token with this method. When called the node on which it's called gets the token. Token passing method is documented here ?? (This method might be obsolete, as this is may be handled automatically by DDL)
 
 \subsubsection*{Public DtmfOutMessage newMessage();}
-This method is used when sending data. It returns a empty message, and enables the user to fill ind the message data manually. A reference is keept to the DtmfApi, so the message can be send by the build in method DtmfOutMessage::send();
+This method is used when sending data. It returns a empty message, and enables the user to fill ind the message data manually. A reference is kept to the DtmfApi, so the message can be send by the build in method DtmfOutMessage::send();
 
 \subsubsection*{Public void sendMessage(unsigned char rcvAddress, char * data, unsigned long dataLength);}
 When this method is called with arguments, the message is created internally and send right away.
 
 \subsection{Thread description}
-Two threads are spawned when the API layer is initialized. The general idea behind these threads is to avoid interference between the Dtmf lib and user application. The Dtmf needs to constantly monitor the surrounding sounds to be able to reply in time. Using sperate threads avoids user algorithms stalling these important processes.
+Two threads are spawned when the API layer is initialized. The general idea behind these threads is to avoid interference between the Dtmf lib and user application. The Dtmf needs to constantly monitor the surrounding sounds to be able to reply in time. Using seperate threads avoids user algorithms stalling these important processes.
 
 \subsubsection{Callback thread}
 This thread is only used for calling the user specified callback function when data is received. 
@@ -30,7 +30,7 @@ The backbone thread is responsible for controlling internal buffers and send/rec
 // Declare callback function
 void function MyClass::messageInCallback(DtmfInMessage m)
 {
-    // This function is called everytime data arrives. The incoming message only exist inside this method, so it's recomended to copy all neded information before exiting the function.
+    // This function is called everytime data arrives. The incoming message only exist inside this method, so it's recommended to copy all needed information before exiting the function.
     return;
 }
 int main()
