@@ -75,7 +75,7 @@
 		synchronisation method between sender and receiver site.
 		
 		Sound waves travels at a velocity of
-		\begin{center}\begin{equation}v_{s} = 343 \frac{m}{s}\end{equation}\end{center}
+		\begin{equation}v_{s} = 343 \frac{m}{s}\end{equation}
 		in air with the temperature of 20 degrees Celsius.
 		
 		\subsubsection{Port Audio Interface}
@@ -129,11 +129,11 @@
 		
 		Essentially the Goertzel algorithm is a second order IIR filter which is dependent on current input and previous
 		output, the filter is given as the sequence shown below:
-		\begin{center}\begin{equation}y(n) = x(n) + 2\cdot cos(2\pi \cdot f_{0})\cdot y(n - 1) - y(n - 2),\end{equation}\end{center}
+		\begin{equation}y(n) = x(n) + 2\cdot cos(2\pi \cdot f_{0})\cdot y(n - 1) - y(n - 2),\end{equation}
 		where $f_{0}$ is the frequency of interest.
 		
 		By Z-transform the following is obtained:
-		\begin{center}\begin{equation}H(z) = \frac{Y(z)}{X(z)} = \frac{1}{1 - 2\cdot cos(2\pi \cdot f_{0})\cdot z^{-1} + z^{-2}}\end{equation}\end{center}
+		\begin{equation}H(z) = \frac{Y(z)}{X(z)} = \frac{1}{1 - 2\cdot cos(2\pi \cdot f_{0})\cdot z^{-1} + z^{-2}}\end{equation}
 		
 		As the above equation show, it is a second order IIR filter. This then have to be implemented as a direct form-II structure
 		where the point W is of interest.
@@ -144,7 +144,7 @@
 		place in discrete time, an expression of the frequency of interest is needed. In discrete time the frequency spectrum
 		is divided into frequency bins, the size of these bins is determined by the number of samples and the sample rate.
 		Obtaining the k'th bin can be done as shown below:
-		\begin{center}\begin{equation}k = \frac{f_{0}}{f_{s}}\cdot N\end{equation}\end{center}
+		\begin{equation}k = \frac{f_{0}}{f_{s}}\cdot N\end{equation}
 		where $f_{0}$ is the frequency of interest, $f_{s}$ is the sampling frequency, and N is the number of samples.
 		
 		Now it is possible to calculate the filter coefficients, which in the case with the Goertzel algorithm reduces 
@@ -152,7 +152,7 @@
 		be calculated in advance because its only dependent on the frequency of interest.
 		
 		The coefficient is calculated with:
-		\begin{center}\begin{equation}c = 2\cdot cos(2\pi \cdot \frac{k}{f_{s}})\end{equation}\end{center}
+		\begin{equation}c = 2\cdot cos(2\pi \cdot \frac{k}{f_{s}})\end{equation}
 		
 		Now that all constants can be calculated in advance the detection system only have to calculate the filter output, calculate
 		the magnitude of the frequency and then it is able to decide based on the result if the frequency exist in a incoming signal.
@@ -164,7 +164,7 @@
 		The computational complexity can therefore be written as one multiplication plus two additions per iteration per tone.
 
 		This leads to:
-		\begin{center}\begin{equation}complexity = 3\cdot N\cdot M,\end{equation}\end{center}
+		\begin{equation}complexity = 3\cdot N\cdot M,\end{equation}
 		where N is the number of samples and M is the number of tones.
 		
 		For one tone detection over 205 samples this is around 600 calculations, for detection of 8 tones simultaneously the equation
