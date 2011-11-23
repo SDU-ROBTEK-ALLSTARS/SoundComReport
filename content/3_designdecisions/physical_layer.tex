@@ -16,7 +16,7 @@
 	\subsection{Physical Layer}
 	In data communication and networking theory the physical layer is the lowermost
 	layer in the OSI model. The OSI model consist of seven different layers which all
-	defines specific tasks for data communication can appear throughout the layers.\newline
+	defines specific tasks for data communication can appear throughout the layers.
 	
 	The task of the physical layer is getting a physical signal translated into a data which
 	then can be delivered as a frame to the above lying layer which is the data link layer,
@@ -26,7 +26,7 @@
 	the data link layer into signals that can be transmitted. Thus, the physical layer defines
 	electrical and physical framework for receiving and transmitting signals through the media,
 	and furthermore it defines encoding/decoding and alignment schemes for translating
-	frames into signals and visa versa.\newline
+	frames into signals and visa versa.
 	
 	This project requires the use of DTMF tones as information carrier, and furthermore it is
 	required that transmission are broadcast through the air. These requirements decides some
@@ -36,7 +36,7 @@
 		\subsubsection{How can DTMF enter into data communication through Air?}
 		DTMF is an abbreviation for Dual Tone Multiple Frequency. It is a system of tones that are used by
 		telephones when dialing a number. The system is an arrangement of four low tones and four high tones,
-		it is arranged in a four-by-four matrix which gives the system sixteen combinations.\newline
+		it is arranged in a four-by-four matrix which gives the system sixteen combinations.
 		
 		The idea is that these sixteen combinations formed by the DTMF matrix is used in some kind of data
 		communication between two or more computers. To let DTMF tones enter into data communication we have
@@ -72,17 +72,17 @@
 		applies to the sound of DTMF tones. Intentionally this section will not give at deeper understanding
 		of the physics, but just state some of the constants involved. This is done to state delays in the
 		communication system. Delays should not be a problem as the physical layer will implement a
-		synchronisation method between sender and receiver site.\newline
+		synchronisation method between sender and receiver site.
 		
 		Sound waves travels at a velocity of
 		\begin{center}\begin{equation}v_{s} = 343 \frac{m}{s}\end{equation}\end{center}
 		in air with the temperature of 20 degrees Celsius.
 		
 		\subsubsection{Port Audio Interface}
-		It was decided in the initial phase of the project to use Port Audio (http://www.portaudio.com/)
+		It was decided in the initial phase of the project to use Port Audio \url{http://www.portaudio.com/}
 		as the interface between the developed API and the soundcard in a computer. Several points
 		was taken into account for this decision, it has to be easy to use, it has access to the recorded
-		samples and output sample buffer, and it has to be cross platform. Port Audio is satisfying all these needs.\newline
+		samples and output sample buffer, and it has to be cross platform. Port Audio is satisfying all these needs.
 
 		The interface that is developed for this project will implement Port Audio in its simplest
 		form along side with a buffer system for incoming samples and outgoing samples.
@@ -120,7 +120,7 @@
 		and the other is called Fast Fourier Transform (FFT) which is a more efficient way to obtain the same information
 		as the DFT algorithm. The computational complexity of DFT\footnote{[124] Li Tan} is $N^2$, where N is the number of samples.
 		For FFT\footnote{[124] Li Tan} the computational complexity is calculated to be $\frac{N}{2}\cdot log_{2}(N)$,
-		where N is the number of samples.\newline
+		where N is the number of samples.
 		
 		As the detection of tones has to occur as fast as possible it is desired to lower the cost of cpu power by using 
 		an algorithm which has the least computational complexity. The Goertzel algorithm therefore suit this need very well.
@@ -130,15 +130,15 @@
 		Essentially the Goertzel algorithm is a second order IIR filter which is dependent on current input and previous
 		output, the filter is given as the sequence shown below:
 		\begin{center}\begin{equation}y(n) = x(n) + 2\cdot cos(2\pi \cdot f_{0})\cdot y(n - 1) - y(n - 2),\end{equation}\end{center}
-		where $f_{0}$ is the frequency of interest.\newline
+		where $f_{0}$ is the frequency of interest.
 		
 		By Z-transform the following is obtained:
 		\begin{center}\begin{equation}H(z) = \frac{Y(z)}{X(z)} = \frac{1}{1 - 2\cdot cos(2\pi \cdot f_{0})\cdot z^{-1} + z^{-2}}\end{equation}\end{center}
 		
 		As the above equation show, it is a second order IIR filter. This then have to be implemented as a direct form-II structure
-		where the point W is of interest.\newline
+		where the point W is of interest.
 		
-		\textbf{\textit{\underline{Picture of direct form-II here!}}}\newline
+		\textbf{\textit{\underline{Picture of direct form-II here!}}}
 		
 		The point W will be used for calculating the frequency response at a specific frequency of interest. As this is taking
 		place in discrete time, an expression of the frequency of interest is needed. In discrete time the frequency spectrum
@@ -159,17 +159,17 @@
 		As detection of DTMF tones is needed for this application it needs to determine if two specific frequencies is present at the
 		same time. But this wont be much of a problem as the constants for each frequency can be calculated in advance.
 		The algorithm are implemented as a direct form-II structure, and need to iterate over the array of collected samples to be
-		able to detect if a given frequency is present in a signal.\newline
+		able to detect if a given frequency is present in a signal.
 		
 		The computational complexity can therefore be written as one multiplication plus two additions per iteration per tone.
 
 		This leads to:
 		\begin{center}\begin{equation}complexity = 3\cdot N\cdot M,\end{equation}\end{center}
-		where N is the number of samples and M is the number of tones.\newline
+		where N is the number of samples and M is the number of tones.
 		
 		For one tone detection over 205 samples this is around 600 calculations, for detection of 8 tones simultaneously the equation
 		above result in around 5000 calculation, and these real calculations where as for DFT and FFT the computational complexity 
-		is much higher and the calculations are carried out with complex numbers.\newline
+		is much higher and the calculations are carried out with complex numbers.
 		
 		This is the reason for choosing the Goertzel algorithm for detection of frequencies.
 		
@@ -187,14 +187,14 @@
 		This tone could then be stuffed into the sequence of DTMF tones to indicate that on each side of this tone is two identical
 		tones. This solution affects the physical layer implementation.
 		
-		The third option is to make a little silence between each tone to indicate a new tone is about to be played at the sending computer.\newline
+		The third option is to make a little silence between each tone to indicate a new tone is about to be played at the sending computer.
 		
 		To avoid tampering with the data link layer as the synchronisation is a part of the physical layer option number one is not commendable. Option
 		number three on the other hand would require an implementation of a silence detection system.
 		
 		Option number two requires that a single frequency is added to the table of tones, and the detection of this tone is added to the implemented
 		detection system. Every time this tone is detected, it is not added to frames that is about to be received, but it will indicate a that two
-		identical bit stream are received one after another.\newline
+		identical bit stream are received one after another.
 		
 		Option number two would be recommended as this solution is independent of detection of silence, which essentially would be an detection of
 		white noise. Furthermore it seems that the implementation of this solution would require a minimum of effort to work.		
