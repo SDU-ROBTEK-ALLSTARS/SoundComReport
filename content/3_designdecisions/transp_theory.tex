@@ -43,17 +43,17 @@ A number of port addresses (0-19)\marginnote{subject to change} are going to be 
 \end{table}
 
 \subsection{Sequencing}
-To make sure the receiver passes on data to the above layer correctly, sequence numbering is introduced. Every packet that is sent will have a number attached, to help the receiving end order segments accurately. The sequence number is $8$ bits long. A segment will also have an $8$ bit acknowledgment number, which is closely related to the sequence number, as we shall see.
+To\marginnote{Not entirely done from here on} make sure the receiver passes on data to the above layer correctly, sequence numbering is introduced. Every packet that is sent will have a number attached, to help the receiving end order segments accurately. The sequence number is $8$ bits long. A segment will also have an $8$ bit acknowledgment number, which is closely related to the sequence number, as we shall see.
 
-When a connection is initiated, a random number between $0$ and $2^8-1$ is selected. Each transmitter increments this number before sending any\marginnote{ANY kind? Sure, Kim?} kind of segment.
+When a connection is initiated, a random number between $0$ and $2^8-1$ is selected. Each transmitter increments this number before sending a segment, except in a few special cases. 
 
 The acknowledgment number indicates to the transmitting party the last in-sequence packet the receiver has received. %%
 
 \subsection{Error control}
-
+Header is always checksummed. If the \texttt{CHK} flag bit is set, a checksum is calculated for the whole datagram. This gives
 
 \subsection{Datagram}
-From the application, the transport layer protocol expects to just receive a stream of bytes. The order in which the bytes are received is significant, but the data they contain is not. When received, the bytes will be packed into datagrams of variable, but a maximum of 256 bytes, length\marginnote{Data field length is subject to change}. Those datagrams are then passed on to the data link layer.
+From the application, the transport layer protocol expects to just receive a stream of bytes. The order in which the bytes are received is significant, but the data they contain is not. When received, the bytes will be packed into datagrams...
 \begin{table}[htb]
  \centering
  \begin{tabular*}{0.70\textwidth}{@{\extracolsep{\fill}}|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
@@ -68,9 +68,12 @@ From the application, the transport layer protocol expects to just receive a str
   \multicolumn{8}{|c|}{                                        } & \multicolumn{8}{p{0.312\textwidth} |}{                                             }\\
   \hline                                                                           % ^ above width is to acquire symmetry
   %
-  \texttt{S} & \texttt{A} & \texttt{C} & \texttt{R} & \texttt{x} & \texttt{x} & \texttt{x} & \texttt{x} & \multicolumn{8}{c|}{ \multirow{3}{*}{Header length} }\\
-  \texttt{Y} & \texttt{C} & \texttt{H} & \texttt{S} & \texttt{x} & \texttt{x} & \texttt{x} & \texttt{x} & \multicolumn{8}{c|}{                                }\\
-  \texttt{N} & \texttt{K} & \texttt{K} & \texttt{T} & \texttt{x} & \texttt{x} & \texttt{x} & \texttt{x} & \multicolumn{8}{c|}{                                }\\
+  \texttt{S} & \texttt{A} & \texttt{C} & \texttt{R} & \texttt{F} & \texttt{ } & \texttt{ } & \texttt{ } & \texttt{ } & \texttt{ } & \texttt{ } & \texttt{ } & 
+  \multicolumn{4}{c|}{     \multirow{3}{*}{HLEN}     }\\
+  \texttt{Y} & \texttt{C} & \texttt{H} & \texttt{S} & \texttt{I} & \texttt{0} & \texttt{0} & \texttt{0} & \texttt{0} & \texttt{0} & \texttt{0} & \texttt{0} & 
+  \multicolumn{4}{c|}{                               }\\
+  \texttt{N} & \texttt{K} & \texttt{K} & \texttt{T} & \texttt{N} & \texttt{ } & \texttt{ } & \texttt{ } & \texttt{ } & \texttt{ } & \texttt{ } & \texttt{ } & 
+  \multicolumn{4}{c|}{                               }\\
   \hline
   %
   \multicolumn{8}{|c|}{    \multirow{3}{*}{Sequence number}    } & \multicolumn{8}{c|}{     \multirow{3}{*}{Acknowledgment number}        }\\
@@ -88,21 +91,8 @@ From the application, the transport layer protocol expects to just receive a str
  \label{tab:trans_datagram_header}
 \end{table}
 
-
-
-The datagram format is shown in Table \ref{tab:trans_datagram_header} where it becomes evident that the overhead is very small. Each field is briefly described:
-\begin{description}
- \item[Source port] is the port number used by the application running on the client.
- \item[Destination port] is the port number used by the application running on the server.
- \item[Length] is the complete length of the whole datagram.
-\end{description}
-
 \subsection{Operation}
-%connection-oriented
-%handshake
-%data push?
-
-
+connection-oriented, handshake, data push
 
 %================= OLD =================
 %
