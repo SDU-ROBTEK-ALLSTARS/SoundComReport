@@ -35,6 +35,11 @@
 \usepackage{url}
 %\usepackage[parfill]{parskip} %Activate to begin paragraphs with an empty line rather than an indent
 
+% Bibliography appearance
+\usepackage[style=authortitle-icomp,natbib=true,sortcites=true,block=space,backend=bibtex8]{biblatex}
+\bibliography{content/bibliography}
+\setlength{\bibparsep}{10pt}
+
 % marginnote package options
 \renewcommand*{\marginfont}{\color{red}\sffamily} %red, sans-serif
 \reversemarginpar %margin notes on left side
@@ -44,16 +49,24 @@
 \makesavenoteenv{tabular}
 
 % listings package settings
+\lstloadlanguages{Matlab,[ANSI]C++}
 \lstset{
-	language=c++,
-	numbers=left,
-	numberstyle=\scriptsize,
-	numbersep=6pt,
-	captionpos=b,
-	tabsize=4,
-	basicstyle=\footnotesize,
-	breaklines=true,% sets automatic line breaking
-	escapeinside={(*¤}{¤*)},
+  %aboveskip=12pt,
+  %belowskip=12pt,
+  %frame=l,
+  numbers=left,
+  numberstyle=\tiny,
+  numbersep=6pt,
+  captionpos=b,
+  tabsize=4,
+  basicstyle=\small,
+  breaklines=true,% sets automatic line breaking
+  escapeinside={(*¤}{¤*)},
+  %rangeprefix=,
+  %rangesuffix=,
+  includerangemarker=false,
+  %commentstyle=\color{white} %''cheat'' to hide comments
+  morekeywords={step,impulse,pzmap,bode,freqz}
 }
 %\renewcommand*\lstlistingname{Code}
 
@@ -77,11 +90,6 @@
     urlcolor=cyan,           % color of external links
     plainpages=false
 }
-
-% Bibliography appearance
-\usepackage[style=authortitle-icomp,natbib=true,sortcites=true,block=space,backend=bibtex8]{biblatex}
-\setlength{\bibparsep}{10pt}
-\bibliography{content/bibliography}
 
 % Headers and footers
 \pagestyle{fancy} % options: empty , plain , fancy

@@ -26,7 +26,7 @@ The backbone thread is responsible for controlling internal buffers and send/rec
 
 \subsection{Usage example}
 \subsubsection{Creating instance}
-\begin{lstlisting}[caption={Creating instance example},label=CreatingInstanceEx]
+\begin{lstlisting}[float=htb,language={[ANSI]C++},caption={Creating instance example},label=CreatingInstanceEx]
 // Declare callback function
 void function MyClass::messageInCallback(DtmfInMessage m)
 {
@@ -47,21 +47,20 @@ DtmfApi *api = new DtmfApi(myAddress, hasToken, \&MyClass::messageInCallback);
 (This example assumes that an instance of API already has been created. See example \ref{CreatingInstanceEx})
 The library support two ways of sending a message. Each with different advantages.
 First method - the fast way:
-\begin{lstlisting}[caption={Sending data example 1},label=SendingDataEx1]
+\begin{lstlisting}[float=htb,language={[ANSI]C++},caption={Sending data example 1},label=SendingDataEx1]
 api->sendMessage(unsigned char rcvAddress, char * data, unsigned long dataLength);
 \end{lstlisting}
 
 Second method - building a custom message:
-\begin{lstlisting}[caption={Sending data example 2},label=SendingDataEx2]
+\begin{lstlisting}[float=htb,language={[ANSI]C++},caption={Sending data example 2},label=SendingDataEx2]
 DtmfOutMessage message = api->newMessage(); // Create an empty message
 message.setData(char * data, unsigned long startAdress, unsigned long dataLength);
 message.send();
 \end{lstlisting}
 
-
 \subsubsection{Receiving data}
 (This example assumes that an instance of API already has been created. See example \ref{CreatingInstanceEx})
-\begin{lstlisting}[caption={Receiving data example},label=ReceivingDataEx]
+\begin{lstlisting}[float=htb,language={[ANSI]C++},caption={Receiving data example},label=ReceivingDataEx]
 void function MyClass::messageInCallback(DtmfInMessage m)
 {
     // This method is called when new data arrives.
@@ -70,5 +69,3 @@ void function MyClass::messageInCallback(DtmfInMessage m)
     return;
 }
 \end{lstlisting}
-
-
