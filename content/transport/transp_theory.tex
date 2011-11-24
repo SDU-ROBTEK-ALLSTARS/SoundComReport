@@ -4,7 +4,7 @@ In the OSI model, the session and transport layers handle process-to-process ses
 \subsection{Speed versus reliability}
 A dilemma, when formulating how the transport layer should function, is that as high as possible speed is desired. On the other hand, one must remember, that we wish to make it as painless as possible for the user application to use the connection.\marginnote{Ref til ''Ideer til hvad projektet skal omhandle''-dokumentet} On this layer, the underlying layers (the data link- and physical layers) are not considered to the extent possible. An exception is made, though, as this transport layer protocol is a part of a system, which will not be used on any other medium than sound.
 
-A UDP\footnote{User datagram protocol}\nomenclature{UDP}{User datagram protocol}-like protocol design would no doubt be one of the best ways to achieve high transfer speeds. The UDP protocol provides a connectionless service, where datagrams are sent and then forgotten. That way the receiver does not have to spend bandwidth to acknowledge successful reception. Additionally, the header size of a datagram is quite small, as there is no error- or flow control. There is not any sequence number either, so datagrams are sent without any way of knowing whether they are received in-order.
+A UDP\footnote{User datagram protocol}\nomenclature{UDP}{User datagram protocol}-like protocol design would no doubt be one of the best ways to achieve high transfer speeds. The UDP protocol provides a connectionless service, where datagrams are sent and then forgotten. That way the receiver does not have to spend bandwidth to acknowledge successful reception. Additionally, the header size of a datagram is quite small, as there is no error- or flow control. There is not any sequence number either, so datagrams are sent without any way of knowing whether they are received in-order or not
 
 Using a TCP\footnote{Transmission control protocol}\nomenclature{TCP}{Transmission control protocol} inspired protocol, instead of UDP, would enable the transport layer to provide a much more reliable service. Now, with the TCP protocol, flow- and error control is added, as well as congestion control. Every packet is assigned a sequence number, ensuring they are passed on to the server application correctly, by the receiving transport layer protocol. Every packet is also acknowledged by the receiver, if it is successfully recorded. If not, the sender re-sends them. All these things combined makes TCP a lot more reliable, but it also increases it's header size to around three times the size of the UDP header. Especially if one is not sending a lot of data in each packet, the header can take up a large percentage of the combined (header plus data) package size.
 
@@ -58,32 +58,24 @@ From the application, the transport layer protocol expects to just receive a str
  \centering
  \begin{tabular*}{0.70\textwidth}{@{\extracolsep{\fill}}|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
   %
-  \multicolumn{1}{c}{\texttt{0}} & \multicolumn{1}{c}{\texttt{1}} & \multicolumn{1}{c}{\texttt{2}} & \multicolumn{1}{c}{\texttt{3}} & 
-  \multicolumn{1}{c}{\texttt{4}} & \multicolumn{1}{c}{\texttt{5}} & \multicolumn{1}{c}{\texttt{7}} & \multicolumn{1}{c}{\texttt{8}} & 
-  \multicolumn{1}{c}{\texttt{9}} & \multicolumn{7}{r}{\texttt{15}}\\
+  \multicolumn{4}{l}{\texttt{0}} & \multicolumn{4}{r}{\texttt{8}} & \multicolumn{4}{l}{\texttt{9}} & \multicolumn{4}{r}{\texttt{15}}\\
   \hline
   %
-  \multicolumn{8}{|c|}{   \multirow{3}{*}{Source port addr.}   } & \multicolumn{8}{c                  |}{   \multirow{3}{*}{Destination port addr.}   }\\
-  \multicolumn{8}{|c|}{                                        } & \multicolumn{8}{c                  |}{                                             }\\
+  \multicolumn{8}{|c|}{   \multirow{2}{*}{Source port addr.}   } & \multicolumn{8}{c                  |}{   \multirow{2}{*}{Destination port addr.}   }\\
   \multicolumn{8}{|c|}{                                        } & \multicolumn{8}{p{0.312\textwidth} |}{                                             }\\
   \hline                                                                           % ^ above width is to acquire symmetry
   %
-  \texttt{S} & \texttt{A} & \texttt{C} & \texttt{R} & \texttt{F} & \texttt{ } & \texttt{ } & \texttt{ } & \texttt{ } & \texttt{ } & \texttt{ } & \texttt{ } & 
-  \multicolumn{4}{c|}{     \multirow{3}{*}{HLEN}     }\\
-  \texttt{Y} & \texttt{C} & \texttt{H} & \texttt{S} & \texttt{I} & \texttt{0} & \texttt{0} & \texttt{0} & \texttt{0} & \texttt{0} & \texttt{0} & \texttt{0} & 
-  \multicolumn{4}{c|}{                               }\\
-  \texttt{N} & \texttt{K} & \texttt{K} & \texttt{T} & \texttt{N} & \texttt{ } & \texttt{ } & \texttt{ } & \texttt{ } & \texttt{ } & \texttt{ } & \texttt{ } & 
-  \multicolumn{4}{c|}{                               }\\
+  \texttt{S} & \texttt{A} & \texttt{C} & \texttt{R} & \texttt{F} & \texttt{ } & \texttt{ } & \texttt{ } & \texttt{ } & \texttt{ } & \texttt{ } & \texttt{ } & \multicolumn{4}{c|}{  \multirow{3}{*}{HLEN}  }\\
+  \texttt{Y} & \texttt{C} & \texttt{H} & \texttt{S} & \texttt{I} & \texttt{0} & \texttt{0} & \texttt{0} & \texttt{0} & \texttt{0} & \texttt{0} & \texttt{0} & \multicolumn{4}{c|}{                         }\\
+  \texttt{N} & \texttt{K} & \texttt{K} & \texttt{T} & \texttt{N} & \texttt{ } & \texttt{ } & \texttt{ } & \texttt{ } & \texttt{ } & \texttt{ } & \texttt{ } & \multicolumn{4}{c|}{                         }\\
   \hline
   %
-  \multicolumn{8}{|c|}{    \multirow{3}{*}{Sequence number}    } & \multicolumn{8}{c|}{     \multirow{3}{*}{Acknowledgment number}        }\\
-  \multicolumn{8}{|c|}{                                        } & \multicolumn{8}{c|}{                                                   }\\
+  \multicolumn{8}{|c|}{    \multirow{2}{*}{Sequence number}    } & \multicolumn{8}{c|}{     \multirow{2}{*}{Acknowledgment number}        }\\
   \multicolumn{8}{|c|}{                                        } & \multicolumn{8}{c|}{                                                   }\\
   \hline
   %
-  \multicolumn{16}{|c|}{           \multirow{3}{*}{Checksum}           }\\
-  \multicolumn{16}{|c|}{                                               }\\
-  \multicolumn{16}{|c|}{                                               }\\
+  \multicolumn{16}{|c|}{   \multirow{2}{*}{Checksum}   }\\
+  \multicolumn{16}{|c|}{                               }\\
   \hline
   %
  \end{tabular*}
