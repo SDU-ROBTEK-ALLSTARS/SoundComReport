@@ -24,9 +24,10 @@ The backbone class is also responsible for creation of the buffers and for handl
 
 To prevent stalling other processes in the user application, the backbone runs in a separate thread. This introduces concurrency problems at the API layer, when the user application wishes to send and retrieve a message, therefore the buffer must be constructed with this in mind.
 The same can happen at the PCM I/O layer, but it is not the responsibility of the backbone to handle this.
+\nomenclature{PCM}{Pulse-code modulation}
 
 The method for determining which buffer to work with, is based on the following criteria.
-In the case of sending messages, the portAudio(PCM) buffer should never be empty, unless all the other buffers are empty. Otherwise there will be unneccesary gaps in the audio output.
+In the case of sending messages, the portAudio(PCM) buffer should never be empty, unless all the other buffers are empty. Otherwise there will be unnecessary gaps in the audio output.
 Likewise, in the case of receiving messages, the backbone should aim to empty the portAudio(PCM) buffer, so there are no ''missed''' samples.
 The message receiving part, has a higher priority, since a gap in the listening sequence could potentially result in data loss, where a gap in the output would result in a longer data transfer time (but not necessarily lost packages).
 
