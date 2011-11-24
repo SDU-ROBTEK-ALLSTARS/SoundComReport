@@ -39,7 +39,7 @@ int main()
 unsigned char myAddress = 1; // My address is 1
 bool hasToken = true; // When starting I have the token. Only one node should have this flag set. When connection to an already running DTMF network this should be set to false.
 
-DtmfApi *api = new DtmfApi(myAddress, hasToken, \&MyClass::messageInCallback);
+DtmfApi *api = new DtmfApi(myAddress, hasToken, &MyClass::messageInCallback);
 // DTMF API is now running.
 (...)
 \end{lstlisting}
