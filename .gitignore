@@ -40,4 +40,5 @@
 *.orig
 /*.tcp
 /*.project
+/*.texlipse
 /*.pdf
