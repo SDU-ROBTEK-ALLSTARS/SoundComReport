@@ -1,6 +1,8 @@
 \section{Data link layer} %Overview and considerations concerning -
+A short introduction to the data link layer design here, perhaps?
+\todo{Bliver Figur \ref{fig:dll_bobler} brugt til noget? (hvis ja, gief PDF format?)}
 
-\begin{figure}[htb]%%PDF figure if possible
+\begin{figure}[htb]
 	\begin{center}
 	\includegraphics[scale=0.4,trim=0 0 0 0]{dll_bobler.png}%trim=l b r t
 	\caption{Things to consider concerning data link layer}
@@ -25,7 +27,7 @@ three bytes.
 
 Example: We want to transmit the two bytes 0011 0101 and 0101 1110. The data
 link layer puts these in a four by four matrix and calculates the parity bits by
-adding the rows and columns:
+adding the rows and columns: \todo{Refer to table by label}
 
 \begin{table}[htb]
 	\begin{center}
@@ -44,7 +46,7 @@ adding the rows and columns:
 
 Instead of as normally done to increase the size of each row by one to contain
 the parity bit, the parity bits are transmitted together as a redundant byte. In
-the case of this example the transmission would be:
+the case of this example the transmission would be: \todo{Refer to table by label}
 
 \begin{table}[htb]
 	\begin{center}
@@ -78,7 +80,7 @@ parity bits for example:
 This will lead to the frame being discarded. Though in some cases it will be
 possible to correct the error and find the original nibble, this is not
 recommended, since more than one tone might be corrupted. Errors in the
-redundant byte will also lead to the discarding of the transmission.
+redundant byte \todo{Ved vi hvilken byte, fejlen er i?} will also lead to the discarding of the transmission.
 
 \subsection{Flow control}
 The next thing to consider is flow control. Since the DTMF-system
@@ -96,11 +98,11 @@ frame (six tones).
 
 \subsection{Framing}
 It is presumed that the physical layer will provide a starting point for each
-transmission. If this is not the case,
-additional flags will be needed in between the frames, again leading to the need
+transmission. If this is not the case, 
+additional flags will be needed in between the frames, \todo{Det må vi hellere få styr på så} again leading to the need
 of stuffing.
 
-Next thing to consider is multipoint. There are three options: A token
+Next thing to consider is multipoint. There are three options: \todo{Vi regner med at læseren kender disse typer, men det er måske også i orden} A token
 network, a time division network or a code division network. Time division
 requires a level of timing the interface layer is unable to deliver.
 Code division leads to the need for larger frames or if implemented with the
@@ -109,7 +111,7 @@ with a token passing network, so this is the choice.
 
 Three bits will control the addressing, all identifying the receiver, since info
 about sender is not needed at this level. Thereby the protocol allows networks
-of up to eight stations.
+of up to eight stations. \todo{Er det statiske addresser eller kan vi vælge dem gennem backbone/API?}
 
 The selective repeat system and the token network introduces the need for different frame types.
 The type field will consist of two bits, at the same time controlling
@@ -118,6 +120,7 @@ the token and indicating frame types. Rules must be implemented to keep the toke
 \begin{table}[htb]
 	\begin{center}
 	\begin{tabular}{|c|ll|}
+		\multicolumn{1}{c}{\textit{Type}} & \multicolumn{1}{l}{} & \multicolumn{1}{l}{}\\ %''abusing'' \multicolumn to avoid borders
 		\hline
 		00 & Has no token & Reply from receiver \\
 		\hline
@@ -133,6 +136,7 @@ the token and indicating frame types. Rules must be implemented to keep the toke
 	\label{tab:protocol_for_type_field}
 \end{table}
 
+\todo{Table ref?}
 Reply frames has type 00 and sequence number 111 (to prevent legal 0:0:0
 frames). Each bit of the data byte corresponds to a sequence number and has
 value 1 for accepted and 0 for resend.
