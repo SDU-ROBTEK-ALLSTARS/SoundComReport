@@ -2,15 +2,16 @@
 \section{Application programming interface}
 The application programming interface (API) layer is designed with the goal of presenting an easy-to-use interface for the Dtmf library. Threading is used to avoid stalling the front end application when sending and receiving data. 
 \subsection{Method description}
+\todo[inline]{Flyttes til implementation? Så hellere bare have en beskrivelse af \textit{formålet} med metoder (samlet set) og \textit{hvorfor} de er lavet, som de er}
 \subsubsection*{Public DtmfApi(unsigned char myAddress,bool hasToken, DtmfApiMsgInCallback * callback);}
 This is the constructor method of the API class. This method is called when the class is to be used.
-When this method is called, two threads are started. One for sending/receiving data and one for user callback. These threads ensure that the end application don't have to wait for the sending a receiving algorithms that needs to be running.
+When this method is called, two threads \todo{Hvordan hænger disse sammen med backbone?} are started. One for sending/receiving data and one for user callback. These threads ensure that the end application doesn't have to wait for the sending a receiving algorithms that needs to be running.
 
 \subsubsection*{Public void makeToken();}
-In case the token will get lost in the network, it is possible to manually insert a token with this method. When called the node on which it's called gets the token. Token passing method is documented here ?? (This method might be obsolete, as this is may be handled automatically by DDL)
+In case the token gets lost in the network, it is possible to manually insert a token with this method. When called, the node on which it's called, gets the token. Token passing method is documented here ?? (This method might be obsolete, as this is may be handled automatically by DDL)
 
 \subsubsection*{Public DtmfOutMessage newMessage();}
-This method is used when sending data. It returns a empty message, and enables the user to fill ind the message data manually. A reference is kept to the DtmfApi, so the message can be send by the build in method DtmfOutMessage::send();
+This method is used when sending data. It returns an empty message, \todo{Den skal Kim vist lige have forklaret} and enables the user to fill in the message data manually. A reference is kept to the DtmfApi, so the message can be send by the build in method DtmfOutMessage::send();
 
 \subsubsection*{Public void sendMessage(unsigned char rcvAddress, char * data, unsigned long dataLength);}
 When this method is called with arguments, the message is created internally and send right away.
