@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<txcop:outputProfiles version="1" xmlns:txcop="http://schemas.ToolsCenter.org/TeXnicCenter/OutputProfiles.xsd">
+	<outputProfileList>
+		<outputProfile name="LaTeX =&gt; PDF" stopOnLatexError="false">
+			<texCommand execute="true" path="C:\Program Files\MiKTeX 2.9\miktex\bin\pdflatex.exe" arguments="-synctex=-1 -interaction=nonstopmode -max-print-line=120 &quot;%pm&quot;"/>
+			<bibTexCommand execute="true" path="C:\Program Files\MiKTeX 2.9\miktex\bin\bibtex.exe" arguments="&quot;%tm&quot;"/>
+			<makeIndexCommand execute="true" path="C:\Program Files\MiKTeX 2.9\miktex\bin\makeindex.exe" arguments="&quot;%tm.nlo&quot; -s &quot;nomencl.ist&quot; -o &quot;%tm.nls&quot;"/>
+			<postProcessors/>
+			<viewer path="C:\Program Files\sumatra\SumatraPDF.exe -inverse-search &quot;\&quot;C:\Program Files\TeXnicCenter\TEXCNTR.EXE\&quot; /ddecmd \&quot;[goto('%f','%l')]\&quot;&quot;" closeBeforeCompilation="false">
+				<viewProjectCommand type="dde">
+					<commandLineCommand path="&quot;&quot;" arguments=""/>
+					<ddeCommand path="C:\Program Files\sumatra\SumatraPDF.exe -inverse-search &quot;\&quot;C:\Program Files\TeXnicCenter\TEXCNTR.EXE\&quot; /ddecmd \&quot;[goto('%f','%l')]\&quot;&quot;" server="SUMATRA" topic="control" command="[Open(&quot;%bm.pdf&quot;,0,1,1)]"/>
+				</viewProjectCommand>
+				<viewCurrentFileCommand type="dde">
+					<commandLineCommand path="&quot;&quot;" arguments=""/>
+					<ddeCommand path="C:\Program Files\sumatra\SumatraPDF.exe -inverse-search &quot;\&quot;C:\Program Files\TeXnicCenter\TEXCNTR.EXE\&quot; /ddecmd \&quot;[goto('%f','%l')]\&quot;&quot;" server="SUMATRA" topic="control" command="[ForwardSearch(&quot;%bm.pdf&quot;,&quot;%Wc&quot;,%l,0,0,1)]"/>
+				</viewCurrentFileCommand>
+				<viewCloseCommand type="dde">
+					<commandLineCommand path="&quot;&quot;" arguments=""/>
+					<ddeCommand path="" server="" topic="System" command=""/>
+				</viewCloseCommand>
+			</viewer>
+		</outputProfile>
+	</outputProfileList>
+</txcop:outputProfiles>

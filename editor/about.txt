@@ -1,5 +1,3 @@
 * main.tcp is a TeXnicCenter project file.
 
-* The file profile_tc_sumatra.tco is a TeXnicCenter output profile for use with
-  SumatraPDF (with synctex and DDE support making forward/inverse search to/from .tex and .pdf documents possible).
-  Also, it uses MakeIndex for an abbreviations list (possible through the nomencl package)
+* .tco files is a TeXnicCenter output profile (remember to edit executable paths when using them)
