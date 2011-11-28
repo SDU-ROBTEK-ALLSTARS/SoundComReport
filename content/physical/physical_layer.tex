@@ -19,9 +19,9 @@
 	layer in the OSI model. The OSI model consist of seven different layers which all
 	defines specific tasks for data communication can appear throughout the layers.
 	
-	The task of the physical layer is getting a physical signal translated into a data which
-	then can be delivered as a frame to the above lying layer which is the data link layer,
-	all this is happening at the receiving side of the physical layer. Communication through
+	The task of the physical layer, is getting a physical signal translated into a data, which
+	then can be delivered as a frame to the above lying layer, which is the data link layer.
+	All this is happening at the receiving side of the physical layer. Communication through
 	the physical layer would not be usable if the physical layer is not able to send any signal,
 	so the physical layer would obviously have to define a set of tasks to translate frames from
 	the data link layer into signals that can be transmitted. Thus, the physical layer defines
@@ -37,7 +37,7 @@
 		\subsubsection{How can DTMF enter into data communication through Air?}
 		DTMF is an abbreviation for Dual Tone Multiple Frequency. It is a system of tones that are used by
 		telephones when dialing a number. The system is an arrangement of four low tones and four high tones,
-		it is arranged in a four-by-four matrix which gives the system sixteen combinations.
+		it is arranged in a four-by-four matrix (see Table \ref{tab:DTMF_mapping})which gives the system sixteen combinations.
 		
 		The idea is that these sixteen combinations formed by the DTMF matrix is used in some kind of data
 		communication between two or more computers. To let DTMF tones enter into data communication we have
@@ -89,6 +89,7 @@
 		form along side with a buffer system for incoming samples and outgoing samples.
 		
 		For the receiving part the buffer that will be implemented is a FILO\footnote{First In Last Out}
+		\nomenclature{FILO}{First In Last Out}
 		buffer which hold identifiers of a certain DTMF tone and each time a DTFM tone is detected it is added
 		to the buffer. The size of this buffer will be the size of a data link layer frame plus the size of some
 		preamble which will indicate a transmission is about to start.
@@ -119,43 +120,46 @@
 		specific frequency. Other algorithms exist which would provide the same information but those would be
 		much more expensive regarding the computational complexity. Those other algorithms are called Discrete Fourier Transform (DFT)
 		and the other is called Fast Fourier Transform (FFT) which is a more efficient way to obtain the same information
-		as the DFT algorithm. The computational complexity of DFT\footnote{[124] Li Tan} is $N^2$, where N is the number of samples.
-		For FFT\footnote{[124] Li Tan} the computational complexity is calculated to be $\frac{N}{2}\cdot log_{2}(N)$,
-		where N is the number of samples.
+		as the DFT algorithm. The computational complexity of DFT, according to Li Tan \cite[124]{DSP}, is $N^2$, where $N$ is the number of samples.
+		For FFT (see Li Tan \cite[124]{DSP}) the computational complexity is calculated to be $\frac{N}{2}\cdot \log_{2}(N)$,
+		where $N$ is the number of samples.
+		\nomenclature{DFT}{Discrete Fourier Transform}
+		\nomenclature{FFT}{Fast Fourier Transform}
 		
 		As the detection of tones has to occur as fast as possible it is desired to lower the cost of cpu power by using 
 		an algorithm which has the least computational complexity. The Goertzel algorithm therefore suit this need very well.
-		The reason for this is that with a few pre-calculated constants and N iterations over N samples, a value is returned
+		The reason for this is that with a few pre-calculated constants and $N$ iterations over $N$ samples, a value is returned
 		which indicate if a specific frequency is present in the incoming signal.
 		
 		Essentially the Goertzel algorithm is a second order IIR filter which is dependent on current input and previous
 		output, the filter is given as the sequence shown below:
-		\begin{equation}y(n) = x(n) + 2\cdot cos(2\pi \cdot f_{0})\cdot y(n - 1) - y(n - 2),\end{equation}
+		\begin{equation}y(n) = x(n) + 2\cdot \cos(2\pi \cdot f_{0})\cdot y(n - 1) - y(n - 2),\end{equation}
 		where $f_{0}$ is the frequency of interest.
 		
 		By Z-transform the following is obtained:
-		\begin{equation}H(z) = \frac{Y(z)}{X(z)} = \frac{1}{1 - 2\cdot cos(2\pi \cdot f_{0})\cdot z^{-1} + z^{-2}}\end{equation}
+		\begin{equation}H(z) = \frac{Y(z)}{X(z)} = \frac{1}{1 - 2\cdot \cos(2\pi \cdot f_{0})\cdot z^{-1} + z^{-2}}\end{equation}
 		
 		As the above equation show, it is a second order IIR filter. This then have to be implemented as a direct form-II structure
 		where the point W is of interest.
+		\nomenclature{IIR}{Infinite Impulse Response}
 		
 		\textbf{\textit{\underline{Picture of direct form-II here!}}}
 		
 		The point W will be used for calculating the frequency response at a specific frequency of interest. As this is taking
 		place in discrete time, an expression of the frequency of interest is needed. In discrete time the frequency spectrum
 		is divided into frequency bins, the size of these bins is determined by the number of samples and the sample rate.
-		Obtaining the k'th bin can be done as shown below:
+		Obtaining the $k$'th bin can be done as shown below:
 		\begin{equation}k = \frac{f_{0}}{f_{s}}\cdot N\end{equation}
-		where $f_{0}$ is the frequency of interest, $f_{s}$ is the sampling frequency, and N is the number of samples.
+		where $f_{0}$ is the frequency of interest, $f_{s}$ is the sampling frequency, and $N$ is the number of samples.
 		
 		Now it is possible to calculate the filter coefficients, which in the case with the Goertzel algorithm reduces 
 		to one single coefficient. This coefficient have to be calculated for each tone that want to be identified, but can 
 		be calculated in advance because its only dependent on the frequency of interest.
 		
 		The coefficient is calculated with:
-		\begin{equation}c = 2\cdot cos(2\pi \cdot \frac{k}{f_{s}})\end{equation}
+		\begin{equation}c = 2\cdot \cos(2\pi \cdot \frac{k}{f_{s}})\end{equation}
 		
-		Now that all constants can be calculated in advance the detection system only have to calculate the filter output, calculate
+		Now that all constants can be calculated in advance, the detection system only have to calculate the filter output, calculate
 		the magnitude of the frequency and then it is able to decide based on the result if the frequency exist in a incoming signal.
 		As detection of DTMF tones is needed for this application it needs to determine if two specific frequencies is present at the
 		same time. But this wont be much of a problem as the constants for each frequency can be calculated in advance.
@@ -165,7 +169,7 @@
 		The computational complexity can therefore be written as one multiplication plus two additions per iteration per tone.
 
 		This leads to:
-		\begin{equation}complexity = 3\cdot N\cdot M,\end{equation}
+		\begin{equation}\mathrm{complexity} = 3\cdot N\cdot M\end{equation}
 		where N is the number of samples and M is the number of tones.
 		
 		For one tone detection over 205 samples this is around 600 calculations, for detection of 8 tones simultaneously the equation
@@ -175,12 +179,12 @@
 		This is the reason for choosing the Goertzel algorithm for detection of frequencies.
 		
 		\subsubsection{Synchronization}
-		To be able to identify if the recorded sound leads to the reception of data a frame from the data link
+		To be able to identify if the recorded sound leads to the reception of data, a frame from the data link
 		layer need to be wrapped in a header which consist of a preamble and possible a tail to indicate transmission has ended.
-		As a stream of data is emulated by sending a sequence of DTMF tones, what happens if the data stream give rise to two identical
-		DTFM tones in a row, how is this handled? 
+		As a stream of data is emulated by sending a sequence of DTMF tones, what happens if the data stream gives rise to two identical
+		DTFM tones in a row?
 		
-		There is several possibilities to encounter this problem. The first solution could be to stuff the frame with a given bit
+		There is several ways to counter this problem. The first solution could be to stuff the frame with a given bit
 		pattern to indicate that on each side of stuffed bits is identical bit patterns. This solution would only affect the data 
 		link layer implementation.
 		
@@ -204,11 +208,11 @@
 		
 		
 		\subsubsection{Software flow}
-				
+		
 		\subsubsection{? What Else ?}
 		
 	\subsection{Test}
-	
+
 	\subsection{Results}
 	
 	\subsection{Interpretation}
