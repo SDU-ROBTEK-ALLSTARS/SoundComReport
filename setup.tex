@@ -9,6 +9,8 @@
 \usepackage{eso-pic} %background pictures
 \usepackage[latin1]{inputenc}
 %\usepackage[danish]{babel}
+%\usepackage[T1]{fontenc}
+%\usepackage{courier}
 \usepackage{csquotes}
 \usepackage{booktabs} % for much better looking tables
 \usepackage{tabularx}
@@ -32,10 +34,10 @@
 \usepackage[intoc]{nomencl} %for abbreviations list
 \usepackage{listings} %for source code listings
 \usepackage{marginnote} %Margin notes - use \marginnote{}
-\usepackage[textsize=footnotesize]{todonotes} %the ''disable'' option removes notes
+%\usepackage[textsize=footnotesize]{todonotes} %the ''disable'' option removes notes
 \usepackage{url}
 \usepackage{multirow}
-\usepackage[normalem]{ulem} %underline, and variations thereof 
+\usepackage[normalem]{ulem} %underline, and variations thereof
 %\usepackage[parfill]{parskip} %Activate to begin paragraphs with an empty line rather than an indent
 
 % Bibliography appearance
@@ -51,27 +53,34 @@
 \makesavenoteenv{tabular}
 
 % listings package settings
-\lstloadlanguages{Matlab,[ANSI]C++}
+\lstloadlanguages{Matlab,[ANSI]C++,[Visual]C++}
 \lstset{
+  basicstyle=\ttfamily\small,
   %aboveskip=12pt,
   %belowskip=12pt,
   %frame=l,
   numbers=left,
-  numberstyle=\tiny,
-  numbersep=6pt,
+  numberstyle=\ttfamily\tiny,
+  numbersep=8pt,
   captionpos=b,
   tabsize=4,
-  basicstyle=\small,
-  breaklines=true,% sets automatic line breaking
+  extendedchars=true,
+  breaklines=true,
+  showspaces=false,
+  showtabs=false,
+  keywordstyle=\color{blue},
   escapeinside={(*¤}{¤*)},
   %rangeprefix=,
   %rangesuffix=,
   includerangemarker=false,
+  %stringstyle=\color{white}\ttfamily,
   %commentstyle=\color{white} %''cheat'' to hide comments
+  xleftmargin=10pt,
+  %backgroundcolor=\color{lightgray},
+  showstringspaces=false,
   morekeywords={step,impulse,pzmap,bode,freqz}
 }
 %\renewcommand*\lstlistingname{Code}
-
 
 % hyperref package settings
 \hypersetup{
