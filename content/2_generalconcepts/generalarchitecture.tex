@@ -1,6 +1,6 @@
 \section{Architectural goals}
 For many libraries developed, it is a priority that the final product is easy to use, efficient and powerfull.  The same goals apply to our network library: It must be easy to use, the user should be able to start the library by just telling it what adress it has, and it should be very easy to send a message, with nothing more than the data to send and an adress. Efficiency is more difficult, especially since using DTMF in a network library is stretching the definition of effectivity quite a bit, but within that constraint, there is room for efficiency.
-Also, the user-application thread will need to spend as little as possible execution time in the network library code, and do as little as possible memory management related to networking operations. 
+Also, the user-application thread will need to spend as little as possible execution time in the network library code, and do as little as possible memory management related to networking operations, as this will minimize faults in the library by user actions.
 
 
 
