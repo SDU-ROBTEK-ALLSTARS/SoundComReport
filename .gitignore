@@ -42,3 +42,5 @@
 /*.project
 /*.texlipse
 /*.pdf
+
+.settings/org.eclipse.mylyn.tasks.ui.prefs
