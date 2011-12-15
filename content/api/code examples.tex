@@ -1,0 +1,65 @@
+\subsection{Usage example}
+\subsubsection{Creating instance}
+\begin{lstlisting}[float=htb,language={[ANSI]C++},caption={Creating instance example},label=CreatingInstanceEx]
+int main()
+{
+unsigned char myAddress = 1; // My address is 1
+bool hasToken = true; // When starting I have the token. Only one node should have this flag set. When connection to an already running DTMF network this should be set to false.
+
+DtmfApi *api = new DtmfApi(myAddress, hasToken);
+// DTMF API is now running, but no ports are enables, so it can't receive any data.
+(...)
+\end{lstlisting}
+
+\subsubsection{Adding a port callback example}
+(This example assumes that an instance of API already has been created. See example \ref{CreatingInstanceEx})
+\begin{lstlisting}[float=htb,language={[ANSI]C++},caption={Adding a port callback example},label=CreatingCallbackEx]
+// Declare callback class
+class MyPort1 : public DtmfCallback
+{
+	virtual void callbackMethod(DtmfInMessage * message)
+	{
+    // This function is called everytime data arrives. The incoming message only exist inside this method, so it's recommended to copy all needed information before exiting the function.
+    // Fetch data from DTMF class to local memory (Assuming we have a dataContainer available in the MyPort1 class)
+    m.getData(this->dataContainer*, 0, m.getMessageLength());
+    
+     // Data is now stored locally, return.
+    return;
+	}
+}
+// Make an instance of the class
+MyPort1 * myPort1 = new MyPort1();
+// Add the object as callback for port 1.
+api->servicePort('1',myPort1);
+\end{lstlisting}
+
+
+\subsubsection{Sending data}
+(This example assumes that an instance of API already has been created. See example \ref{CreatingInstanceEx})
+The library support two ways of sending a message. Each with different advantages.
+First method - the fast way:
+\begin{lstlisting}[float=htb,language={[ANSI]C++},caption={Sending data example 1},label=SendingDataEx1]
+unsigned char rcvAddress = '2';
+unsigned char rcvPort = '1';
+unsigned char * helloWorld = (unsigned char*)\"HelloWorld\";
+api->sendMessage(rcvAddress, rcvPort, helloWorld, std::strlen(helloWorld));
+\end{lstlisting}
+
+Second method - building a custom message:
+\begin{lstlisting}[float=htb,language={[ANSI]C++},caption={Sending data example 2},label=SendingDataEx2]
+unsigned char rcvAddress = '2';
+unsigned char rcvPort = '1';
+unsigned char * hello = (unsigned char*)\"Hello\";
+unsigned char * world = (unsigned char*)\"World\";
+DtmfOutMessage message = api->newMessage(); // Create an empty message
+message.setData(hello, 0, std::strlen(hello)); // Add hello to message
+message.setData(world, std::strlen(hello), std::strlen(world)); // Append the world to message
+message.send();
+\end{lstlisting}
+
+
+\subsubsection{Deleting instance}
+\begin{lstlisting}[float=htb,language={[ANSI]C++},caption={Deleting instance example},label=DeletingInstanceEx]
+delete(api); // DTMF API is now shutting down. This operation may take a while.
+(...)
+\end{lstlisting}
