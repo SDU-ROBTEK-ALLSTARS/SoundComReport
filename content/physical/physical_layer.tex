@@ -17,6 +17,8 @@ sound waves are used for communication. The type of signal is DTMF tones and the
 only take place as half-duplex as sending and receiving is impossible as the communication system works
 as a broadcast system.
 
+\nomenclature{DTMF}{Dual-tone multi-frequency}
+
 	\subsection{DTMF as information Carrier}
 	DTMF is an abbreviation for Dual Tone Multiple Frequency. It is a system of tones that are used by
 	telephones when dialing a number. The system is an arrangement of four low tones and four high tones,
@@ -49,7 +51,7 @@ as a broadcast system.
 	cause this would make the system inefficient. The system need to be able to transmit a sequence
 	of tones matching a given bit pattern. The number of tones played each second will determine the
 	bitrate of the communication. As each tone hold four bits the bitrate can be written as below:
-	\begin{center}\begin{equation}bitrate = \frac{numberOfTones \cdot numberOfBitsPerTone}{time}\end{equation}\end{center}
+	\begin{equation}bitrate = \frac{numberOfTones \cdot numberOfBitsPerTone}{time}\end{equation}
 	
 	\subsection{Utilisation of PortAudio Interface}
 	It was decided in the initial phase of the project to use Port Audio \url{http://www.portaudio.com/}
@@ -97,6 +99,10 @@ as a broadcast system.
 	For this purpose the Goertzel algorithm is used, this algorithm has the ability to detect if a signal contain a
 	specific frequency. Other algorithms exist which would provide the same information but those would be
 	much more expensive regarding the computational complexity. Those other algorithms are called Discrete Fourier Transform (DFT)
+	
+	\nomenclature{DFT}{Discrete Fourier Transform}
+	\nomenclature{FFT}{Fast Fourier Transform}
+	
 	and the other is called Fast Fourier Transform (FFT) which is a more efficient way to obtain the same information
 	as the DFT algorithm. The computational complexity of DFT\footnote{[124] Li Tan} is $N^2$, where N is the number of samples.
 	For FFT\footnote{[124] Li Tan} the computational complexity is calculated to be $\frac{N}{2}\cdot log_{2}(N)$,
@@ -109,11 +115,13 @@ as a broadcast system.
 	
 	Essentially the Goertzel algorithm is a second order IIR filter which is dependent on current input and previous
 	output, the filter is given as the difference equation shown below:
-	\begin{center}\begin{equation}y(n) = x(n) + 2\cdot cos(2\pi \cdot f_{0})\cdot y(n - 1) - y(n - 2),\end{equation}\end{center}
+	\begin{equation}y(n) = x(n) + 2\cdot cos(2\pi \cdot f_{0})\cdot y(n - 1) - y(n - 2),\end{equation}
 	where $f_{0}$ is the frequency of interest.
 	
 	By Z-transform the following is obtained:
-	\begin{center}\begin{equation}H(z) = \frac{Y(z)}{X(z)} = \frac{1}{1 - 2\cdot cos(2\pi \cdot f_{0})\cdot z^{-1} + z^{-2}}\end{equation}\end{center}
+	\begin{equation}H(z) = \frac{Y(z)}{X(z)} = \frac{1}{1 - 2\cdot cos(2\pi \cdot f_{0})\cdot z^{-1} + z^{-2}}\end{equation}
+	
+	\nomenclature{IIR}{Infinite Impulse Response}
 	
 	As the above equation show, it is a second order IIR filter. This can be implemented as a direct form-II structure
 	where the point W is of interest.
@@ -138,7 +146,7 @@ as a broadcast system.
 	be calculated in advance because its only dependent on the frequency of interest.
 	
 	The coefficient is calculated with:
-	\begin{center}\begin{equation}c = 2\cdot cos(2\pi \cdot \frac{k}{f_{s}})\end{equation}\end{center}
+	\begin{equation}c = 2\cdot cos(2\pi \cdot \frac{k}{f_{s}})\end{equation}
 	
 	Now that all constants can be calculated in advance the detection system only have to calculate the filter output, calculate
 	the magnitude of the frequency and then it is able to decide based on the result if the frequency exist in a incoming signal.
@@ -149,7 +157,7 @@ as a broadcast system.
 	
 	The computational complexity can therefore be written as one multiplication plus two additions per iteration per tone.
 	This leads to:
-	\begin{center}\begin{equation}numberOfOperations = 3\cdot N\cdot M,\end{equation}\end{center}
+	\begin{equation}numberOfOperations = 3\cdot N\cdot M,\end{equation}
 	where N is the number of samples and M is the number of tones.
 	
 	For one tone detection over 205 samples this is around 600 calculations, for detection of 8 tones simultaneously the equation
@@ -252,19 +260,19 @@ as a broadcast system.
 	calculated based upon the number representing each nibble.
 	
 	Calculate low frequency:
-	\begin{center}\begin{equation}f_{l} = \frac{number}{4},\end{equation}\end{center}
+	\begin{equation}f_{l} = \frac{number}{4},\end{equation}
 	where $f_{l}$ is a whole number, meaning if the outcome is not whole, digits after the comma are discarded. Number
 	represent a number from the sequence numbers representing the data stream of a frame.
 	
 	Calculate high frequency:
-	\begin{center}\begin{equation}f_{h} = number\%4,\end{equation}\end{center}
+	\begin{equation}f_{h} = number\%4,\end{equation}
 	where $f_{h}$ is a whole number from the modulus operator, this operator is used here to return the rest of the division.
 	
 	If low and high frequencies are arranged in two arrays as they are listed, one for low tones and one for the high tones,
 	then $f_{l}$ and $f_{h}$ represent an index of a tone in the frequency array concerned.
 	
 	The generation of numbers from identified frequencies is also an easy calculation to carry out, as this would look like this:
-	\begin{center}\begin{equation}number = f_{l} \cdot 4 + f_{h},\end{equation}\end{center}
+	\begin{equation}number = f_{l} \cdot 4 + f_{h},\end{equation}
 	This can be confirmed by table \ref{tab:newDTMF_mapping}.
 	
 	The latter calculations defines the encoding scheme between DTMF tones and numbers, which is one of the steps needed for

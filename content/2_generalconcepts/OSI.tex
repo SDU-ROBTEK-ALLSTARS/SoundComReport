@@ -1,8 +1,9 @@
 \section{Network layers and the OSI model}
 The task of enabling two or more processes to communicate across physical machines requires a lot of work, and a lot of errors have to be considered, depending of the medium used to transport data. Addressing, both at the process and machine layer has to be handled, and the interface to the physical medium needs to be considered. Grouping problems into logical sections help to solve this problem, as an otherwise very complicated networking procedure can be broken down into small self contained processes.
-One such way of grouping a network framework is the OSI model. The OSI model is represented as a stack of processes (herafter refered to as a "network stack"), which together enables a group of processes to communicate across physical and logical networks.
+One such way of grouping a network framework is the OSI model. The OSI model is represented as a stack of processes (herafter refered to as a ''network stack''), which together enables a group of processes to communicate across physical and logical networks.
 In itself the OSI model is not an actual network stack, but it is a model of an architecture that is both robust and flexible. 
-As seen in figure \ref{fig:osi_model_stack} it defines seven layers in a networking application, where each layer corresponds to a logical section of the network protocol, and a message passes from the top layer in the first process, potentially all the way to the bottom of the stack, until it has arrived at the second process stack, afterwhich it begins "climbing" the stack, and thereby making the message available to the second process.
+As seen in figure \ref{fig:osi_model_stack} it defines seven layers in a networking application, where each layer corresponds to a logical section of the network protocol, and a message passes from the top layer in the first process, potentially all the way to the bottom of the stack, until it has arrived at the second process stack, afterwhich it begins ''climbing'' the stack, and thereby making the message available to the second process.
+
 \begin{figure}[htb]
 	\begin{center}
 	\includegraphics[scale=0.5,trim=0 0 0 0]{content/graphics/OsiStack.pdf} %trim=l b r t (can cut off from every side)
@@ -10,10 +11,6 @@ As seen in figure \ref{fig:osi_model_stack} it defines seven layers in a network
 	\label{fig:osi_model_stack}			% figure labels are of the form \label{fig:*}
 	\end{center}
 \end{figure}
-
-
-
-
 
 
 Each layer interfaces to the layer above and/or below it, either adding or removing data from the package that is passed. This is either done directly, or by a third-party control mechanism depending on the choice of architecture.
@@ -34,10 +31,10 @@ The transport layer ensures that a process can deliver a package to another proc
 \subsection{Session layer}
 This layer handles synchronization between two network processes, and dialog control (whether communication should be full duplex or half duplex).
 
-\subsection{presentation layer}
+\subsection{Presentation layer}
 The presentation layer is concerned with ensuring that the data is interpreted correctly (int, float, string. etc), encryption and compression.
 
 \subsection{application layer}
 This is the final application, using the network stack. For instance a chat client, email client etc.
 
-REFERENCER DATAKOMBOG SIDE 27 -42
+REFERENCER DATAKOMBOG SIDE 27-42
