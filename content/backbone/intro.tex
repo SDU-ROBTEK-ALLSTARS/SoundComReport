@@ -1,7 +1,7 @@
 \chapter{Backbone}
 The main controller of the application is the backbone, it is constructed by the Api at launch, and after its construction, it starts its own thread and takes control of the network library.
 
-\subsection{The backbone class}
+\section{The backbone class}
 The backbone class controls the overall flow of the system by repeatedly checking the state of all buffers and deciding which buffer needs attention, under all circumstances, as long as there is data in any buffer, the backbone will dispatch work to one of the layers, so the sytem only is idle when there is no data left to process.
 If more than two buffers have accumulated a sufficient amount of data, it is up to the backbone to choose the most urgent of the two buffers to work with, as this library has ample oppertunity to choke itself with data, should it not be properly handled.
 
@@ -38,7 +38,7 @@ The same argument goes for the transport layer, which ofcourse has the lowest pr
 \item If amount of packages \textless package minimum value, encode messages(produces outbound packages).
 \end{enumerate}
 This prioritized flow see figure \ref{fig:backboneprime} will ideally ensure that the system strives to stay in a "stable" state, during medium load time.
-When the system is a bit more relaxed, that is, all values are within working parameters, the system will assign work in a way that reminds somewhat of round robin, that the system checks all buffers once, and then if there is no work to be done, goes to sleep for a predetermined amount of time. The starting buffer to check, is advanced through the six buffers for each attempt at general work, in accordance with flow \ref{fig:backboneGeneral}.
+When the system is a bit more relaxed, that is, all values are within working parameters, the system will assign work in a way that reminds somewhat of round robin, that the system checks all buffers once, and then if there is no work to be done, goes to sleep for a predetermined amount of time. The starting buffer to check, is advanced through the six buffers for each attempt at general work, in accordance with flow \ref{fig:backbonegeneral}.
 
 
 
@@ -53,7 +53,7 @@ Note that these checks depend on, among other parameters, the maximum size of pa
 
 
 
-\subsection{The buffer class}
+\section{The buffer class}
 The buffer class itself is the container of all messages, packages and frame within the library. Within it resides 3 sets of sub buffers: Two message buffers, two package buffers and two frame buffers. 
 The message are a bit different from the package buffers and frame buffers, and will be described independently. They are used by the backbone to store messages, but the Api (and by extension the user thread) can also pull or push messages from and to them, this introduces a concurrency problem, and the message buffer need to be able to handle the situation of simultanious access flawlessly.
 Since the buffer is used as FIFO storage, it would make sense to be able to put a mutex on only the last element of the queue, and implement it as a linked list.
@@ -65,11 +65,6 @@ The frame buffer and package buffer have different needs compared to the message
 Therefore a type of circular buffer with fixed size is used instead, ideally with data allocated at startup, so the individual layers doesn't construct any objects at runtime, but instead uses those already allocated by the buffer.
 When a layer is used to decode or encode, the only parameters it receives are pointers to the nescecary buffers, as that is all the data they need.
 
-
-
-
-
-
 \begin{figure}[htb]
 	\begin{center}
 	\includegraphics[scale=0.7,trim=0 0 0 0]{backbonePrime.pdf}
@@ -78,11 +73,10 @@ When a layer is used to decode or encode, the only parameters it receives are po
 	\end{center}
 \end{figure}
 
-
 \begin{figure}[htb]
 	\begin{center}
 	\includegraphics[scale=0.7,trim=0 0 0 0]{backboneGeneral.pdf}
 	\caption{Backbone general flow}
-	\label{fig:backbonegeneralt}	
+	\label{fig:backbonegeneral}	
 	\end{center}
 \end{figure}
