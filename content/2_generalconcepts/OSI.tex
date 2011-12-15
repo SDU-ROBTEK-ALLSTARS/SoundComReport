@@ -5,11 +5,17 @@ In itself the OSI model is not an actual network stack, but it is a model of an 
 As seen in figure \ref{fig:osi_model_stack} it defines seven layers in a networking application, where each layer corresponds to a logical section of the network protocol, and a message passes from the top layer in the first process, potentially all the way to the bottom of the stack, until it has arrived at the second process stack, afterwhich it begins "climbing" the stack, and thereby making the message available to the second process.
 \begin{figure}[htb]
 	\begin{center}
-	\includegraphics[scale=1,trim=0 0 0 0]{OSI_MODEL_STACK.png} %trim=l b r t (can cut off from every side)
+	\includegraphics[scale=0.5,trim=0 0 0 0]{content/graphics/OsiStack.pdf} %trim=l b r t (can cut off from every side)
 	\caption{OSI model}
 	\label{fig:osi_model_stack}			% figure labels are of the form \label{fig:*}
 	\end{center}
 \end{figure}
+
+
+
+
+
+
 Each layer interfaces to the layer above and/or belov it, either adding or removing data from the package that is passed. This is either done directly, or by a third-party control mechanism depending on the choice of architecture.
 Layer one, two and three can be considered the network support layer, they are responsible for ensuring dataflow through the network of physical machines and they are expected to be active and usable, even though no client application is using the network on a machine.
 
@@ -26,7 +32,7 @@ The network layer handles sending packages from machine to machine, across large
 The transport layer ensures that a process can deliver a package to another process, this making sure packages arrives in order and intact.
 
 \subsection{Session layer}
-This layer is handles syncronisation between two network processes, and dialog control (whether communication should be full duplex or half duplex).
+This layer handles syncronisation between two network processes, and dialog control (whether communication should be full duplex or half duplex).
 
 \subsection{presentation layer}
 The presentation layer is concerned with ensuring that the data is interpreted correctly (int, float, string. etc), encryption and compression.
@@ -38,4 +44,4 @@ This is the final application, using the network stack. For instance a chat clie
 
 
 
-REFERENCER DATAKOMBOG SIDE 27 -42
+REFERENCER DATAKOMBOG SIDE 27 -42*******************************************************************************

@@ -1,0 +1,51 @@
+
+\subsubsection{Overview of the send/receive process}
+\begin{description}
+\item[Sending Application]
+Duty: The application calls the API, providing data and relevant delivery information
+Output: Data and destination.
+\item[Sending API layer]
+Input: Data and destination.
+Duty: The API layer encloses the message into a package, adding a header containing info about receiving process.
+Output: A package.
+\item[Sending session layer]
+Input: A package
+Duty: The session layer opens, negotiates and maintains the connection. It segmentates the data, adding destination and sender addresses, session ID, flags, total length and sequence number to each datagram.
+Output: A datagram
+\item[Sending data link layer]
+Input: A datagram
+Duty: The data link layer segmentates the datagram and encodes each with a header containing sequence number, address, frame type and checksum.
+Output: Frames
+\item[Sending physical layer]
+Input: A frame
+Duty: The physical layer translates each four bit sequence into DTMF tone data.
+Output: PCM string
+\item[Sending sound system interface]
+Input: PCM string
+Duty: To parse data to the sound system
+Output: DTMF tones
+\item[Receiver side]
+Receiving sound system interface
+Input: DTMF tones
+Duty: Record sound input into a buffer.
+Output: PCM bytes
+\item[Physical layer]
+Input: PCM bytes
+Duty: The physical layer reads the buffered data and interprets any DTMF tone data into four bit sequences. When six tones are received the corresponding 3 byte frame is buffered.
+Output: A frame
+\item[Data link layer]
+Input: Frames
+Duty: The data link layer checks the received frame and discards it if errors have occurred. It then gathers the frames, removes the headers and reassembles them into a datagram. If frames are missing, resending is requested from the sending data link layer.
+Output: A datagram
+\item[Network layer]
+Input: A datagram
+Duty: Negotiates and maintains the connection. Removes the header and reassemble the data into a package.
+Output: A package
+\item[API layer]
+Input: A package.
+Duty: The API layer removes the header and presents the final message to the receiving process.
+Output: Data
+\item[Application]
+Input: Data
+Duty: The application interprets and uses the received data
+\end{description}
