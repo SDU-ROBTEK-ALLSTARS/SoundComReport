@@ -1,25 +1,22 @@
 \chapter*{Abstract}\addcontentsline{toc}{chapter}{Abstract}
-The base of this project is a given assignment to build a network using DTMF
-tones. It is natural therefore to use the layers described in the OSI-model as
-phases of both the project and the report.
+This project is based on the given assignment to create a protocol stack which
+use DTMF tones as information carriers, furthermore this has to be done through air
+by speaker and microphone. The team agreed on pursuing a secondary objective which
+was to develop an application programming interface for easy-to-use utilisation of
+the protocol stack.
 
-\section*{Physical layer}
-The probing of the physical layer forms a base for the entire project. It is
-given that the physical layer is to transport data via DTMF tones. A thorough
-examination of the physical layer is important since it defines the requirements
-for the rest of the system. This phase will contain experiments and theoretical
-proofs leading to a clear performance specification.
+It is natural therefore to use the layers described in the OSI-model to define
+the implementation of the protocol stack itself, and for the composition of the report.
+Interdisciplinarity is a big concern for this project as networking- and datacommunication
+theory is mixed with the basics of, digital signal processing, software development,
+and C++ programming skills. Thus, will this report reflect these skills used to analyse given
+problem statements and after ward solving them.
 
-\section*{Data link and network layers}
-The focus of this phase is error correction and flow control. Since the system
-is exposed to noisy surroundings, it must be safe and reliable. The protocol
-must be build to make multi-point networking possible.
+Everything points in the direction of accomplishment of the objective as a fairly stable 
+protocol stack was implemented, though it is not efficient compared to state of the art
+data communication systems which exist today. \textbf{\textit{Secondary goal?}}
 
-\section*{Transport and session layers}
-This\marginnote{Must remember to consider the ''session'' part again} layer opens and manages the connection and routes between different
-processes on the station. It is also responsible for segmentation and reassembly
-of packages.
-
-\section*{Presentation and application layer}
-This layer acts as the facade of the system, connecting the user application to
-the network through an easy to use application programmer interface.
+The result work as a proof of concept, that DTMF tones can be used as information carriers
+when the data is transported in air. The significance of creating this proof have given a
+great insight in topics regarding the basics of, networking and data communication,
+digital signal processing, software development, and C++ programming. \textbf{\textit{Secondary goal?}}
