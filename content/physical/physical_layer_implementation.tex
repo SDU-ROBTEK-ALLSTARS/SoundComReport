@@ -10,13 +10,13 @@ and outgoing data. It is therefore recommended to take a look at the files locat
 Files that spoken of is listed below:
 
 \begin {itemize}
-\item PhysicalLayer.h - This file contain the interface for the implementation of PhysicalLayer class.
-\item PhysicalLayer.cpp - This file contain the implementation of PhysicalLayer class.
+\item DtmfPhysical.h - This file contain the interface for the implementation of DtmfPhysical class.
+\item DtmfPhysical.cpp - This file contain the implementation of DtmfPhysical class.
 \item BufferedSoundIO.h - This file contain the interface for the implementation of BufferedSoundIO class.
 \item BufferedSoundIO.cpp - This file contain the implementation of BufferedSoundIO class.
 \end{itemize}
 
-	\subsection{PhysicalLayer.h - Interface}
+	\subsection{DtmfPhysical.h - Interface}
 	As mentioned the first decisions will define the requirements of the interface. Decisions around the interface are listed below:
 	\begin {enumerate}
 	\item Constructor have to take parameters for controlling sample rate for incoming and outgoing sound streams, length of sample buffers,
@@ -27,8 +27,8 @@ Files that spoken of is listed below:
 	layer can be passed as a reference so manipulation of this buffer can take place at the physical layer.
 	\end{enumerate}
 	
-	\subsection{PhysicalLayer.cpp - Implementation}
-	The interface implementation takes place in the PhysicalLayer class which will be the class for exposing received data to the protocol stack
+	\subsection{DtmfPhysical.cpp - Implementation}
+	The interface implementation takes place in the DtmfPhysical class which will be the class for exposing received data to the protocol stack
 	and receiving data from the protocol stack for data transmission.
 	
 	The \textit{constructor} of the physical layer instantiates the BufferedSoundIO which setup PortAudio for utilisation. The constructor passes the
@@ -36,7 +36,7 @@ Files that spoken of is listed below:
 	
 	The \textit{send(void*)} method takes one parameter as a reference to the buffer exposed from the data link layer to the physical layer. This buffer
 	will be of the type \textit{boost::circular\_buffer$<$Frame$>$}. The \textit{send} method check if a transmission is going on as \textit{send} is called.
-	If not it resize an internal buffer in the PhysicalLayer so this buffer can hold all frames as one sequence of numbers, the type of 
+	If not it resize an internal buffer in the DtmfPhysical so this buffer can hold all frames as one sequence of numbers, the type of 
 	the sequence buffer will be \textit{boost::circular\_buffer$<$unsigned int$>$}. This sequence is then pushed to the BufferedSoundIO class which
 	internally holds a buffer of the same type. A simple flowchart of the \textit{send} method is shown in figure \ref{fig:physical_send}.
 	
@@ -61,9 +61,9 @@ Files that spoken of is listed below:
 	\end{figure}
 	
 	\subsection{Internal workings of the BufferedSoundIO}
-	The interface of BufferedSoundIO will not be explained in greater detail as the instantiation is handled by the PhysicalLayer class.
+	The interface of BufferedSoundIO will not be explained in greater detail as the instantiation is handled by the DtmfPhysical class.
 	
-	The PhysicalLayer class is fairly simple compared to the BufferedSoundIO class. This is because BufferedSoundIO have to control two processes
+	The DtmfPhysical class is fairly simple compared to the BufferedSoundIO class. This is because BufferedSoundIO have to control two processes
 	at the same time which are fired by PortAudio.
 	
 	\begin {enumerate}
@@ -91,11 +91,11 @@ static int paStreamCallback(const void *inputBuffer,
 							void *userData);
 	\end{lstlisting}\label{lst:pa_callback}
 	
-	BufferedSoundIO is instantiated with PhysicalLayer and therefore resides in PhysicalLayer. BufferedSoundIO itself setup two streams where each
+	BufferedSoundIO is instantiated with DtmfPhysical and therefore resides in DtmfPhysical. BufferedSoundIO itself setup two streams where each
 	represent either a input or output stream, this is done because the physical layer works on two streams of data seperately. As two streams are 
 	now present, a foundation for communication with sound is founded. These two streams are able to work asynchronously which might proof to be an
 	advantage later on. If the input callback is fired twice as often as the output callback, could proof to make the communication more reliable
-	as this could address some of the overlapping issues which could lead to loss of data. Exact scientific tests on the topic will not be preformed
+	as this could address some of the overlapping issues which could lead to loss of data. Exact scientific tests on the topic will not be performed
 	due to time constraints, but a rule of thumb is, be sure to fire the input callback at least twice as often as the output callback.
 	
 		\subsubsection{Output streaming}
@@ -137,7 +137,7 @@ static int paOutputStreamCallback(	const void *inputBuffer,
 		a decision making system which analyse the state of the signal to see if it is a valid signal. If the signal is valid a code is calculated, this
 		code is now validated to see if it is contained in the mapping system of tones and codes. If the code is valid it is pushed to the input
 		sequence buffer which is of the type \textit{boost::circular\_buffer$<$unsigned int$>$}. When ever the decision making system see the code 17,
-		which corresponds to end of a frame a callback is made from BufferedSoundIO to PhysicalLayer asking the PhysicalLayer to pull the codes from
+		which corresponds to end of a frame a callback is made from BufferedSoundIO to DtmfPhysical asking the DtmfPhysical to pull the codes from
 		the input sequence buffer which is held in BufferedSoundIO.
 		
 		\begin{figure}[htb]
@@ -148,10 +148,10 @@ static int paOutputStreamCallback(	const void *inputBuffer,
 			\end{center}
 		\end{figure}
 		
-	\subsection{Callback to PhysicalLayer}
-	Everytime the input callback in BufferedSoundIO recognise the code 17, a callback is made back to the PhysicalLayer. This callback pull the
-	codes from BufferedSoundIO, generate a frame from the information pulled, and store this frame in the frame buffer of PhysicalLayer. This ensures
-	that frames and the funtionality for generating sequences from frames and generating frames from sequences are kept in the PhysicalLayer class.
+	\subsection{Callback to DtmfPhysical}
+	Everytime the input callback in BufferedSoundIO recognise the code 17, a callback is made back to the DtmfPhysical. This callback pull the
+	codes from BufferedSoundIO, generate a frame from the information pulled, and store this frame in the frame buffer of DtmfPhysical. This ensures
+	that frames and the funtionality for generating sequences from frames and generating frames from sequences are kept in the DtmfPhysical class.
 	A sketch up of the function is shown in figure \ref{fig:physical_frame_callback}
 	
 	\begin{figure}[htb]

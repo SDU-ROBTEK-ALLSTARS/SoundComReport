@@ -1,31 +1,22 @@
 \section{Framework Composition}\label{sec:physical_analysis} 
-In data communication and networking theory the physical layer is the lowermost
-layer in the OSI model\cite{KOM}. The task of the physical layer is getting a physical signal 
-translated into data which then can be delivered as a frame to the above lying layer 
-which is the data link layer, all this is happening at the receiving site of the physical
-layer. Communication through the physical layer would not be usable if the physical layer 
-is not able to send any signal, so the physical layer would obviously have to define a set 
-of tasks to translate frames from the data link layer into signals that can be transmitted. 
-Thus, the physical layer defines the electrical and physical framework for receiving and 
+The physical layer defines the electrical and physical framework for receiving and 
 transmitting signals through the media, and furthermore it defines encoding/decoding 
 and alignment schemes for translating frames into signals and visa versa.
 
 This project requires the use of DTMF tones as information carrier, and furthermore it is
 required that transmission are broadcast through the air. These requirements decides some
 of the properties of the physical layer, the first one is the media which is the air as 
-sound waves are used for communication. The type of signal is DTMF tones and the communication can
-only take place as half-duplex as sending and receiving is impossible as the communication system works
-as a broadcast system.
+sound waves are used for communication, and the communication can only take place as half-duplex as sending and receiving is impossible as the communication system works as a broadcast system.
 
 \nomenclature{DTMF}{Dual-tone multi-frequency}
 
 	\subsection{DTMF as information Carrier}
 	DTMF is an abbreviation for Dual Tone Multiple Frequency. It is a system of tones that are used by
 	telephones when dialing a number. The system is an arrangement of four low tones and four high tones,
-	it is arranged in a four-by-four matrix which gives the system sixteen combinations.
+	they are arranged in a four-by-four matrix which gives the system sixteen combinations.
 	
-	The idea is that these sixteen combinations formed by the DTMF matrix is used in some kind of data
-	communication between two or more computers. To let DTMF tones enter into data communication we have
+	The idea is that these sixteen combinations formed by the DTMF matrix is used to transmit data
+	between two or more computers. To let DTMF tones enter into data communication we have
 	to apply the property of  waves to carry bits. This can be done by letting each entry in the matrix
 	consist of four bits. Four bits gives sixteen combinations which each can be assigned to an entry in
 	the matrix. Below is shown the DTMF map which will be used in the physical layer for encoding and decoding.
@@ -54,13 +45,7 @@ as a broadcast system.
 	\begin{equation}bitrate = \frac{numberOfTones \cdot numberOfBitsPerTone}{time}\end{equation}
 	
 	\subsection{Utilisation of PortAudio Interface}
-	It was decided in the initial phase of the project to use Port Audio \url{http://www.portaudio.com/}
-	as the interface between the developed API\footnote{Application Programming Interface} and the 
-	soundcard in a computer. Several points was taken into account for this decision, it has to be easy to use,
-	it has access to the recorded samples and output sample buffer, and it has to be cross platform.
-	Port Audio is satisfying all these needs.
-	
-	PortAudio is an API which exposes streams for recording or playing back sound through the soundcard of a
+	PortAudio exposes streams for recording or playing back sound through the soundcard of a
 	computer. PortAudio allow for developers to push raw audio data to the soundcards outgoing buffer and
 	receiving raw audio data from the soundcards ingoing buffer. Thus, PortAudio is good foundation for the
 	implementation of the physical layer as tone detecting, and tone generating algorithms can be laid on top
@@ -84,7 +69,7 @@ as a broadcast system.
 		\end{center}
 	\end{figure}
 	
-	The PhysicalLayer and BufferedSoundIO will be implemented as two separated classes which will be bounded together
+	The DtmfPhysical and BufferedSoundIO will be implemented as two separated classes which will be bounded together
 	and exposed as the physical layer to the rest of the protocol stack. The idea for implementing the physical layer
 	as two seperate classes on top of PortAudio API, is to separate functionality between the physical layers internal
 	layers. BufferedSoundIO class will be implementing the math needed to generate and detect tones while the physical
@@ -92,7 +77,7 @@ as a broadcast system.
 	numbers which then can be pushed to BufferedSoundIO which then processes this sequence to generate a sequence of DTMF
 	tones at the sending site. In the receiving site the receiving process will look a lot like the process for sending a
 	frame, the BufferedSoundIO class will detect sequences of DTMF tones which will be transformed into a sequence of
-	numbers. This sequence of numbers will then be sent to the PhysicalLayer and then be translated into a frame.
+	numbers. This sequence of numbers will then be sent to the DtmfPhysical and then be translated into a frame.
 	
 	\subsection{Goertzel Algorithm}
 	To be able to detect if tones have been transmitted some algorithm for detection of tones have to be implemented.
