@@ -21,7 +21,7 @@ sound waves are used for communication, and the communication can only take plac
 	consist of four bits. Four bits gives sixteen combinations which each can be assigned to an entry in
 	the matrix. Below is shown the DTMF map which will be used in the physical layer for encoding and decoding.
 	
-	\begin{table}[htb]
+	\begin{table}[!h]
 		\begin{center}
 			\begin{tabular}{c|c c c c}
 			 & 1209 Hz & 1336 Hz & 1477 Hz & 1633 Hz \\
@@ -56,15 +56,12 @@ sound waves are used for communication, and the communication can only take plac
 	will be explained in greater detail later.
 	
 	PortAudio will be implemented as a part of the physical layer to create the interface between the developed
-	protocol stack and the sound card. An example of this is shown in figure \ref{fig:physical_4layers}.
+	protocol stack and the sound card. Figure \ref{fig:physical_4layers} show the components which forms the physical layer. 
 	
-	\begin{figure}[htb]
+	\begin{figure}[!h]
 		\begin{center}
 		\includegraphics[scale=0.6,trim=0 0 0 0]{physical_4layers.png}%trim=l b r t
-		\caption{This is a model of the steps needed to implement the physical layer. The PortAudio API is delivered
-		by PortAudio. BufferedSoundIO is handling the math for generating sound and detecting sound, and also the
-		PortAudio API. The physical layer includes the encoding scheme and functionality exposed to the rest of the
-		developed protocol stack.}
+		\caption{Assembly of components in the physical layer. DtmfPhysical handles frames and BufferedSoundIO handles DTMF tones.}
 		\label{fig:physical_4layers}
 		\end{center}
 	\end{figure}
@@ -89,8 +86,8 @@ sound waves are used for communication, and the communication can only take plac
 	\nomenclature{FFT}{Fast Fourier Transform}
 	
 	and the other is called Fast Fourier Transform (FFT) which is a more efficient way to obtain the same information
-	as the DFT algorithm. The computational complexity of DFT according to \cite[124]{DSP} is $N^2$, where N is the number of samples.
-	For FFT the computational complexity is calculated to be $\frac{N}{2}\cdot \log_{2}(N)$,
+	as the DFT algorithm. The number of operations of DFT \cite[p. 124]{DSP} is $N^2$, where N is the number of samples.
+	For FFT \cite[p. 124]{DSP} the number of operations is calculated to be $\frac{N}{2}\cdot log_{2}(N)$,
 	where N is the number of samples.
 	
 	As the detection of tones has to occur as fast as possible it is desired to lower the cost of cpu power by using 
@@ -99,8 +96,8 @@ sound waves are used for communication, and the communication can only take plac
 	which indicate if a specific frequency is present in the incoming signal.
 	
 	Essentially the Goertzel algorithm is a second order IIR filter which is dependent on current input and previous
-	output, the filter is given as the difference equation shown below:
-	\begin{equation}y(n) = x(n) + 2\cdot \cos(2\pi \cdot f_{0})\cdot y(n - 1) - y(n - 2),\end{equation}
+	output, the filter is given as the difference equation \ref{eq:physical_goertzel_sequence}.
+	\begin{equation}y(n) = x(n) + 2\cdot cos(2\pi \cdot f_{0})\cdot y(n - 1) - y(n - 2),\end{equation}\label{eq:physical_goertzel_sequence}
 	where $f_{0}$ is the frequency of interest.
 	
 	By Z-transform the following is obtained:
@@ -111,7 +108,7 @@ sound waves are used for communication, and the communication can only take plac
 	As the above equation show, it is a second order IIR filter. This can be implemented as a direct form-II structure
 	where the point W is of interest.
 	
-	\begin{figure}[htb]
+	\begin{figure}[!h]
 		\begin{center}
 		\includegraphics[scale=0.6,trim=0 0 0 0]{physical_biquad_filter.png}%trim=l b r t
 		\caption{A direct form II implementation}
@@ -146,13 +143,13 @@ sound waves are used for communication, and the communication can only take plac
 	where N is the number of samples and M is the number of tones.
 	
 	For one tone detection over 205 samples this is around 600 calculations, for detection of 8 tones simultaneously the equation
-	above result in around 5000 calculation, and these are real calculations where as for DFT and FFT the computational complexity 
+	above result in around 5000 calculations, and these are real calculations where as for DFT and FFT the computational complexity 
 	is much higher and the calculations are carried out with complex numbers.
 	
 	This is the reason for choosing the Goertzel algorithm for detection of frequencies.
 	
-	\subsection{Synchronization}
-	The physical layer will be handling the synchronization of the data stream. Keeping the data in sync enables the software to
+	\subsection{Synchronisation}\label{sec:physical_sync}
+	The physical layer will be handling the synchronisation of the data stream. Keeping the data in sync enables the software to
 	keep track of the given chunks of data from the upper layer, this is important to do because the physical layer at the receiving
 	site will have to assemble the DTMF tones back into the exact same chunks of data for delivery to the upper layer.
 	A way to solve this need is to wrap the content of data into a header and possibly a tail. The chuck of data received from the 
@@ -170,7 +167,7 @@ sound waves are used for communication, and the communication can only take plac
 	bit of silence in between each other. This implementation would require some sort of timing scheme which would rely on precise timing
 	so decisions, on how the recorded silence should be interpreted, can be made. Decisions that will define the transmission of a frame, will be as 
 	already mentioned, where does a frame start, where does it end, and the stuffing in between each tone. All these properties will be
-	hard to manage duo to silence can be considered as white noise which is totally random. White noise is not in the scope of this 
+	hard to manage due to silence can be considered as white noise which is totally random. White noise is not in the scope of this 
 	document.
 	
 	A second solution could be to do the stuffing at the data link layer in between equal bit patterns with a another bit pattern. 
@@ -180,10 +177,9 @@ sound waves are used for communication, and the communication can only take plac
 	frame itself. This mean that when data containing the bit pattern for stuffing this data could be discarded on false reasons and
 	then corrupt the frame.
 	
-	A third and more elegant solution is to add a ninth frequency to the map seen in table \ref{tab:DTMF_mapping}. The new map will
-	then look like the table below:
+	A third and more elegant solution is to add a ninth frequency to the map seen in table \ref{tab:DTMF_mapping}.
 	
-	\begin{table}[htb]
+	\begin{table}[!h]
 		\begin{center}
 			\begin{tabular}{c c|c c c c}
 	 		index & & 0 & 1 & 2 & 3 \\
@@ -206,7 +202,7 @@ sound waves are used for communication, and the communication can only take plac
 	\textit{here does the frame start}, 17 for \textit{here does the frame end}, and 18 for \textit{two equal bit patterns are presented after
 	each other}. Code 19 can be leaved as a reserved control code. 
 	
-	\begin{table}[htb]
+	\begin{table}[!h]
 			\begin{center}
 				\begin{tabular}{|c|c|}
 				\hline
@@ -233,41 +229,11 @@ sound waves are used for communication, and the communication can only take plac
 	register the tone.
 	
 	\subsection{Encoding scheme}\label{sub:encoding_scheme}
-	The encoding scheme is handling the translation from frames into DTMF tones and visa versa. The encoding will be a
-	two step process as frames are translated into a sequence of numbers which then are translated into a sequence of DTMF
-	tones.
+	The encoding and decoding will be handled on two levels, the encoding from frames to a sequence of 4 bit data elements and control codes, and the decoding of sequences to frames is handled in the DtmfPhysical class. The encoding from a sequence code to DTMF tone and decoding in opposite direction is handled in the BufferedSoundIO class.
+		
+	The encoding and decoding happening in the DtmfPhysical class is based on the synchronisation method that was chosen in section \ref{sec:physical_sync}. The encoding of a frame into a code sequence is pretty straight forward, as the system will extract the three bytes which a frame consist of, as six nibbles. The system will analyse these nibbles to see if any of them have an identical nibble next to it, if so the sequence of nibbles is stuffed with 18 which corresponds to \textit{Double tone} according to table \ref{tab:physical_control_tones}. After this stuffing has taken place the frame is wrapped in a \textit{begin} and \textit{end} signature. An example of this is shown below:
 	
-	A frame can be considered as a stream of bits, this stream is the actual data the frame consist of. This stream can be divided
-	into 4 bit sequences where each number represent the value from zero to fifteen both included. These sixteen combinations
-	match up with table \ref{tab:DTMF_mapping} and the four upper rows in table \ref{tab:newDTMF_mapping}. After dividing the 
-	frame into nibbles\footnote{A 4 bit size} and each nibble is put into a list, this list now is a sequence of numbers. Each
-	number is assigned to a combination of two tones according to table \ref{tab:newDTMF_mapping}. These frequencies can now be
-	calculated based upon the number representing each nibble.
-	
-	Calculate low frequency:
-	\begin{equation}f_{l} = \frac{number}{4},\end{equation}
-	where $f_{l}$ is a whole number, meaning if the outcome is not whole, digits after the comma are discarded. Number
-	represent a number from the sequence numbers representing the data stream of a frame.
-	
-	Calculate high frequency:
-	\begin{equation}f_{h} = number\%4,\end{equation}
-	where $f_{h}$ is a whole number from the modulus operator, this operator is used here to return the rest of the division.
-	
-	If low and high frequencies are arranged in two arrays as they are listed, one for low tones and one for the high tones,
-	then $f_{l}$ and $f_{h}$ represent an index of a tone in the frequency array concerned.
-	
-	The generation of numbers from identified frequencies is also an easy calculation to carry out, as this would look like this:
-	\begin{equation}number = f_{l} \cdot 4 + f_{h},\end{equation}
-	This can be confirmed by table \ref{tab:newDTMF_mapping}.
-	
-	The latter calculations defines the encoding scheme between DTMF tones and numbers, which is one of the steps needed for
-	the full encoding. The other step is to get a frame and translate it into a number sequence and likewise translating a
-	sequence of numbers into a frame. At the sending site frames are split into nibbles and stuffed with control tones at relevant
-	spots.
-	
-	An Example:
-	
-	\begin{table}[htb]
+	\begin{table}[!h]
 		\begin{center}
 			\begin{tabular}{|c|c|c|c|c|c|}
 			\hline
@@ -275,13 +241,13 @@ sound waves are used for communication, and the communication can only take plac
 			\hline
 			\end{tabular}
 		\end{center}
-		\caption{Represent a frame and each number is a nibble of that frame.}
+		\caption{Representation of a random frame as the six nibbles.}
 		\label{tab:physical_frame}
 	\end{table}
 	
-	The example above would then have to be stuffed as below according to table \ref{tab:physical_control_tones}:
+	The process explained before would result in the code sequence represented in table \ref{tab:physical_control_tones}:
 	
-	\begin{table}[htb]
+	\begin{table}[!h]
 		\begin{center}
 			\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
 			\hline
@@ -289,10 +255,24 @@ sound waves are used for communication, and the communication can only take plac
 			\hline
 			\end{tabular}
 		\end{center}
-		\caption{Represent a frame as the number sequence after stuffing it.}
+		\caption{Represent a frame as the code sequence after stuffing it.}
 		\label{tab:physical_stuffed_frame}
 	\end{table}
 	
-	As seen in table \ref{tab:physical_stuffed_frame} the frame itself is wrapped in control codes telling the software where
-	the frame start and end. In between nibbles of the same bit combination a control code is added to indicate that two equal
-	tones are going to be played right after another as this frame is transmitted.
+	The decoding of a code sequence into a frame works a little different as the physical layer is able to run asynchronously and the internal data stream are independent of each other. This causes that incoming data wont look like the data that was sent. Lets say that the PortAudio callback is fired twice as often on the receiving computer as the sending computers output callback and otherwise out of synchronisation, this lead to a received code sequence which could look like the one in table \ref{tab:physical_received_frame}.
+	
+	\begin{table}[!h]
+		\begin{center}
+			\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+			\hline
+			16 & 12 & 12 & 1 & 1 & 18 & 18 & 1 & 1 & 15 & 10 & 11 & 11 & 17 & 17 \\
+			\hline
+			\end{tabular}
+		\end{center}
+		\caption{Represent a random received code sequence which represent a frame.}
+		\label{tab:physical_received_frame}
+	\end{table}
+	
+	Decoding of this sequence requires for the system to identify control code from actual data codes. This i done by ignoring the numbers 16, and 17, as a sequence will always be arranged in frames because a sequence always start with 16 and ends with 17. The next thing is that the system needs to iterate over the sequence to remove all the codes the match up with the previous code. When it meets 18 the decoding scheme know that two identical codes are allowed next to each other in the frame. This process will result in the frame mentioned in table \ref{tab:physical_frame}.
+	
+	The encoding and decoding which is taking place in the BufferedSoundIO class can be considered as a table look up for now. For further insight of the mathematics going on behind the scenes it is recommended to look at appendix \ref{app:physical_encode}.

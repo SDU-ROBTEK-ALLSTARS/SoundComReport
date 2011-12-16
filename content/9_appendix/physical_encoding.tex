@@ -1,1 +1,46 @@
 \chapter{Encoding at the physical Layer}\label{app:physical_encode}
+
+	
+	
+	
+	
+	
+	The encoding scheme is handling the translation from frames into DTMF tones and visa versa. The encoding will be a
+	two step process as frames are translated into a sequence of numbers which then are translated into a sequence of DTMF
+	tones.
+	
+	A frame can be considered as a stream of bits, this stream is the actual data the frame consist of. This stream can be divided
+	into 4 bit sequences where each number represent the value from zero to fifteen both included. These sixteen combinations
+	match up with table \ref{tab:DTMF_mapping} and the four upper rows in table \ref{tab:newDTMF_mapping}. After dividing the 
+	frame into nibbles\footnote{A 4 bit size} and each nibble is put into a list, this list now is a sequence of numbers. Each
+	number is assigned to a combination of two tones according to table \ref{tab:newDTMF_mapping}. These frequencies can now be
+	calculated based upon the number representing each nibble.
+	
+	Calculate low frequency:
+	\begin{equation}f_{l} = \frac{number}{4},\end{equation}
+	where $f_{l}$ is a whole number, meaning if the outcome is not whole, digits after the comma are discarded. Number
+	represent a number from the sequence numbers representing the data stream of a frame.
+	
+	Calculate high frequency:
+	\begin{equation}f_{h} = number\%4,\end{equation}
+	where $f_{h}$ is a whole number from the modulus operator, this operator is used here to return the rest of the division.
+	
+	If low and high frequencies are arranged in two arrays as they are listed, one for low tones and one for the high tones,
+	then $f_{l}$ and $f_{h}$ represent an index of a tone in the frequency array concerned.
+	
+	The generation of numbers from identified frequencies is also an easy calculation to carry out, as this would look like this:
+	\begin{equation}number = f_{l} \cdot 4 + f_{h},\end{equation}
+	This can be confirmed by table \ref{tab:newDTMF_mapping}.
+	
+	The latter calculations defines the encoding scheme between DTMF tones and numbers, which is one of the steps needed for
+	the full encoding. The other step is to get a frame and translate it into a number sequence and likewise translating a
+	sequence of numbers into a frame. At the sending site frames are split into nibbles and stuffed with control tones at relevant
+	spots.
+	
+	An Example:
+	
+
+	
+	As seen in table \ref{tab:physical_stuffed_frame} the frame itself is wrapped in control codes telling the software where
+	the frame start and end. In between nibbles of the same bit combination a control code is added to indicate that two equal
+	tones are going to be played right after another as this frame is transmitted.
