@@ -93,10 +93,10 @@ as well contain information about witch frames to resend. In other words a
 selective repeat system is preferred. To introduce a selective repeat system,
 additional redundancy is needed.
 
-Pipelining must be cosidered to increase the speed of the system and is
+Pipelining must be considered to increase the speed of the system and is
 implemented as a three bit sequence number. This limits redundancy to a minimum
 while still benefiting from pipelining. The sender transmits eight frames
-(fourty eight tones) and then waits for the receiver to reply with one frame
+(forty eight tones) and then waits for the receiver to reply with one frame
 (six tones). Should the receiver not respond or should the reply be lost, the
 sender will automatically re-transmit after a while.
 
@@ -112,7 +112,7 @@ means preferably transmitting one byte per frame. A smaller payload would mean
 increased complexity and lesser efficiency.
 
 Normally bytes are transmitted in chunks of eight, but since the length of
-datagrams kan vary, the sender must have a way of telling the receiver to process smaller
+datagrams can vary, the sender must have a way of telling the receiver to process smaller
 chunks. This introduces the need for an End Of Transmission flag (EOT).
 
 Next thing to consider is multipoint. There are three options: A token

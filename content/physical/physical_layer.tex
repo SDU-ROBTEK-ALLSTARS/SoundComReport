@@ -1,6 +1,6 @@
 \section{Framework Composition}\label{sec:physical_analysis} 
 In data communication and networking theory the physical layer is the lowermost
-layer in the OSI model\cite{KOM}. The task of the physical layer is getting a physical signal 
+layer in the OSI model - see \cite{KOM}. The task of the physical layer is getting a physical signal 
 translated into data which then can be delivered as a frame to the above lying layer 
 which is the data link layer, all this is happening at the receiving site of the physical
 layer. Communication through the physical layer would not be usable if the physical layer 
@@ -50,23 +50,25 @@ as a broadcast system.
 	of information and it is not satisfying exchanging information of the size of four bits alone,
 	cause this would make the system inefficient. The system need to be able to transmit a sequence
 	of tones matching a given bit pattern. The number of tones played each second will determine the
-	bitrate of the communication. As each tone hold four bits the bitrate can be written as below:
+	bit rate of the communication. As each tone hold four bits the bit rate can be written as below:
 	\begin{equation}bitrate = \frac{numberOfTones \cdot numberOfBitsPerTone}{time}\end{equation}
 	
 	\subsection{Utilisation of PortAudio Interface}
-	It was decided in the initial phase of the project to use Port Audio \url{http://www.portaudio.com/}
+	It was decided in the initial phase of the project to use PortAudio\footnote{\url{http://www.portaudio.com/}}
 	as the interface between the developed API\footnote{Application Programming Interface} and the 
-	soundcard in a computer. Several points was taken into account for this decision, it has to be easy to use,
+	sound card in a computer. Several points was taken into account for this decision, it has to be easy to use,
 	it has access to the recorded samples and output sample buffer, and it has to be cross platform.
 	Port Audio is satisfying all these needs.
 	
-	PortAudio is an API which exposes streams for recording or playing back sound through the soundcard of a
-	computer. PortAudio allow for developers to push raw audio data to the soundcards outgoing buffer and
-	receiving raw audio data from the soundcards ingoing buffer. Thus, PortAudio is good foundation for the
+	\nomenclature{API}{Application Programming Interface}
+	
+	PortAudio is an API which exposes streams for recording or playing back sound through the sound card of a
+	computer. PortAudio allow for developers to push raw audio data to the sound cards outgoing buffer and
+	receiving raw audio data from the sound cards ingoing buffer. Thus, PortAudio is good foundation for the
 	implementation of the physical layer as tone detecting, and tone generating algorithms can be laid on top
 	of PortAudio, as basic mathematics which apply to digital signal processing. The PortAudio API provides the
-	user with a callback function which implicitly exposes the soundcard buffers for input and output. PortAudio
-	futhermore gives the possibility for using more sound streams which then provide more callback functions
+	user with a callback function which implicitly exposes the sound card buffers for input and output. PortAudio
+	furthermore gives the possibility for using more sound streams which then provide more callback functions
 	which means that input and output streams can run asynchronously. The way PortAudio handles these streams
 	will be explained in greater detail later.
 	
@@ -104,8 +106,8 @@ as a broadcast system.
 	\nomenclature{FFT}{Fast Fourier Transform}
 	
 	and the other is called Fast Fourier Transform (FFT) which is a more efficient way to obtain the same information
-	as the DFT algorithm. The computational complexity of DFT\footnote{[124] Li Tan} is $N^2$, where N is the number of samples.
-	For FFT\footnote{[124] Li Tan} the computational complexity is calculated to be $\frac{N}{2}\cdot log_{2}(N)$,
+	as the DFT algorithm. The computational complexity of DFT according to \cite[124]{DSP} is $N^2$, where N is the number of samples.
+	For FFT the computational complexity is calculated to be $\frac{N}{2}\cdot \log_{2}(N)$,
 	where N is the number of samples.
 	
 	As the detection of tones has to occur as fast as possible it is desired to lower the cost of cpu power by using 
@@ -115,11 +117,11 @@ as a broadcast system.
 	
 	Essentially the Goertzel algorithm is a second order IIR filter which is dependent on current input and previous
 	output, the filter is given as the difference equation shown below:
-	\begin{equation}y(n) = x(n) + 2\cdot cos(2\pi \cdot f_{0})\cdot y(n - 1) - y(n - 2),\end{equation}
+	\begin{equation}y(n) = x(n) + 2\cdot \cos(2\pi \cdot f_{0})\cdot y(n - 1) - y(n - 2),\end{equation}
 	where $f_{0}$ is the frequency of interest.
 	
 	By Z-transform the following is obtained:
-	\begin{equation}H(z) = \frac{Y(z)}{X(z)} = \frac{1}{1 - 2\cdot cos(2\pi \cdot f_{0})\cdot z^{-1} + z^{-2}}\end{equation}
+	\begin{equation}H(z) = \frac{Y(z)}{X(z)} = \frac{1}{1 - 2\cdot \cos(2\pi \cdot f_{0})\cdot z^{-1} + z^{-2}}\end{equation}
 	
 	\nomenclature{IIR}{Infinite Impulse Response}
 	
@@ -138,7 +140,7 @@ as a broadcast system.
 	place in discrete time, an expression of the frequency of interest is needed. In discrete time the frequency spectrum
 	is divided into frequency bins, the size of these bins is determined by the number of samples and the sample rate.
 	Obtaining the k'th bin can be done as shown below:
-	\begin{center}\begin{equation}k = \frac{f_{0}}{f_{s}}\cdot N\end{equation}\end{center}
+	\begin{equation}k = \frac{f_{0}}{f_{s}}\cdot N\end{equation}
 	where $f_{0}$ is the frequency of interest, $f_{s}$ is the sampling frequency, and N is the number of samples.
 	
 	Now it is possible to calculate the filter coefficients, which in the case with the Goertzel algorithm reduces 
@@ -166,8 +168,8 @@ as a broadcast system.
 	
 	This is the reason for choosing the Goertzel algorithm for detection of frequencies.
 	
-	\subsection{Synchronisation}
-	The physical layer will be handling the synchronisation of the data stream. Keeping the data in sync enables the software to
+	\subsection{Synchronization}
+	The physical layer will be handling the synchronization of the data stream. Keeping the data in sync enables the software to
 	keep track of the given chunks of data from the upper layer, this is important to do because the physical layer at the receiving
 	site will have to assemble the DTMF tones back into the exact same chunks of data for delivery to the upper layer.
 	A way to solve this need is to wrap the content of data into a header and possibly a tail. The chuck of data received from the 
@@ -175,7 +177,7 @@ as a broadcast system.
 	This will ease the assembly of a frame because the software have an indication of the exact start of a frame and the exact ending
 	of it as well.
 	
-	Another problem with synchronisation arise due to the mapping between 4 bit combinations and DTMF tones. This is because if there is a
+	Another problem with synchronization arise due to the mapping between 4 bit combinations and DTMF tones. This is because if there is a
 	need for sending, 1111 and 1111 right after each other the system will not be able to identify the two tones corresponding to the
 	given bit patterns from each other. It would therefore look like only one tone was transmitted instead of two. This actually apply
 	to each combination which are followed up by its own combination of bits. Some kind of stuffing is needed to separate each tone
@@ -189,7 +191,7 @@ as a broadcast system.
 	document.
 	
 	A second solution could be to do the stuffing at the data link layer in between equal bit patterns with a another bit pattern. 
-	The are several disadvantages duo to use of this method. First the synchronisation would now be spread across two layers because
+	The are several disadvantages duo to use of this method. First the synchronization would now be spread across two layers because
 	the physical layer still would have to track the beginning of a frame and the end of a frame. Another disadvantage is that this 
 	method is unreliable as the defined bit pattern for stuffing at the data link layer could be generated by the data contained by the 
 	frame itself. This mean that when data containing the bit pattern for stuffing this data could be discarded on false reasons and
@@ -241,9 +243,9 @@ as a broadcast system.
 			\label{tab:physical_control_tones}
 	\end{table}
 	
-	This method for synchronisation is also well connected to the rest of the
+	This method for synchronization is also well connected to the rest of the
 	data transmission at the physical layer as the implementation is based on a tone detection system, so by adding an extra tone a lot of new
-	possibilities are offered, in exchange of complicated timing schemes or sharing the synchronisation functionality between two layers.
+	possibilities are offered, in exchange of complicated timing schemes or sharing the synchronization functionality between two layers.
 	The detection system can now by identifying a shift in tone frequencies detect a new tone was sent and thus the system is able to
 	register the tone.
 	

@@ -38,7 +38,7 @@ This thread is stopped by a mutex lock until new data arrives. When the backbone
 \subsubsection{Backbone thread}
 The backbone is descibed in the backbone chapter (ref ???)
 
-\subsection{Method description}
+\subsection{Method description}\label{sub:api_method_description}
 \subsubsection*{Public DtmfApi(unsigned char myAddress,bool hasToken);}
 This is the constructor method of the API class. This method is called when the class is to be used. The first argument is the address of the machine the library is started on. The second argument is used for defining whether this node has the token when joining the network. Note that only one node can have the token at a time (See ??). When this method is called, two threads are started. At this point some nessecary pointers are exchanged, allowing the backbone thread to unsleep the callback thread when new data arrives. The threads are described in \ref{api_thread_description}.
 
