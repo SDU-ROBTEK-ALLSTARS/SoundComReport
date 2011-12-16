@@ -1,4 +1,4 @@
-\section{Data link layer}  -
+\section{Data link layer}\label{sec:dll_theory}
 \subsection{Overview and considerations concerning the data link layer}
 There are several subjects to examine before designing the data link layer.
 First of all the requirements must be identified. 
@@ -160,14 +160,13 @@ next station.
 This leads to the following format of a frame: 
 
 \begin{table}[htb]
-	\begin{center}
-	\begin{tabular}{|ccc|c|c|}
-		\hline
-		type (2 bits) & address (2 bits) & sequence (3 bits) & EOT-flag (1 bit) & data
-		(8 bits) & parity (8 bits)  \\
-		\hline
-	\end{tabular}
-	\end{center}
-	\caption{Final frame format}
-	\label{tab:final_frame_format}
+ \begin{center}
+ \begin{tabular}{|c|c|c|c|c|c|}
+  \hline
+  type (2 bits) & address (2 bits) & sequence (3 bits) & EOT-flag (1 bit) & data (8 bits) & parity (8 bits)\\
+  \hline
+ \end{tabular}
+ \end{center}
+ \caption{Final frame format}
+ \label{tab:final_frame_format}
 \end{table}

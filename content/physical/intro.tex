@@ -1,2 +1,18 @@
-\chapter{Physical layer}
-Here is an introduction to the chapter
+\chapter{Physical Layer}\label{chap:physical}
+This chapter will be split into two parts and a soliloquy. The first part will
+explain the main considerations that have been made during the design phase of
+a physical layer which allow DTMF tones to act as information carriers.
+The design is based on the basics of networking and digital signal processing
+theory which means that the physical aspects will not be taking into considerations
+and thus not be in the scope of this document. The design will lead to several
+inferences which will create the foundation for implementing the physical layer as software.
+
+The second part will explain the implementation in greater detail regarding the physical layer
+interface, which functionality is exposed to the data link layer, and how does the BufferedSoundIO
+work internally.
+
+The soliloquy will contain a brief discussion of the thoughts made after the implementation
+was done.
+
+% Nomenclatur
+\nomenclature{DTMF}{Dual-tone multi-frequency}
