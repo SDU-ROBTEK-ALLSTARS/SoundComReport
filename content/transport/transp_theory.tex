@@ -11,13 +11,13 @@ A UDP\footnote{User datagram protocol.}-like protocol design would no doubt be o
 
 Using a TCP\footnote{Transmission control protocol.} inspired protocol instead would enable the transport layer to provide a much more reliable service. Now, in the TCP protocol, flow- and error control is added, as well as congestion control. Every packet is assigned a sequence number, ensuring they are passed on to the server application correctly, by the receiving transport layer protocol. Every packet is also acknowledged by the receiver, if it is successfully recorded. If not, the sender re-sends them. All these things combined makes TCP a lot more reliable, but it also increases it's header size to around three times the size of the UDP header. Especially if one is not sending a lot of data in each packet, the header can take up a large percentage of the combined (header plus data) package size.%%%%%%
 
-Although the services provided by the data link layer guarantees an error-free connection, we cannot be sure data is received in the correct order.\marginnote{Ref.} Both because the data link layer itself does not provide \textit{that} guarantee, but also because the backbone priority system could possibly shift the order. As there is an uncertainty here, we need to establish a way to ensure that data is passed on from the protocol to the above layer in the correct order. This can be done by using a system, where each outgoing data packet is assigned a sequence number.
+Although the services provided by the data link layer guarantees an error-free connection, we cannot be sure data is received in the correct order.\marginnote{Ref.} The data link layer does not provide \textit{that} guarantee. As there is an uncertainty here, we need to establish a way to ensure that data is passed on from the protocol to the above layer in the correct order. This can be done by using a system, where each outgoing data packet is assigned a sequence number.
 
 Sequence numbering provides a way to make sure packets are delivered in the correct order, but with just the sequence number, it is not certain that the data bytes \textit{inside} a given packet are in the correct order. For this a checksum calculation is called for.
 
 All summed up, a protocol design, that will ensure in-order delivery of data, is needed. Features as flow- and congestion control is ignored. Mainly because the communication is going to take place via sound after all: We can safely say that the transfer speeds will not be high and congestion is unlikely to occur.\marginnote{Ref.} After all, the communication line is inherently half-duplex, making the data flow one-way (at a single point in time) by nature.
 
-Coincidentally the RUDP\footnote{Reliable UDP protocol.} described in \cite{RUDP} suits the needs well on many points. Therefore some of the properties, portrayed in the following parts, are based on those of the RUDP. Note that the RUDP document is an \textit{internet draft}, meaning it is work-in-progress (and seemingly ot updated in a long time).
+Coincidentally the RUDP\footnote{Reliable UDP protocol.} described in \cite{RUDP} suits the needs well on many points. Therefore many of the properties, portrayed in the following parts, are based on those of the RUDP. Note that the RUDP document is an \textit{internet draft}, meaning it is work-in-progress (and seemingly not updated in a long time).
 
 \nomenclature{RUDP}{Reliable User Datagram Protocol}
 
@@ -27,7 +27,7 @@ The data link layer takes care of the node-to-node delivery, where each node has
 
 \begin{figure}[htb]
  \centering
- \includegraphics[scale=0.62,trim=0 267 0 267]{content/graphics/trans_osi_modelish.pdf}%trim=l b r t
+ \includegraphics[scale=0.62,trim=0 267 0 267]{content/graphics/transport/trans_osi_modelish.pdf}%trim=l b r t
  \caption{The transmission path from sending to receiving transport layer protocol}
  \label{fig:trans_osi_modelish}
 \end{figure}
@@ -73,26 +73,67 @@ All the attributes described above, leads to the packet header format as shown i
 \subsection{Sequence numbering}
 As mentioned, sequence numbering is introduced to make sure the receiving protocol passes on data to the above layer in the correct order. Every packet that is sent will have such a number attached. The sequence number is eight bits long. A packet will also have an eight bit acknowledgment number, which is closely related to the sequence number, as we shall see.
 
-When a connection is initiated, a random sequence number between $0$ and $2^8-1$ is selected. This number will be attached to a so-called SYN packet (the \texttt{SYN} flag is then set), which is used to establish a connection and synchronise the senders sequence numbers with the receivers. Each party must then increment this number by 1 before sending a response packet, except in a few special cases, which will be discussed.
+When a connection is initiated, a random sequence number between $0$ and $2^8-1$ is selected. This number will be attached to a so-called SYN packet (the \texttt{SYN} flag is then set), which is used to establish a connection and synchronise the senders sequence numbers with the receivers. Each party must then increment this number by 1 before sending a response packet, except in a few special cases, which will be discussed. The sequence number is allowed to overflow, effectively resetting it to 0.
 
 The acknowledgment number is also a number of 8 bits. It indicates, to the sender, the sequence number of a packet which the receiver has received correctly. If \texttt{ACK} flag is set it means the acknowledgment number is valid.
 
 \subsection{Error control}
-In order to avoid the risk of bytes shifting position inside one packet, a checksum is calculated. This checksum also serves as a strong error detection mechanism, although it should, in theory, not be needed as the data link layer protocol provides error control. The checksum type chosen is the cyclic redundancy check, or CRC, using the CRC-CCITT generator polynomial $x^{16} + x^{12} + x^5 + 1$.\marginnote{Elaborate on CRC + Ref.} This provides checksum size of 16 bits.
+In order to avoid the risk of bytes shifting position inside one packet, a checksum is calculated. This checksum also serves as a strong error detection mechanism, although it should, in theory, not be needed as the data link layer protocol provides error control. The checksum type chosen is the cyclic redundancy check, or CRC, using the CRC-CCITT generator polynomial $x^{16} + x^{12} + x^5 + 1$.\marginnote{Elaborate on CRC + Ref.} This provides a checksum size of 16 bits.
 
 \nomenclature{CRC}{Cyclic redundancy check}
 
 The header of the packet is always getting it's checksum calculated. If the \texttt{CHK} flag bit is set, a checksum is calculated for the whole package. This is the default, and preferred way, of transmission.
 
 \subsection{Operation}
-Because of the need to synchronise sequence numbers,the protocol uses \textit{handshaking} in the form of the SYN packet and the response to it. When a connection is first opened, a SYN packet, with a random sequence number attached, is sent. The receiver must then respond within a set time frame to acknowledge the connection. This response must have an acknowledgment number equal to the sequence number just received. Figure \ref{fig:trans_syn_transfer} shows the connection establishment taking place. Disconnected and connected refers to the protocols internal status: How it perceives itself.
+Because of the need to synchronise sequence numbers, the protocol uses \textit{handshaking} in the form of the SYN packet and the response to it. When a connection is first opened, the SYN packet, with a random sequence number attached, is sent. The receiver must then respond within a set time frame to verify the connection. This response must have an acknowledgment number equal to the sequence number just sent. Figure \ref{fig:trans_syn_transfer} shows the connection establishment taking place. Disconnected and connected refers to the protocols internal status; how it perceives itself.
 
 \begin{figure}[htb]
  \centering
- \includegraphics[scale=0.64,trim=0 264 0 266]{content/graphics/trans_syn_transfer.pdf}%trim=l b r t
+ \includegraphics[scale=0.64,trim=0 290 0 255]{content/graphics/transport/trans_syn_transfer.pdf}%trim=l b r t
  \caption{The transport layer protocol opening a connection}
  \label{fig:trans_syn_transfer}
 \end{figure}
+
+When a connection has been opened, communication keeps on happening as shown on Figure \ref{fig:trans_syn_transfer}, except in the case where packets are received out of sync, or more than one packet has been received in a row before getting the chance to acknowledge them. If that happens we have a scenario as shown in Figure \ref{fig:trans_syn_packburst}.
+
+\begin{figure}[htb]
+ \centering
+ \includegraphics[scale=0.64,trim=0 290 0 255]{content/graphics/transport/trans_syn_packburst.pdf}%trim=l b r t
+ \caption{The transport layer protocol transmitting unequal amounts of packets}
+ \label{fig:trans_syn_packburst}
+\end{figure}
+
+If the number of unacknowledged packets, either in- or out of sync, becomes too large (if the queue becomes too full), an extended acknowledgment packet (\texttt{EAK} flag set) is sent. This is a special packet containing no user data. Instead the data field consists of the unacknowledged sequence numbers. It is still limited by the maximum packet length, though. Table \ref{tab:trans_ext_ack} illustrates the extended acknowledgment packet.
+
+\begin{table}[htb]
+ \centering
+ \begin{tabular}{|c|c|c|c|c|}
+ \hline
+  \multirow{2}{*}{Header} & \multirow{2}{*}{Unack. seq. $\#1$} & \multirow{2}{*}{Unack. seq. $\#2$} & \multirow{2}{*}{ $\cdots$ } & \multirow{2}{*}{Unack. seq. $\#N$} \\
+  & & & & \\
+ \hline
+ \end{tabular}
+ \caption{Transport layer protocol extended acknowledgment packet}
+ \label{tab:trans_ext_ack}
+\end{table}
+
+In the case there is no data to send, but the user of the protocol wishes to gauge the connection status, a NUL packet (\texttt{NUL} flag set) can be sent. The NUL packet contains no user data, but still consumes sequence numbers normally. When a NUL packet is received, the receiver must respond to it within a specified time interval, or the connection is deemed broken.
+
+The \texttt{RST} flag can be set to send a reset packet. When the reset packet is received, the receiver of the packet must stop sending data and flush it's data I/O queues. This can be used to either reset the connection or close it entirely: If the \texttt{SYN} flag is also set, a reset will occur. A new, randomly generated, sequence number must be attached to the sequence number field in this case. If, on the other hand, the \texttt{SYN} flag is not set, the connection will terminate.
+
+
+\subsection{Retransmission handling}
+To accommodate the need for retransmission, the protocol will feature in- and output queues, which store whole unacknowledged packets. When an acknowledgment is received, the corresponding packet will be deleted from the queues. Each node will have a retransmission timer that, if it reaches zero, triggers a retransmission of any packets that has already been sent but are still unacknowledged. This retransmission timer is reset every time a packet, which requires acknowledgment, is sent. Only a set amount of retransmissions are allowed to occur before the connection is deemed broken.
+
+\begin{figure}[htb]
+ \centering
+ \includegraphics[scale=0.64,trim=0 290 0 255]{content/graphics/transport/trans_timeout.pdf}%trim=l b r t
+ \caption{The transport layer asdfadsf}
+ \label{fig:trans_timeout}
+\end{figure}
+
+Figure \ref{fig:trans_timeout} shows a packet with sequence number 20 being sent. It gets lost underway though, and never reaches it's target. Luckily the sender had saved a copy of the sent packet, which he can then resend when the max. retransmission time has passed. When the receiver has later acknowledged the packet it is removed from the queue (this is not shown on the diagram).
+
 
 %================= OLD =================
 %

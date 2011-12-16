@@ -9,8 +9,7 @@
 \usepackage{eso-pic} %background pictures
 \usepackage[latin1]{inputenc}
 %\usepackage[danish]{babel}
-%\usepackage[T1]{fontenc}
-%\usepackage{courier}
+\usepackage{courier}
 \usepackage{csquotes}
 \usepackage{booktabs} % for much better looking tables
 \usepackage{tabularx}
@@ -39,6 +38,9 @@
 \usepackage{multirow}
 \usepackage[normalem]{ulem} %underline, and variations thereof
 %\usepackage[parfill]{parskip} %Activate to begin paragraphs with an empty line rather than an indent
+
+% Define small typewriter shorthand
+\newcommand{\smalltt}[1]{\texttt{\small #1}}
 
 % Bibliography appearance
 \usepackage[style=numeric,natbib=true,sortcites=true,block=space,backend=bibtex8]{biblatex}
@@ -75,7 +77,8 @@
   includerangemarker=false,
   %stringstyle=\color{white}\ttfamily,
   %commentstyle=\color{white} %''cheat'' to hide comments
-  xleftmargin=10pt,
+  xleftmargin=7pt,
+  xrightmargin=7pt,
   %backgroundcolor=\color{lightgray},
   showstringspaces=false,
   morekeywords={step,impulse,pzmap,bode,freqz}
@@ -105,9 +108,11 @@
 % Headers and footers
 \pagestyle{fancy} % options: empty , plain , fancy
 \setlength{\headheight}{15pt}
-\lhead{\nouppercase{\rightmark}}%\lhead{\nouppercase{\leftmark}}
+%\lhead{\nouppercase{\rightmark}}
+\lhead{\nouppercase{\leftmark}}
 \chead{}
-\rhead{}
+%\rhead{}
+\rhead{\nouppercase{\rightmark}}
 \lfoot{}
 \cfoot{}
 \rfoot{\thepage}
