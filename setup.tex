@@ -24,7 +24,7 @@
 \usepackage{subfig} %make it possible to include more than one captioned figure/table in a single float
 \usepackage{float} %float positioning etc
 \usepackage{amsmath,amsfonts,amssymb,amsthm} %AMS' packages for symbols, theorems etc.
-\usepackage{xfrac} %for nicefrac{}{}
+\usepackage{xfrac} %for slash fractions
 \usepackage{wrapfig}
 \usepackage{multicol}
 \usepackage{footnote}
@@ -48,8 +48,9 @@
   \hyphenchar\font=`\-% allowing hyphenation
 }
 
-% Define custom typewriter shorthand (uses \justify)
+% Define custom typewriter shorthands (uses \justify)
 \newcommand{\custtt}[1]{\texttt{\justify{\small #1}}}
+\newcommand{\smalltt}[1]{\texttt{{\small #1}}}
 
 % Bibliography appearance
 \usepackage[style=numeric,natbib=true,sortcites=true,block=space,backend=bibtex8]{biblatex}

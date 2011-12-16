@@ -17,7 +17,7 @@ Sequence numbering provides a way to make sure packets are delivered in the corr
 
 All summed up, a protocol design, that will ensure in-order delivery of data, is needed. Features as flow- and congestion control is ignored. Mainly because the communication is going to take place via sound after all: We can safely say that the transfer speeds will not be high and congestion is unlikely to occur.\marginnote{Ref.} After all, the communication line is inherently half-duplex, making the data flow one-way (at a single point in time) by nature.
 
-Coincidentally the RUDP\footnote{Reliable UDP protocol.} described in \cite{RUDP} suits the needs well on many points. Therefore many of the properties, portrayed in the following parts, are based on those of the RUDP. Note that the RUDP document is an \textit{internet draft}, meaning it is work-in-progress (and seemingly not updated in a long time).
+Coincidentally the RUDP\footnote{Reliable UDP protocol.} described in \cite{RUDP} suits the needs well on many points. Therefore many of the properties, portrayed in the following parts, are based on those of the RUDP. Note that the RUDP document is an \textit{internet draft}, meaning it is work-in-progress (although it has seemingly not been updated for a long time).
 
 \nomenclature{RUDP}{Reliable User Datagram Protocol}
 
@@ -35,7 +35,7 @@ The data link layer takes care of the node-to-node delivery, where each node has
 To obtain a way of distinguishing signaling processes from each other, another attribute must be introduced: A port number.\footnote{Port number, in this text, is separate from the port number normally associated with a process when it \textit{binds} via some kind of Internet socket. Still, the term is used, as it's purpose is the same.} The port number, assigned to a certain server application, must be known to the client before it starts sending. That is the only way the client process will know where to send data. In the protocol, we select the port number to be eight bits long. This reasoning behind this choice is, that it is unlikely that we have to server lots of applications at a time. Add to that, that we wish to keep a minimal overhead size (a higher port number would add more bits to the header), as we don't have a lot of bandwidth available to begin with.
 
 
-\subsection{Packet format}
+\subsection{Packet format}\label{sub:trans_packet_format}
 From the above layer the protocol expects to just receive a stream of data. The order in which the data is received is significant, but the data itself is not. When received, the data bytes will be packed into packets of a maximum length of 255 bytes (it can be smaller). A maximum length of 255 bytes seems like a sensible size.\marginnote{Better reasoning/reference}
 
 All the attributes described above, leads to the packet header format as shown in Table \ref{tab:trans_packet_header}. It is 8 bytes long, which leaves a maximum possible amount of 248 bytes of data per packet. The flags field will be treated throughout the next parts of this section.
@@ -82,7 +82,7 @@ In order to avoid the risk of bytes shifting position inside one packet, a check
 
 \nomenclature{CRC}{Cyclic redundancy check}
 
-The header of the packet is always getting it's checksum calculated. If the \texttt{CHK} flag bit is set, a checksum is calculated for the whole package. This is the default, and preferred way, of transmission.
+The header of the packet is always getting it's checksum calculated. If the \texttt{CHK} flag bit is set, a checksum is calculated for the whole package. This is the default, and preferred, way of transmission.
 
 \subsection{Operation}
 Because of the need to synchronise sequence numbers, the protocol uses \textit{handshaking} in the form of the SYN packet and the response to it. When a connection is first opened, the SYN packet, with a random sequence number attached, is sent. The receiver must then respond within a set time frame to verify the connection. This response must have an acknowledgment number equal to the sequence number just sent. Figure \ref{fig:trans_syn_transfer} shows the connection establishment taking place. Disconnected and connected refers to the protocols internal status; how it perceives itself.
@@ -128,7 +128,7 @@ To accommodate the need for retransmission, the protocol will feature in- and ou
 \begin{figure}[htb]
  \centering
  \includegraphics[scale=0.64,trim=0 290 0 255]{content/graphics/transport/trans_timeout.pdf}%trim=l b r t
- \caption{The transport layer asdfadsf}
+ \caption{The transport layer protocol retransmission timeout}
  \label{fig:trans_timeout}
 \end{figure}
 

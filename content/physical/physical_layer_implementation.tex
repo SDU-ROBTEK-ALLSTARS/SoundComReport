@@ -1,11 +1,10 @@
 \section{Physical layer software Implementation}
 Before implementation is started a few decisions have to be made. First thing is defining an interface which tell which functionalities
 that will be exposed to the upper layer. Second phase of the decision making is to develop flowcharts that define the flow of events 
-that have to take place to make the physical layer as functional and stable as possible. A decision about using Boost C++ Libraries
-(http://www.boost.org/) was also made so utilisation of the supported ring buffer can take place. This decision was taken to avoid
-implementing this buffer type ourselves as this is a time consuming process, making it work and the optimisation which follows.
+that have to take place to make the physical layer as functional and stable as possible. A decision about using Boost C++ Libraries\footnote{\url{http://www.boost.org/}} was also made so utilisation of the supported ring buffer can take place. This decision was taken to avoid
+implementing this buffer type ourselves as this is a time consuming process, making it work and the optimization which follows.
 By using Boost we get this vital functionality handed over for free. This section will not go into every little aspect of implementing
-the software, but will give good overview of how the physical layer is utilised and also how it does work internally to process incoming 
+the software, but will give good overview of how the physical layer is utilized and also how it does work internally to process incoming 
 and outgoing data. It is therefore recommended to take a look at the files located at src/physical/ to get the full view of the physical layer.
 Files that spoken of is listed below:
 
@@ -34,28 +33,28 @@ Files that spoken of is listed below:
 	The \textit{constructor} of the physical layer instantiates the BufferedSoundIO which setup PortAudio for utilisation. The constructor passes the
 	parameters through the constructor of the BufferedSoundIO.
 	
-	The \textit{send(void*)} method takes one parameter as a reference to the buffer exposed from the data link layer to the physical layer. This buffer
-	will be of the type \textit{boost::circular\_buffer$<$Frame$>$}. The \textit{send} method check if a transmission is going on as \textit{send} is called.
+	The \custtt{send(void*)} method takes one parameter as a reference to the buffer exposed from the data link layer to the physical layer. This buffer
+	will be of the type \custtt{boost::circular\_ buffer<Frame>}. The \custtt{send} method check if a transmission is going on as \custtt{send} is called.
 	If not it resize an internal buffer in the PhysicalLayer so this buffer can hold all frames as one sequence of numbers, the type of 
-	the sequence buffer will be \textit{boost::circular\_buffer$<$unsigned int$>$}. This sequence is then pushed to the BufferedSoundIO class which
-	internally holds a buffer of the same type. A simple flowchart of the \textit{send} method is shown in figure \ref{fig:physical_send}.
+	the sequence buffer will be \custtt{boost::circular\_buffer <unsigned int>}. This sequence is then pushed to the BufferedSoundIO class which
+	internally holds a buffer of the same type. A simple flowchart of the \custtt{send} method is shown in figure \ref{fig:physical_send}.
 	
 	\begin{figure}[htb]
 		\begin{center}
 		\includegraphics[scale=0.6,trim=0 0 0 0]{physical_send.png}%trim=l b r t
-		\caption{Flowchart shown here gives an overview of the internal workings in the \textit{send} method.}
+		\caption{An overview of the internal workings in the \smalltt{send} method}
 		\label{fig:physical_send}
 		\end{center}
 	\end{figure}
 	
-	The \textit{receive(void*)} method takes one parameter as a reference to the buffer which stores data for link layer is delivered from the physical layer.
-	This buffer	will be of the type \textit{boost::circular\_buffer$<$Frame$>$}. The \textit{receive} method check if the internal frame buffer is empty.
-	If this is not the case the frames are delivered up to the data link layer. A simple flowchart of the \textit{receive} method is shown in figure \ref{fig:physical_receive}.
+	The \custtt{receive(void*)} method takes one parameter as a reference to the buffer which stores data for link layer is delivered from the physical layer.
+	This buffer	will be of the type \custtt{boost::circular\_buffer<Frame>}. The \custtt{receive} method check if the internal frame buffer is empty.
+	If this is not the case the frames are delivered up to the data link layer. A simple flowchart of the \custtt{receive} method is shown in figure \ref{fig:physical_receive}.
 	
 	\begin{figure}[htb]
 		\begin{center}
 		\includegraphics[scale=0.6,trim=0 0 0 0]{physical_receive.png}%trim=l b r t
-		\caption{Flowchart shown here gives an overview of the internal workings in the \textit{receive} method.}
+		\caption{An overview of the internal workings in the \smalltt{receive} method}
 		\label{fig:physical_receive}
 		\end{center}
 	\end{figure}
@@ -72,8 +71,8 @@ Files that spoken of is listed below:
 	\end{enumerate}
 	
 	To understand BufferedSoundIO a little knowledge of how PortAudio works internally is needed. PortAudio provides the user of the API to initialize
-	and start a sound stream through a computers soundcard. This stream \textit{of sound} or data is available through a callback function delivered
-	by PortAudio. As PortAudio is programmed in C, this callback function is simply a function pointer\footnote{http://www.newty.de/fpt}
+	and start a sound stream through a computers sound card. This stream \textit{of sound} or data is available through a callback function delivered
+	by PortAudio. As PortAudio is programmed in C, this callback function is simply a function pointer\footnote{\url{http://www.newty.de/fpt}}
 	which allow for the user to create a function in his program that will be called when PortAudio is calling its own callback function.
 	This callback is called according to the setup of a given stream, for instance, if the sample rate is $8kHz$ and the stream is initialized as 
 	only output with a buffer of 8000 samples, then will this stream fire the callback every second as the buffer is emptied every second.
@@ -82,29 +81,29 @@ Files that spoken of is listed below:
 	function declaration with an arbitrary name. 
 	
 	\begin{lstlisting}[float=htb,language={C++},caption={PortAudios callback function declaration. This declaration is used for both input
-	streams, output streams, and the two in combination.}]
+	streams, output streams, and the two in combination},label={lst:pa_callback}]
 static int paStreamCallback(const void *inputBuffer,
 							void *outputBuffer,
 							unsigned long framesPerBuffer,
 							const PaStreamCallbackTimeInfo* timeInfo,
 							PaStreamCallbackFlags statusFlags,
 							void *userData);
-	\end{lstlisting}\label{lst:pa_callback}
+	\end{lstlisting}
 	
 	BufferedSoundIO is instantiated with PhysicalLayer and therefore resides in PhysicalLayer. BufferedSoundIO itself setup two streams where each
-	represent either a input or output stream, this is done because the physical layer works on two streams of data seperately. As two streams are 
+	represent either a input or output stream, this is done because the physical layer works on two streams of data separately. As two streams are 
 	now present, a foundation for communication with sound is founded. These two streams are able to work asynchronously which might proof to be an
 	advantage later on. If the input callback is fired twice as often as the output callback, could proof to make the communication more reliable
 	as this could address some of the overlapping issues which could lead to loss of data. Exact scientific tests on the topic will not be preformed
 	due to time constraints, but a rule of thumb is, be sure to fire the input callback at least twice as often as the output callback.
 	
 		\subsubsection{Output streaming}
-		The output stream fires the internal \textit{paOutputStreamCallback} function of BufferedSoundIO. As shown in listing \ref{lst:pa_callback}
-		the last parameter taken by PortAudio callback \textit{void *userData} is used so the user is able to pass arbitrary data as a reference into the
+		The output stream fires the internal \custtt{paOutputStreamCallback} function of BufferedSoundIO. As shown in listing \ref{lst:pa_callback}
+		the last parameter taken by PortAudio callback \custtt{void *userData} is used so the user is able to pass arbitrary data as a reference into the
 		callback. Regarding BufferedSoundIO this parameter is used to send a reference to the object itself in which the stream resides. 
-		Listing \ref{lst:pa_stream_callback} show the exact implentatation of \textit{paOutputStreamCallback}.
+		Listing \ref{lst:pa_stream_callback} show the exact implementation of \custtt{paOutputStreamCallback}.
 		
-		\begin{lstlisting}[float=htb,language={C++},caption={Implementation of \textit{paOutputStreamCallback}.}]
+		\begin{lstlisting}[float=htb,language={C++},caption={Implementation of \smalltt{paOutputStreamCallback}},label={lst:pa_stream_callback}]
 static int paOutputStreamCallback(	const void *inputBuffer,
 									void *outputBuffer,
 									unsigned long framesPerBuffer,
@@ -112,46 +111,46 @@ static int paOutputStreamCallback(	const void *inputBuffer,
 									PaStreamCallbackFlags statusFlags,
 									void *userData)
 { return ((BufferedSoundIO*)userData) -> outputStreamCallback(inputBuffer, outputBuffer, framesPerBuffer, timeInfo, statusFlags); }
-		\end{lstlisting}\label{lst:pa_stream_callback}
+		\end{lstlisting}
 		
 		This way of implementing the callback makes the callback able to reach data which resides in the object of BufferedSoundIO,
-		\textit{paOutputStreamCallback} call the \textit{outputStreamCallback} which is also a member function of BufferedSoundIO.
+		\custtt{paOutputStreamCallback} call the \custtt{outputStreamCallback} which is also a member function of BufferedSoundIO.
 		
-		The \textit{outputStreamCallback(...)} essentially generate sound according to entries in an internal buffer of BufferedSoundIO
-		if there is any present, a sketch up of the flowchart of \textit{outputStreamCallback(...)} is shown in figure \ref{fig:physical_output_callback}.
+		The \custtt{outputStreamCallback(...)} essentially generate sound according to entries in an internal buffer of BufferedSoundIO
+		if there is any present, a sketch up of the flowchart of \custtt{outputStreamCallback(...)} is shown in Figure \ref{fig:physical_output_callback}.
 		
 		\begin{figure}[htb]
 			\begin{center}
 			\includegraphics[scale=0.6,trim=0 0 0 0]{physical_output_callback.png}%trim=l b r t
-			\caption{A sketch up of \textit{outputStreamCallback(...)} function. For more details this can be found in BufferedSoundIO.cpp}
+			\caption{A sketch up of \smalltt{outputStreamCallback(...)} function. For more details this can be found in BufferedSoundIO.cpp}
 			\label{fig:physical_output_callback}
 			\end{center}
 		\end{figure}
 		
 		\subsubsection{Input streaming}
 		Input streaming works in the exact same way as the output stream regarding the callback. BufferedSoundIO have a function named
-		\textit{paInputStreamCallback} which handles the callback from PortAudio, \textit{paInputStreamCallback} call the \textit{inputStreamCallback}
-		function which handles the internal input buffer exposed by PortAudio. Figure \ref{fig:physical_input_callback} show a sketch up of \textit{inputStreamCallback}.
+		\custtt{paInputStreamCallback} which handles the callback from PortAudio, \custtt{paInputStreamCallback} call the \custtt{inputStreamCallback}
+		function which handles the internal input buffer exposed by PortAudio. Figure \ref{fig:physical_input_callback} show a sketch up of \custtt{inputStreamCallback}.
 		
 		This function is a little more complex compared to the output callback as this implements the Goertzel algorithm for detection of tones and also
 		a decision making system which analyse the state of the signal to see if it is a valid signal. If the signal is valid a code is calculated, this
 		code is now validated to see if it is contained in the mapping system of tones and codes. If the code is valid it is pushed to the input
-		sequence buffer which is of the type \textit{boost::circular\_buffer$<$unsigned int$>$}. When ever the decision making system see the code 17,
+		sequence buffer which is of the type \custtt{boost::circular\_buffer<unsigned int>}. When ever the decision making system see the code 17,
 		which corresponds to end of a frame a callback is made from BufferedSoundIO to PhysicalLayer asking the PhysicalLayer to pull the codes from
 		the input sequence buffer which is held in BufferedSoundIO.
 		
 		\begin{figure}[htb]
 			\begin{center}
 			\includegraphics[scale=0.6,trim=0 0 0 0]{physical_input_callback.png}%trim=l b r t
-			\caption{A sketch up of \textit{inputStreamCallback(...)} function. For more details this can be found in BufferedSoundIO.cpp}
+			\caption{A sketch up of \smalltt{inputStreamCallback(...)} function. For more details this can be found in BufferedSoundIO.cpp}
 			\label{fig:physical_input_callback}
 			\end{center}
 		\end{figure}
 		
 	\subsection{Callback to PhysicalLayer}
-	Everytime the input callback in BufferedSoundIO recognise the code 17, a callback is made back to the PhysicalLayer. This callback pull the
+	Every time the input callback in BufferedSoundIO recognise the code 17, a callback is made back to the PhysicalLayer. This callback pull the
 	codes from BufferedSoundIO, generate a frame from the information pulled, and store this frame in the frame buffer of PhysicalLayer. This ensures
-	that frames and the funtionality for generating sequences from frames and generating frames from sequences are kept in the PhysicalLayer class.
+	that frames and the functionality for generating sequences from frames and generating frames from sequences are kept in the PhysicalLayer class.
 	A sketch up of the function is shown in figure \ref{fig:physical_frame_callback}
 	
 	\begin{figure}[htb]
