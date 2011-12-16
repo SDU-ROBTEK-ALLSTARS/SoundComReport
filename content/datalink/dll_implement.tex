@@ -1,6 +1,6 @@
-\section{Data link layer}
-The data link layer is implemented as a DataLinkLayer class and a Frame class.
-The DataLinkLayer object is instantiated by the backbone class and controls the
+\section{Implementation}
+The data link layer is implemented as a \custtt{DataLinkLayer} class and a Frame class.
+The \custtt{DataLinkLayer} object is instantiated by the backbone class and controls the
 network token and the processing of frames into datagrams and vice versa. When
 instantiating, the address and token is controlled by arguments. The Frame
 objects and datagram objects are instantiated in buffers by the backbone and
@@ -15,11 +15,11 @@ presented to the data link layer as method arguments.
 \end{figure}
 
 Two public methods are used to call the data link layer, one for upwards traffic
-(decode) and one for downwards traffic (encode). Both methods are called with
+(\custtt{decode}) and one for downwards traffic (\custtt{encode}). Both methods are called with
 pointers to the four accessible buffers as arguments. Furthermore the backbone
-can call a method (needsAttention) to know whether the data link layer need
+can call a method (\custtt{needsAttention}) to know whether the data link layer need
 extraordinary attention because a timer has run out. Another method
-(canTransmit) telles the backbone whether the data link layer object holds the
+(\custtt{canTransmit}) tells the backbone whether the data link layer object holds the
 network token and thereby is able to send encoded data.
 
 \begin{figure}[htb]
