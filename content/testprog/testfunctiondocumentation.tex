@@ -54,7 +54,7 @@ Figure \ref{fig:TestFlowchart} shows the flowchart testing a single layer by fee
 
 \subsection{Physical Layer}
 
-The single instance test, wheter the computer is able to send and recieve sound have already been done while developing and debugging the layer. Therefore it is more logical to perform a test with two instances of the layer. Examening how many of the sent messages actually recieved by the other instance.
+The single instance test, wheter the computer is able to send and recieve sound have already been done while developing and debugging the layer. Therefore it is more logical to perform a test with two instances of the layer, examening how many of the sent messages are actually recieved by the other instance.
 
 \subsection{Datalink Layer}
 
@@ -67,6 +67,8 @@ Testing the ability to communicate with errors is done by having to instances co
 
 \subsection{Transport Layer}
 
+More nEeded!
+
 The transport layer is responsible verifying the checksum. An appropriate test is sending a stream of messages to the transport layer, to see if only the correctly checksummed messages arrive. With the two instance test it would be possible to see if the transport layer is able produce and interpretate the checksum.
 
 \subsection{Application Layer}
@@ -77,5 +79,5 @@ The perfomance of the application layer is tested by building a file transfer pr
 
 \subsection{Layers Combined}
 
-In this test all the layers are connected and controlled by the backbone. With the file transfer program from the application layer, it is now tested by sending the file from the application layer test between two computers. 
+In this test all the layers are connected and controlled by the backbone. This test is done as a potential user, with the options provided by the application layer. Using the file transfer program from the application layer, it is now tested by sending the file from the application layer test between two computers. 
 
