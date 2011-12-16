@@ -1,2 +1,47 @@
-\chapter{API}
-Here is an introduction to the chapter
+\chapter{API}\label{chap:api}
+\nomenclature{API}{Application programming interface}
+The application programming interface (API) layer is designed with the goal of presenting an easy-to-use interface for the Dtmf library. The following chapter goes trough some of the considerations and tequniques used in the api layer design.
+
+(The message buffers should be included in this section)
+
+%Threading is used to avoid stalling the front end application when sending and receiving data. /* To be rewritten */
+
+% Notes about writing the API documentation.
+
+% Introduction
+%  Short, about what to read in the next few pages.
+% [Userbility] Considerations ( + What did i decide during the considerations)
+%  Easy usage for the end user
+%  Threads to minimize dirsturbance of the users application
+%  Using callbacks to receive data on ports
+% Implementation (How was it implemented)
+%  Evalutation of public api methods
+%  Short usage example [ Send | Receive / Setting up callback/port ]
+
+% Threading
+% - Thread safe buffers +  a little about race conditions
+
+% May be used / refered
+% - Message types
+% - Life of a message
+% - Dependency diagram
+
+% Drawing showing the API layer as an interface with a cloud representing the underling layers
+
+% Test suite
+
+
+
+% Limitations of the protocol? Max numbers of stations, number of ports, max datasize.
+
+% DtmfInMessage::getData not implemented
+
+
+% DtmfInMessage - who can create it?
+
+
+
+
+
+% Api documentation
+% * Remember to be compatible with General Concepts > Facade class
