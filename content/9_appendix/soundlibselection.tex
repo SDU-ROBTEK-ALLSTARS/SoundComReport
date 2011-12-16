@@ -1,45 +1,23 @@
-\chapter{Sound library selection}\label{chap:lib}
-Requirements\marginnote{This part requires expansion/corrections}
+\chapter{PortAudio}\label{chap:lib}\label{app:portaudio}
+As this project requires the usage of the sound card in a computer some interface is needed. A quick search on Google resulted in a countless number of possibilities for interfacing a C++ program with the sound card of a computer. The team decided on a set of requirements which the interface had to provide. Requirements are listed below:
+
 \begin{itemize}
-\item Multi platform (WIndows, Linux, Mac)
-\item Fast
-\item Access to raw sample data (PCM)
-\item Both sound in and sound out
-\item(OpenSource)
-\item(Variable sample speed)
-\item(Resolution of samples)
-\item Pros/Cons on found libraries
+\item Easy-to-use application programming interface.
+\item Cross platform.
+\item Access to raw sample data.
+\item Variable sample speed.
+\item Support multiple streams.
 \end{itemize}
 
-\begin{table}
-\centering
-\begin{tabularx}{\textwidth}{lXX}
-Library & Pros & Cons\\
-\midrule
-CLAM (C++) & Framework for audio analysis. Has a prototype application. Built-in FFT & Many dependencies, Big framework\\
-\multicolumn{3}{l}{\url{http://clam-project.org}}\\
-\midrule
-fmod & & Commercial product/Closed source\\
-\multicolumn{3}{l}{\url{http://www.fmod.org}}\\
-\midrule
-portAudio (C) & & At first glance; no support for multi-channel streams\\
-\multicolumn{3}{l}{\url{http://www.portaudio.com}}\\
-\midrule
-OpenAL (C++)& & Emphasizes on using sound sources in a ''3D'' arrangement around a user\\
-\multicolumn{3}{l}{\url{http://connect.creativelabs.com/openal}}\\
-\midrule
-SDL (C) & & PCM, seems easy to work with \\
-\multicolumn{3}{l}{\url{http://www.libsdl.org/}}\\
-\midrule
-BASS & Custom samples, DSP,  any add-ons for encodings/multi-channel, Well-documented & No direct PCM (must read/written to files)\\
-\multicolumn{3}{l}{\url{http://www.un4seen.com/}}\\
-\midrule
-RTAudio (C++) & Capability probing, free-to-use-and-modify license & \\
-\multicolumn{3}{l}{\url{http://www.music.mcgill.ca/~gary/rtaudio/}}\\
-\midrule
-QTMultimedia (C++) & & Requires core funtions from QT lib\\
-\multicolumn{3}{l}{\url{http://doc.qt.nokia.com/latest/qtmultimedia.html}}\\
-\midrule
-SFML (C++) & & 
-\end{tabularx}
-\end{table}
+The surface of several interfaces was scratched to see what they had to offer. Some of the possibilities are listed below:
+
+\begin{description}
+\item[RT Audio\footnote{}] was crap...
+\footnotetext{\url{http://www.music.mcgill.ca/~gary/rtaudio/}}
+
+\item[QT Multimedia\footnote{}] is developed by Nokia, and is a good suggestion as it comply with the requirements. The disadvantage is that core files from QT itself is needed which result in increased size of the developed software. Not that the size is specified as a requirement of the project itself but it also result in a superior complexity of the developed software itself, so QT Multimedia was discarded.
+\footnotetext{\url{http://doc.qt.nokia.com/latest/qtmultimedia.html}}
+
+\item[PortAudio\footnote{}] was finally chosen as the lowermost component of the software as it comply with the requirements mentioned above.  The reason for this final decision was based on the simplicity of the usage of PortAudio. Beside this point it is extremely adaptable which make it possible to use in a wide range of applications.
+\footnotetext{\url{http://www.portaudio.com/}}
+\end{description}
