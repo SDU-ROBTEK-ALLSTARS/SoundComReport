@@ -25,7 +25,6 @@
       </data>
     </node>
     <node id="n1">
-      <data key="d5"/>
       <data key="d6">
         <y:GenericNode configuration="com.yworks.flowchart.process">
           <y:Geometry height="52.66666666666663" width="80.0" x="682.0" y="416.16666666666663"/>
@@ -38,7 +37,6 @@ i = i +1 &lt;br&gt; i = i % 6 &lt;br&gt; j = 0
       </data>
     </node>
     <node id="n2">
-      <data key="d5"/>
       <data key="d6">
         <y:GenericNode configuration="com.yworks.flowchart.process">
           <y:Geometry height="52.66666666666663" width="80.0" x="682.0" y="498.83333333333326"/>
@@ -49,7 +47,6 @@ i = i +1 &lt;br&gt; i = i % 6 &lt;br&gt; j = 0
       </data>
     </node>
     <node id="n3">
-      <data key="d5"/>
       <data key="d6">
         <y:GenericNode configuration="com.yworks.flowchart.decision">
           <y:Geometry height="40.0" width="80.0" x="682.0" y="581.4999999999999"/>
@@ -60,7 +57,6 @@ i = i +1 &lt;br&gt; i = i % 6 &lt;br&gt; j = 0
       </data>
     </node>
     <node id="n4">
-      <data key="d5"/>
       <data key="d6">
         <y:GenericNode configuration="com.yworks.flowchart.terminator">
           <y:Geometry height="40.0" width="80.0" x="682.0" y="651.4999999999999"/>
@@ -71,7 +67,6 @@ i = i +1 &lt;br&gt; i = i % 6 &lt;br&gt; j = 0
       </data>
     </node>
     <node id="n5">
-      <data key="d5"/>
       <data key="d6">
         <y:GenericNode configuration="com.yworks.flowchart.decision">
           <y:Geometry height="63.0" width="121.0" x="818.0" y="569.9999999999999"/>
@@ -82,7 +77,6 @@ i = i +1 &lt;br&gt; i = i % 6 &lt;br&gt; j = 0
       </data>
     </node>
     <node id="n6">
-      <data key="d5"/>
       <data key="d6">
         <y:GenericNode configuration="com.yworks.flowchart.decision">
           <y:Geometry height="78.76119253333286" width="139.0" x="952.0" y="433.2611925333331"/>
@@ -93,40 +87,36 @@ i = i +1 &lt;br&gt; i = i % 6 &lt;br&gt; j = 0
       </data>
     </node>
     <node id="n7">
-      <data key="d5"/>
       <data key="d6">
         <y:GenericNode configuration="com.yworks.flowchart.decision">
           <y:Geometry height="79.99999999999994" width="139.0" x="952.0" y="158.5000000000001"/>
           <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="36.0" modelName="internal" modelPosition="c" textColor="#000000" visible="true" width="95.0" x="22.0" y="22.0">&lt;html&gt;Out Dgram avail.&lt;br&gt; room for result&lt;/html&gt;</y:NodeLabel>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="36.0" modelName="internal" modelPosition="c" textColor="#000000" visible="true" width="93.0" x="23.0" y="21.99999999999997">&lt;html&gt;Out packet avail.&lt;br&gt; room for result&lt;/html&gt;</y:NodeLabel>
         </y:GenericNode>
       </data>
     </node>
     <node id="n8">
-      <data key="d5"/>
       <data key="d6">
         <y:GenericNode configuration="com.yworks.flowchart.decision">
           <y:Geometry height="79.99999999999994" width="139.0" x="952.0" y="249.50000000000006"/>
           <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="36.0" modelName="internal" modelPosition="c" textColor="#000000" visible="true" width="86.0" x="26.5" y="21.999999999999943">&lt;html&gt;In Dgram avail.&lt;br&gt; room for result&lt;/html&gt;</y:NodeLabel>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="36.0" modelName="internal" modelPosition="c" textColor="#000000" visible="true" width="84.0" x="27.5" y="21.999999999999943">&lt;html&gt;In packet avail.&lt;br&gt; room for result&lt;/html&gt;</y:NodeLabel>
         </y:GenericNode>
       </data>
     </node>
     <node id="n9">
-      <data key="d5"/>
       <data key="d6">
         <y:GenericNode configuration="com.yworks.flowchart.decision">
           <y:Geometry height="78.76119253333286" width="139.0" x="952.0" y="340.5"/>
           <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="36.0" modelName="internal" modelPosition="c" textColor="#000000" visible="true" width="98.0" x="20.5" y="21.38059626666643">&lt;html&gt;In Pframe avail.&lt;br&gt; room for in frame&lt;/html&gt;</y:NodeLabel>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="36.0" modelName="internal" modelPosition="c" textColor="#000000" visible="true" width="98.0" x="20.5" y="21.38059626666643">&lt;html&gt;In P. frame avail.&lt;br&gt; room for in frame&lt;/html&gt;</y:NodeLabel>
         </y:GenericNode>
       </data>
     </node>
     <node id="n10">
-      <data key="d5"/>
       <data key="d6">
         <y:GenericNode configuration="com.yworks.flowchart.decision">
           <y:Geometry height="79.99999999999989" width="139.0" x="952.0" y="623.3557183999994"/>
@@ -137,7 +127,6 @@ i = i +1 &lt;br&gt; i = i % 6 &lt;br&gt; j = 0
       </data>
     </node>
     <node id="n11">
-      <data key="d5"/>
       <data key="d6">
         <y:GenericNode configuration="com.yworks.flowchart.decision">
           <y:Geometry height="79.99999999999989" width="139.0" x="952.0" y="526.0223850666662"/>
@@ -148,7 +137,6 @@ i = i +1 &lt;br&gt; i = i % 6 &lt;br&gt; j = 0
       </data>
     </node>
     <node id="n12">
-      <data key="d5"/>
       <data key="d6">
         <y:GenericNode configuration="com.yworks.flowchart.process">
           <y:Geometry height="40.0" width="101.59999999999991" x="1141.0" y="178.50000000000009"/>
@@ -159,18 +147,16 @@ i = i +1 &lt;br&gt; i = i % 6 &lt;br&gt; j = 0
       </data>
     </node>
     <node id="n13">
-      <data key="d5"/>
       <data key="d6">
         <y:GenericNode configuration="com.yworks.flowchart.process">
           <y:Geometry height="40.0" width="101.59999999999991" x="1141.0" y="269.5"/>
           <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" modelName="internal" modelPosition="c" textColor="#000000" visible="true" width="82.708984375" x="9.445507812499955" y="10.6494140625">decode Dgram</y:NodeLabel>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" modelName="internal" modelPosition="c" textColor="#000000" visible="true" width="82.05859375" x="9.770703124999955" y="10.6494140625">decode packet</y:NodeLabel>
         </y:GenericNode>
       </data>
     </node>
     <node id="n14">
-      <data key="d5"/>
       <data key="d6">
         <y:GenericNode configuration="com.yworks.flowchart.process">
           <y:Geometry height="40.0" width="101.59999999999991" x="1141.0" y="359.88059626666643"/>
@@ -181,7 +167,6 @@ i = i +1 &lt;br&gt; i = i % 6 &lt;br&gt; j = 0
       </data>
     </node>
     <node id="n15">
-      <data key="d5"/>
       <data key="d6">
         <y:GenericNode configuration="com.yworks.flowchart.process">
           <y:Geometry height="40.0" width="101.59999999999991" x="1141.9552735999998" y="452.6417887999995"/>
@@ -192,7 +177,6 @@ i = i +1 &lt;br&gt; i = i % 6 &lt;br&gt; j = 0
       </data>
     </node>
     <node id="n16">
-      <data key="d5"/>
       <data key="d6">
         <y:GenericNode configuration="com.yworks.flowchart.process">
           <y:Geometry height="40.0" width="101.59999999999991" x="1141.9552735999998" y="546.0223850666662"/>
@@ -203,7 +187,6 @@ i = i +1 &lt;br&gt; i = i % 6 &lt;br&gt; j = 0
       </data>
     </node>
     <node id="n17">
-      <data key="d5"/>
       <data key="d6">
         <y:GenericNode configuration="com.yworks.flowchart.process">
           <y:Geometry height="40.0" width="101.59999999999991" x="1141.9552735999998" y="650.3557183999997"/>
@@ -214,7 +197,6 @@ i = i +1 &lt;br&gt; i = i % 6 &lt;br&gt; j = 0
       </data>
     </node>
     <node id="n18">
-      <data key="d5"/>
       <data key="d6">
         <y:GenericNode configuration="com.yworks.flowchart.process">
           <y:Geometry height="40.0" width="80.0" x="682.0" y="721.4999999999999"/>
