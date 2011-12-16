@@ -55,8 +55,8 @@ This method is used when sending data. It returns an empty message, and enables 
 When this method is called with arguments, the message is created internally and send right away.
 
 \subsubsection*{Deconstructing the api}
-The dtmf lib is shut down, when the delete statement is called. (See usage example xx) When the lib is asked to shut down, it tells the running threads to exit their main loop and join the main thread. This may take a while depending on the state of the backbone. When threads are joined, all allocated messages will be deallocated.
-%\ref{DeletingInstanceEx}
+The dtmf lib is shut down, when the delete statement is called. (See usage example \ref{DeletingInstanceEx}) When the lib is asked to shut down, it tells the running threads to exit their main loop and join the main thread. This may take a while depending on the state of the backbone. When threads are joined, all allocated messages will be deallocated.
+
 \section{Usage example}
 Usage examples are available in appendix (??)
 

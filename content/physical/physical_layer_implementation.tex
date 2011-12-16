@@ -101,7 +101,7 @@ static int paStreamCallback(const void *inputBuffer,
 		\subsubsection{Output streaming}
 		The output stream fires the internal \textit{paOutputStreamCallback} function of BufferedSoundIO. As shown in listing \ref{lst:pa_callback}
 		the last parameter taken by PortAudio callback \textit{void *userData} is used so the user is able to pass arbitrary data as a reference into the
-		callback. Regarding BufferedSoundIO this parameter is used to send the a reference to the object itself in which the stream resides. 
+		callback. Regarding BufferedSoundIO this parameter is used to send a reference to the object itself in which the stream resides. 
 		Listing \ref{lst:pa_stream_callback} show the exact implentatation of \textit{paOutputStreamCallback}.
 		
 		\begin{lstlisting}[float=htb,language={C++},caption={Implementation of \textit{paOutputStreamCallback}.}]
