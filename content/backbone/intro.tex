@@ -32,12 +32,12 @@ The same argument goes for the transport layer, which of course has the lowest p
  In the end the final priority queue is:
 
 \begin{enumerate}
-\item If amount of input frames \textgreater input frame maximum value, move frames from the physical layer.
-\item If amount of output frames \textless output frames minimum value, move frames to the physical layer.
-\item If amount of frames \textgreater frame maximum value, decode frames (produces inbound packages).
-\item If amount of frames \textless frame minimum value, encode packets(produces outbound frames).
-\item If amount of packets \textgreater package maximum value, decode packets(produces finished inbound messages).
-\item If amount of packets \textless package minimum value, encode messages(produces outbound packages).
+\item If amount of input frames \textgreater\, input frame maximum value, move frames from the physical layer.
+\item If amount of output frames \textless\, output frames minimum value, move frames to the physical layer.
+\item If amount of frames \textgreater\, frame maximum value, decode frames (produces inbound packages).
+\item If amount of frames \textless\, frame minimum value, encode packets (produces outbound frames).
+\item If amount of packets \textgreater\, package maximum value, decode packets (produces finished inbound messages).
+\item If amount of packets \textless\, package minimum value, encode messages (produces outbound packages).
 \end{enumerate}
 This prioritized flow (see figure \ref{fig:backboneprime}) will ideally ensure that the system strives to stay in a ''stable'' state, during medium load time. Where, even if the library doesn't receive much processing time from the operating system, still manages to behave in a manner consistent with the protocol.
 When the system is a bit more relaxed, that is, all values are within working parameters, the system will assign work in a way that functions like round robin, that means, that the system checks all buffers once, and then if there is no work to be done, goes to sleep for a predetermined amount of time. The starting buffer to check, is advanced through the six buffers for each attempt at general work, in accordance with flow \ref{fig:backbonegeneral}.
@@ -73,7 +73,7 @@ When a layer is used to decode or encode, the only parameters it receives are po
 
 \begin{figure}[htb]
 	\begin{center}
-	\includegraphics[scale=0.69,trim=0 100 0 100]{backbonePrime.pdf}
+	\includegraphics[scale=0.66,trim=0 100 0 100]{backbonePrime.pdf}
 	\caption{Backbone primary flow. This diagram illustrates the decision process when determining what buffers to service. ''P. frames'' are frames still buffered in the physical layer}
 	\label{fig:backboneprime}	
 	\end{center}
@@ -81,7 +81,7 @@ When a layer is used to decode or encode, the only parameters it receives are po
 
 \begin{figure}[htb]
 	\begin{center}
-	\includegraphics[scale=0.69,trim=0 100 0 100]{backboneGeneral.pdf}
+	\includegraphics[scale=0.66,trim=0 100 0 100]{backboneGeneral.pdf}
 	\caption{Backbone general flow. This diagram illustrates the decision process when the system is in a stable state, here the ''switch'' loop, ensures that all 6 actions are evaluated in order, but starting from a different one each time. ''P. frames'' are frames still buffered in the physical layer}
 	\label{fig:backbonegeneral}	
 	\end{center}
