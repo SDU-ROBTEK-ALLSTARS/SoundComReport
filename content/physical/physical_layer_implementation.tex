@@ -1,12 +1,5 @@
 \section{Physical layer software Implementation}
-Before implementation is started a few decisions have to be made. First thing is defining an interface which tell which functionalities
-that will be exposed to the upper layer. Second phase of the decision making is to develop flowcharts that define the flow of events 
-that have to take place to make the physical layer as functional and stable as possible. A decision about using Boost C++ Libraries\footnote{\url{http://www.boost.org/}} was also made so utilisation of the supported ring buffer can take place. This decision was taken to avoid
-implementing this buffer type ourselves as this is a time consuming process, making it work and the optimization which follows.
-By using Boost we get this vital functionality handed over for free. This section will not go into every little aspect of implementing
-the software, but will give good overview of how the physical layer is utilized and also how it does work internally to process incoming 
-and outgoing data. It is therefore recommended to take a look at the files located at src/physical/ to get the full view of the physical layer.
-Files that spoken of is listed below:
+Before implementation is started decisions of which functionalities that will be exposed to the upper layer have to be made. This section will not go into every little aspect of implementing the software, but will give good overview of how the physical layer is utilized and also how it does work internally to process incoming and outgoing data. It is therefore recommended to take a look at the files located at src/physical/ to get the full view of the physical layer. Files that spoken of is listed below:
 
 \begin {itemize}
 \item DtmfPhysical.h - This file contain the interface for the implementation of DtmfPhysical class.
@@ -21,9 +14,9 @@ Files that spoken of is listed below:
 	\item Constructor have to take parameters for controlling sample rate for incoming and outgoing sound streams, length of sample buffers,
 	resolution, and number of channels. All the parameters have to be available for later tweaking purposes.
 	\item The interface need to have a send method which take a void pointer as parameter where the frame buffer can be passed as a reference
-	so manipulation of the incoming buffer can take place at the physical layer. This is due to 
+	so manipulation of the incoming buffer can take place at the physical layer. This is done to avoid copying too much data around in the memory as this task is time consuming.
 	\item The interface need to have a receive method which take a void pointer as parameter where the incoming frame buffer for the data link
-	layer can be passed as a reference so manipulation of this buffer can take place at the physical layer.
+	layer can be passed as a reference so manipulation of this buffer can take place at the physical layer. This is done for the same reasons as the latter requirement.
 	\end{enumerate}
 	
 	\subsection{DtmfPhysical.cpp - Implementation}
@@ -75,7 +68,7 @@ Files that spoken of is listed below:
 	by PortAudio. As PortAudio is programmed in C, this callback function is simply a function pointer\footnote{\url{http://www.newty.de/fpt}}
 	which allow for the user to create a function in his program that will be called when PortAudio is calling its own callback function.
 	This callback is called according to the setup of a given stream, for instance, if the sample rate is $8kHz$ and the stream is initialized as 
-	only output with a buffer of 8000 samples, then will this stream fire the callback every second as the buffer is emptied every second.
+	only output with a buffer of 8000 samples, then this stream will fire the callback every second as the buffer is emptied every second.
 	The same goes for input streams but a little different, every time the input buffer is full the stream callback is fired. To implement
 	this type of function a well defined pattern have to be followed, the pattern is defined by PortAudio and come in the form of a
 	function declaration with an arbitrary name. 
