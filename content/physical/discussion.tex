@@ -1,2 +1,6 @@
 \section{Discussion}
-Here goes pip-hans...
+This discussion will elucidate some of the conflicts between the theoretical implementation and the actual implementation. This mean that in time of writing, the \custtt{frameCallback(...)} function have not been implemented yet as finding a solution for this problem have been a little harder than anticipated. A solution though could be to implement a functor pattern in the DtmfPhysical class, this discussion will not delve at this pattern, but it is certainly worth digging into as the current implementation has a cheap hack to make the physical layer behave as described in the previous sections.
+
+Another improvement would be encapsulating the DtmfPhysical and the BufferedSoundIO class into a new class which would which would deliver the requested interface to the upper layer. This could proof to heighten the stability of the physical layer as the visibility of public methods in the BufferedSoundIO class could be kept internal in the physical layer.
+
+Otherwise the implementation of the physical layer have proceeded with satisfaction.

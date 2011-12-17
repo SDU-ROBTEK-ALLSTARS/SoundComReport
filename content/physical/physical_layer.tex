@@ -60,7 +60,7 @@ sound waves are used for communication, and the communication can only take plac
 	
 	\begin{figure}[!h]
 		\begin{center}
-		\includegraphics[scale=0.6,trim=0 0 0 0]{physical_4layers.png}%trim=l b r t
+		\includegraphics[scale=0.6,trim=0 0 0 0]{content/graphics/physical/physical_4layers.png}%trim=l b r t
 		\caption{Assembly of components in the physical layer. DtmfPhysical handles frames and BufferedSoundIO handles DTMF tones.}
 		\label{fig:physical_4layers}
 		\end{center}
@@ -110,7 +110,7 @@ sound waves are used for communication, and the communication can only take plac
 	
 	\begin{figure}[!h]
 		\begin{center}
-		\includegraphics[scale=0.6,trim=0 0 0 0]{physical_biquad_filter.png}%trim=l b r t
+		\includegraphics[scale=0.6,trim=0 0 0 0]{content/graphics/physical/physical_biquad_filter.png}%trim=l b r t
 		\caption{A direct form II implementation}
 		\label{fig:physical_biquad_filter}
 		\end{center}
@@ -203,23 +203,23 @@ sound waves are used for communication, and the communication can only take plac
 	each other}. Code 19 can be leaved as a reserved control code. 
 	
 	\begin{table}[!h]
-			\begin{center}
-				\begin{tabular}{|c|c|}
-				\hline
-				\textbf{Code} & \textbf{Representation}\\
-				\hline
-				16 & Start of a frame \\
-				\hline
-				17 & End of a frame \\
-				\hline
-				18 & Double tone \\
-				\hline
-				19 & \textit{Reserved} \\
-				\hline
-				\end{tabular}
-			\end{center}
-			\caption{Show a table of control codes(tones).}
-			\label{tab:physical_control_tones}
+		\begin{center}
+			\begin{tabular}{|c|c|}
+			\hline
+			\textbf{Code} & \textbf{Representation}\\
+			\hline
+			16 & Start of a frame \\
+			\hline
+			17 & End of a frame \\
+			\hline
+			18 & Double tone \\
+			\hline
+			19 & \textit{Reserved} \\
+			\hline
+			\end{tabular}
+		\end{center}
+		\caption{Show a table of control codes(tones).}
+		\label{tab:physical_control_tones}
 	\end{table}
 	
 	This method for synchronization is also well connected to the rest of the
