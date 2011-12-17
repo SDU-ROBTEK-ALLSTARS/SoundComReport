@@ -1,12 +1,5 @@
 \section{Physical layer software Implementation}
-Before implementation is started a few decisions have to be made. First thing is defining an interface which tell which functionalities
-that will be exposed to the upper layer. Second phase of the decision making is to develop flowcharts that define the flow of events 
-that have to take place to make the physical layer as functional and stable as possible. A decision about using Boost C++ Libraries\footnote{\url{http://www.boost.org/}} was also made so utilisation of the supported ring buffer can take place. This decision was taken to avoid
-implementing this buffer type ourselves as this is a time consuming process, making it work and the optimization which follows.
-By using Boost we get this vital functionality handed over for free. This section will not go into every little aspect of implementing
-the software, but will give good overview of how the physical layer is utilized and also how it does work internally to process incoming 
-and outgoing data. It is therefore recommended to take a look at the files located at src/physical/ to get the full view of the physical layer.
-Files that spoken of is listed below:
+Before implementation is started decisions of which functionalities that will be exposed to the upper layer have to be made. This section will not go into every little aspect of implementing the software, but will give good overview of how the physical layer is utilized and also how it does work internally to process incoming and outgoing data. It is therefore recommended to take a look at the files located at src/physical/ to get the full view of the physical layer. Files that spoken of is listed below:
 
 \begin {itemize}
 \item DtmfPhysical.h - This file contain the interface for the implementation of DtmfPhysical class.
@@ -21,9 +14,9 @@ Files that spoken of is listed below:
 	\item Constructor have to take parameters for controlling sample rate for incoming and outgoing sound streams, length of sample buffers,
 	resolution, and number of channels. All the parameters have to be available for later tweaking purposes.
 	\item The interface need to have a send method which take a void pointer as parameter where the frame buffer can be passed as a reference
-	so manipulation of the incoming buffer can take place at the physical layer. This is due to 
+	so manipulation of the incoming buffer can take place at the physical layer. This is done to avoid copying too much data around in the memory as this task is time consuming.
 	\item The interface need to have a receive method which take a void pointer as parameter where the incoming frame buffer for the data link
-	layer can be passed as a reference so manipulation of this buffer can take place at the physical layer.
+	layer can be passed as a reference so manipulation of this buffer can take place at the physical layer. This is done for the same reasons as the latter requirement.
 	\end{enumerate}
 	
 	\subsection{DtmfPhysical.cpp - Implementation}
@@ -39,9 +32,9 @@ Files that spoken of is listed below:
 	the sequence buffer will be \custtt{boost::circular\_buffer <unsigned int>}. This sequence is then pushed to the BufferedSoundIO class which
 	internally holds a buffer of the same type. A simple flowchart of the \custtt{send} method is shown in figure \ref{fig:physical_send}.
 	
-	\begin{figure}[htb]
+	\begin{figure}[!h]
 		\begin{center}
-		\includegraphics[scale=0.66,trim=0 0 0 0]{physical_send.png}%trim=l b r t
+		\includegraphics[scale=0.7,trim=0 0 0 0]{content/graphics/physical/physical_send.png}%trim=l b r t
 		\caption{An overview of the internal workings in the \smalltt{send} method}
 		\label{fig:physical_send}
 		\end{center}
@@ -51,9 +44,9 @@ Files that spoken of is listed below:
 	This buffer	will be of the type \custtt{boost::circular\_buffer<Frame>}. The \custtt{receive} method check if the internal frame buffer is empty.
 	If this is not the case the frames are delivered up to the data link layer. A simple flowchart of the \custtt{receive} method is shown in figure \ref{fig:physical_receive}.
 	
-	\begin{figure}[htb]
+	\begin{figure}[!h]
 		\begin{center}
-		\includegraphics[scale=0.66,trim=0 0 0 0]{physical_receive.png}%trim=l b r t
+		\includegraphics[scale=0.7,trim=0 0 0 0]{content/graphics/physical/physical_receive.png}%trim=l b r t
 		\caption{Flowchart shown here gives an overview of the internal workings in the \smalltt{receive} method.}
 		\label{fig:physical_receive}
 		\end{center}
@@ -75,12 +68,12 @@ Files that spoken of is listed below:
 	by PortAudio. As PortAudio is programmed in C, this callback function is simply a function pointer\footnote{\url{http://www.newty.de/fpt}}
 	which allow for the user to create a function in his program that will be called when PortAudio is calling its own callback function.
 	This callback is called according to the setup of a given stream, for instance, if the sample rate is $8kHz$ and the stream is initialized as 
-	only output with a buffer of 8000 samples, then will this stream fire the callback every second as the buffer is emptied every second.
+	only output with a buffer of 8000 samples, then this stream will fire the callback every second as the buffer is emptied every second.
 	The same goes for input streams but a little different, every time the input buffer is full the stream callback is fired. To implement
 	this type of function a well defined pattern have to be followed, the pattern is defined by PortAudio and come in the form of a
 	function declaration with an arbitrary name. 
 	
-	\begin{lstlisting}[float=htb,language={C++},caption={PortAudios callback function declaration. This declaration is used for both input
+	\begin{lstlisting}[float=!h,language={C++},caption={PortAudios callback function declaration. This declaration is used for both input
 	streams, output streams, and the two in combination},label={lst:pa_callback}]
 static int paStreamCallback(const void *inputBuffer,
 							void *outputBuffer,
@@ -103,7 +96,7 @@ static int paStreamCallback(const void *inputBuffer,
 		callback. Regarding BufferedSoundIO this parameter is used to send a reference to the object itself in which the stream resides. 
 		Listing \ref{lst:pa_stream_callback} show the exact implementation of \custtt{paOutputStreamCallback}.
 		
-		\begin{lstlisting}[float=htb,language={C++},caption={Implementation of \smalltt{paOutputStreamCallback}},label={lst:pa_stream_callback}]
+		\begin{lstlisting}[float=!h,language={C++},caption={Implementation of \smalltt{paOutputStreamCallback}},label={lst:pa_stream_callback}]
 static int paOutputStreamCallback(	const void *inputBuffer,
 									void *outputBuffer,
 									unsigned long framesPerBuffer,
@@ -119,9 +112,9 @@ static int paOutputStreamCallback(	const void *inputBuffer,
 		The \custtt{outputStreamCallback(...)} essentially generate sound according to entries in an internal buffer of BufferedSoundIO
 		if there is any present, a sketch up of the flowchart of \custtt{outputStreamCallback(...)} is shown in Figure \ref{fig:physical_output_callback}.
 		
-		\begin{figure}[htb]
+		\begin{figure}[!h]
 			\begin{center}
-			\includegraphics[scale=0.66,trim=0 0 0 0]{physical_output_callback.png}%trim=l b r t
+			\includegraphics[scale=0.7,trim=0 0 0 0]{content/graphics/physical/physical_output_callback.png}%trim=l b r t
 			\caption{A sketch up of \smalltt{outputStreamCallback(...)} function. For more details this can be found in BufferedSoundIO.cpp}
 			\label{fig:physical_output_callback}
 			\end{center}
@@ -139,9 +132,9 @@ static int paOutputStreamCallback(	const void *inputBuffer,
 		which corresponds to end of a frame a callback is made from BufferedSoundIO to DtmfPhysical asking the DtmfPhysical to pull the codes from
 		the input sequence buffer which is held in BufferedSoundIO.
 		
-		\begin{figure}[htb]
+		\begin{figure}[!h]
 			\begin{center}
-			\includegraphics[scale=0.66,trim=0 0 0 0]{physical_input_callback.png}%trim=l b r t
+			\includegraphics[scale=0.7,trim=0 0 0 0]{content/graphics/physical/physical_input_callback.png}%trim=l b r t
 			\caption{A sketch up of \smalltt{inputStreamCallback(...)} function. For more details this can be found in BufferedSoundIO.cpp}
 			\label{fig:physical_input_callback}
 			\end{center}
@@ -151,12 +144,12 @@ static int paOutputStreamCallback(	const void *inputBuffer,
 	Everytime the input callback in BufferedSoundIO recognise the code 17, a callback is made back to the DtmfPhysical. This callback pull the
 	codes from BufferedSoundIO, generate a frame from the information pulled, and store this frame in the frame buffer of DtmfPhysical. This ensures
 	that frames and the functionality for generating sequences from frames and generating frames from sequences are kept in the DtmfPhysical class.
-	A sketch up of the function is shown in figure \ref{fig:physical_frame_callback}
+	A sketch-up of the function is shown in figure \ref{fig:physical_frame_callback}
 	
-	\begin{figure}[htb]
+	\begin{figure}[!h]
 		\begin{center}
-		\includegraphics[scale=0.6,trim=0 0 0 0]{physical_frame_callback.png}%trim=l b r t
-		\caption{A sketch up of \smalltt{frameCallback(...)} function.}
+		\includegraphics[scale=0.7,trim=0 0 0 0]{content/graphics/physical/physical_frame_callback.png}%trim=l b r t
+		\caption{A sketch-up of \smalltt{frameCallback(...)} function.}
 		\label{fig:physical_frame_callback}
 		\end{center}
 	\end{figure}
