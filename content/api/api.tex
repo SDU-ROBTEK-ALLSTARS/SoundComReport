@@ -17,7 +17,7 @@ When closing the API, the allocated memory needs to be deallocated. This is done
 \section{Implementation}
 \subsection{Threading}
 \label{threading}
-Threading is used in the API layer to allow the concurrency that's needed between the user code, the send/receive logics and the callback method. By using threads, none of these will interrupt each other's execution except when reading and writing from shared memory. Boost threads (see \ref{app:boost}) are used to make the implementation in the code easy and fulfil the multi platform requirements. When the API layer is started, it starts two child threads in the constructor before it returns.
+Threading is used in the API layer to allow the concurrency that is needed between the user code, the send/receive logics and the callback method. By using threads, none of these will interrupt each other's execution except when reading and writing from shared memory. Boost threads (see \ref{app:boost}) are used to make the implementation in the code easy and fulfil the multi platform requirements. When the API layer is started, it starts two child threads in the constructor before it returns.
 
 \subsubsection{Thread race conditions}
 \label{thread_race_conditions}
@@ -48,7 +48,7 @@ This is the constructor method of the API class. This method is called when the 
 
 %\subsubsection*{Public void servicePort(unsigned char port, DtmfCallback * callbackMethod)}
 \subsubsection{Add receiver port method}
-This method is used for adding listening ports, and assign a user defined callback method to them. To define a class which can be used as callback object, it has to inherit from the \custtt{DtmfCallback class}, ensuring that the callback has the correct interface to receive data from the library. When a message is received the method named \custtt{callbackMethod} will be called on the defined object. The user of the library is responsible for providing the object with information to process the data as the user entended. Notice that the callback method will run in the callback thread and awareness of threading problems is required if data is to be passed to the main thread. Notice that if the port is already defined, it will be overwritten by the newest defined callback method. Only one callback method is allowed on each port.
+This method is used for adding listening ports, and assign a user defined callback method to them. To define a class which can be used as callback object, it has to inherit from the \custtt{DtmfCallback class}, ensuring that the callback has the correct interface to receive data from the library. When a message is received the method named \custtt{callbackMethod} will be called on the defined object. The user of the library is responsible for providing the object with information to process the data as the user entended. Notice that the callback method will run in the callback thread and awareness of threading problems is required if data is to be passed on to the main thread. Alose notice that if the port is already defined, it will be overwritten by the newest defined callback method. Only one callback method is allowed on each port.
 
 %\subsubsection*{Public void makeToken();}
 %In case the token will get lost in the network, it is possible to manually insert a token with this method. When called the node on which it's called gets the token. Token passing method is documented here ??
