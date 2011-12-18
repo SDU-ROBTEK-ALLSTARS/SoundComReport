@@ -48,22 +48,22 @@ This is the constructor method of the API class. This method is called when the 
 
 %\subsubsection*{Public void servicePort(unsigned char port, DtmfCallback * callbackMethod)}
 \subsubsection{Add receiver port method}
-This method is used for adding listening ports, and assign a user defined callback method to them. To define a class which can be used as callback object, it has to inherit from the \custtt{DtmfCallback class}, ensuring that the callback has the correct interface to receive data from the library. When a message is received the method named \custtt{callbackMethod} will be called on the defined object. The user of the library is responsible for providing the object with information to process the data as the user entended. Notice that the callback method will run in the callback thread and awareness of threading problems is required if data is to be passed to the main thread. If the port is already defined, it will be overwritten. Only one callback method is allowed on each port.
+This method is used for adding listening ports, and assign a user defined callback method to them. To define a class which can be used as callback object, it has to inherit from the \custtt{DtmfCallback class}, ensuring that the callback has the correct interface to receive data from the library. When a message is received the method named \custtt{callbackMethod} will be called on the defined object. The user of the library is responsible for providing the object with information to process the data as the user entended. Notice that the callback method will run in the callback thread and awareness of threading problems is required if data is to be passed to the main thread. Notice that if the port is already defined, it will be overwritten by the newest defined callback method. Only one callback method is allowed on each port.
 
 %\subsubsection*{Public void makeToken();}
 %In case the token will get lost in the network, it is possible to manually insert a token with this method. When called the node on which it's called gets the token. Token passing method is documented here ??
 
 %\subsubsection*{Public DtmfOutMessage newMessage();}
 \subsubsection{Create new message method}
-This method is used when sending data. It returns an empty message, and enables the user to fill in the message data manually. A reference is kept in the \custtt{DtmfApi}, so the message can sent itself by the build-in send method. This reference is also used to cleanup unused messages.
+This method is used when sending data. It returns an empty message, and enables the user to fill in the message data manually. The message itself contains functionalty to add data. A reference to the message is kept in the \custtt{DtmfApi}, so the message can sent itself by the build-in send method. This reference is also used to cleanup unused messages.
 
 %\subsubsection*{Public void sendMessage(unsigned char rcvAddress, unsigned char rcvPort, char * data, unsigned long dataLength);}
 \subsubsection{Send message immediately}
-When this method is called with arguments, the message is created internally and send to the que right away.
+When this method is called with arguments, the message is created internally and send to the que right away. This method can be used if the user wants to send simple messages.
 
 %\subsubsection*{Deconstructing the api}
 \subsubsection{Deconstructings method}
-When the delete statement is called, the Dtmf library is shut down,. (See usage example \ref{DeletingInstanceEx}) When the lib is asked to shut down, it tells the running threads to exit their main loop and join the main thread. This may take a while depending on the state of the backbone. When threads are joined, all allocated messages will be deallocated.
+When the delete statement is called, the Dtmf library is shut down. (See usage example \ref{DeletingInstanceEx}) When the lib is asked to shut down, it tells the running threads to exit their main loop and join the main thread. This may take a while depending on the state of the backbone. When threads exits, they are joined to the main thread and all allocated messages will be deallocated.
 
 \section{Usage example}
 Usage examples are available in appendix \ref{app:usageexample}
