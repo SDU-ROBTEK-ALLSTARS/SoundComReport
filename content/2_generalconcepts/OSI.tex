@@ -1,8 +1,8 @@
 \section{Network layers and the OSI model}
-The task of enabling two or more processes to communicate across physical machines requires a lot of work, and a lot of errors have to be considered, depending on the medium used to transport data. Addressing, both at the process and machine layer has to be handled, and the interface to the physical medium needs to be considered. Grouping problems into logical sections help solve this problem, as an otherwise very complicated procedure can be broken down into small self contained processes.
-One such way of grouping a network framework is the OSI model \cite[27-42]{KOM}. The OSI model is represented as a stack of processes (hereafter referred to as a ''network stack''), which together enables a group of processes to communicate across physical and logical networks.
+The task of enabling two or more processes to communicate across physical machines requires a lot of work, and a lot of errors have to be considered, depending on the medium used to transport data. Addressing, both at the process and machine layer, has to be handled and the interface to the physical medium needs to be considered. Grouping problems into logical sections help solve this problem, as an otherwise very complicated procedure can be broken down into small self contained processes.
+One such way of grouping a network framework is the OSI model \cite[27-42]{KOM}. The OSI model is represented as a stack of processes, hereafter referred to as a ''network stack'', which together enables a group of processes to communicate across physical and logical networks.
 In itself the OSI model is not an actual network stack, but it is a model of an architecture that is both robust and flexible. 
-As seen in Figure \ref{fig:osi_model_stack} it defines seven layers in a networking application, where each layer corresponds to a logical section of the network protocol. And a message passes from the top layer in the first process, potentially all the way to the bottom of the stack, until it has arrived at the second process stack, after which it begins ''climbing'' the stack, thereby making the message available to the second process.
+As seen in Figure \ref{fig:osi_model_stack} it defines seven layers in a networking application, where each layer corresponds to a logical section of the network protocol. A message passes from the top layer in the first process, potentially all the way to the bottom of the stack, until it has arrived at the second process stack. After which it begins ''climbing'' the stack, thereby making the message available to the second process.
 
 \begin{figure}[htb]
 	\begin{center}
@@ -17,7 +17,7 @@ Each layer interfaces to the layer above and/or below it, either adding or remov
 Layer one, two and three can be considered the network support layers. They are responsible for ensuring dataflow through the network of physical machines and they are expected to be active and usable, even though no client application is using the network on a machine.
 
 \subsection{Physical layer}
-This layer's responsibility is to enable a stream of bits to be broadcast between physical machines, typically through a wire, by the means of electricity or in this case through air, by means of sound. Synchronization, encoding and the transmission speed are all things that the physical layer needs to handle.
+This layer's responsibility is to enable a stream of bits to be broadcast between physical machines, typically through a wire, by the means of electricity or in this case through air, by means of sound. Synchronization, encoding and transmission speed are all things that the physical layer needs to handle.
 
 \subsection{Data link layer}
 The data link layer uses the physical layer to present an error free transmission line. Data coming from the higher layers, is divided into frames (small manageable units) which the physical layer can handle. Local addressing is also handled by the data link layer.
