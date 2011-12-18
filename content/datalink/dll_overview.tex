@@ -3,11 +3,11 @@
 There are several subjects to examine before designing the data link layer.
 First of all the requirements must be identified. 
 \begin{itemize}
-	\item 	Short frames
-	\item	Error detection
-	\item	Error correction
-	\item	Pipelining
-	\item 	Multipoint
+	\item Short frames
+	\item Error detection
+	\item Error correction
+	\item Pipelining
+	\item Multipoint
 \end{itemize}
 
 \subsection{Encoding}
@@ -30,7 +30,7 @@ link layer puts these in a four by four matrix and calculates the parity bits by
 adding the rows and columns:
 
 \begin{table}[htb]
-	\begin{center}
+	\centering
 	\begin{tabular}{c|c}
 	0011 & 0 \\
 	0101 & 0 \\
@@ -39,7 +39,6 @@ adding the rows and columns:
 	\hline
 	1101 & \\
 	\end{tabular}
-	\end{center}
 	\caption{Two-dimensional parity check}
 	\label{tab:two_dimensional_parity_check}
 \end{table}
@@ -49,11 +48,10 @@ the parity bit, the parity bits are transmitted together as a redundant byte. In
 the case of this example the transmission would be:
 
 \begin{table}[htb]
-	\begin{center}
+	\centering
 	\begin{tabular}{c|c|c|c|c|c}
 	0011 & 0101 & 0101 & 1110 & 0001 & 1101 \\
 	\end{tabular}
-	\end{center}
 	\caption{Bytes to be transmitted}
 	\label{tab:bytes_to_be_transmitted}
 \end{table}
@@ -63,7 +61,7 @@ be misinterpreted, the receiving data link layer would get a mismatch of the
 parity bits for example:
 
 \begin{table}[htb]
-	\begin{center}
+	\centering
 	\begin{tabular}{c|c}
 	0011 & 0 \\
 	0101 & 0 \\
@@ -72,7 +70,6 @@ parity bits for example:
 	\hline
 	1000 & \\
 	\end{tabular}
-	\end{center}
 	\caption{Failed parity check}
 	\label{tab:failed_parity_check}
 \end{table}
@@ -100,8 +97,7 @@ while still benefiting from pipelining. The sender transmits eight frames
 (six tones). Should the receiver not respond or should the reply be lost, the
 sender will automatically re-transmit after a while.
 
-\subsection{Frame design}
-\label{dll_frame_design}
+\subsection{Frame design}\label{dll_frame_design}
 The physical layer will provide a starting point for each
 transmission. If this is was not the case,
 additional flags would be needed in between the frames, leading to the
@@ -128,7 +124,7 @@ same time controlling the token and indicating frame types. Table
 \ref{tab:protocol_for_type_field} shows the meaning of the two bits.
 
 \begin{table}[htb]
-	\begin{center}
+	\centering
 	\begin{tabular}{|c|ll|}
 		\hline
 		00 & Has no token & Reply from receiver \\
@@ -140,7 +136,6 @@ same time controlling the token and indicating frame types. Table
 		11 & Has token & Data frame for addressed station \\
 		\hline
 	\end{tabular}
-	\end{center}
 	\caption{Protocol for type field}
 	\label{tab:protocol_for_type_field}
 \end{table}
@@ -161,13 +156,14 @@ next station.
 This leads to the following format of a frame: 
 
 \begin{table}[htb]
- \begin{center}
+ \centering
  \begin{tabular}{|c|c|c|c|c|c|}
   \hline
-  type (2 bits) & address (2 bits) & sequence (3 bits) & EOT-flag (1 bit) & data (8 bits) & parity (8 bits)\\
+  type & address & sequence & EOT-flag & data & parity \\
+  2 bits & 2 bits & 3 bits & 1 bit & 8 bits & 8 bits\\
   \hline
  \end{tabular}
- \end{center}
  \caption{Final frame format}
  \label{tab:final_frame_format}
 \end{table}
+% \begin{tabular*}{0.75\textwidth}{@{\extracolsep{\fill}}|c|c|c|c|c|c|}
