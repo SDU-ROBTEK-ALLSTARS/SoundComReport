@@ -17,16 +17,21 @@ The surface of several interfaces was scratched to see what they had to offer. S
 \item[RT Audio\footnotemark] was a good option, as it complies with the requirements and is written in c++, but it has a few disadvantages compared to PortAudio. One of the critical points where RT Audio fails, is the documentation. Though it is present, it is not considered good enough compared to what is presend in the portaudio project. It is also worth bringing to notice, that the API is slightly more complicated then on portaudio.
 \footnotetext{\url{http://www.music.mcgill.ca/~gary/rtaudio/}}
 
+
+
 \item[QT Multimedia\footnotemark] is developed by Nokia, and is a good suggestion as it complies with the requirements. The disadvantage is that core files from QT itself is needed which results in an increased size of the developed software. It is not that the size is specified as a requirement of the project itself but it also results in a superior complexity of the developed software itself, so QT Multimedia was discarded.
 \footnotetext{\url{http://doc.qt.nokia.com/latest/qtmultimedia.html}} 
 
 \item[SDL (Simple Directmedia Layer)\footnotemark]
- is a c library written to provide low-level access to multimedia hardware accross platforms, including audio, video, timers and events. It has wrappers to lot of different languages. It has been developed with the main purpose of use in games and demos.
+ is a c library written to provide low-level access to multimedia hardware accross platforms, including audio, video, timers and events. It has wrappers to lot of different languages. It has been developed with the main purpose of use in games and demos. The library complies with the requirements, but the extra multimedia functionality is not needed, so this is not an advantage in any way, for which reason Port Audio is a better choise as it has a smaller footprint.
 \footnotetext{\url{http://www.libsdl.org/}}
 
+\item[CLAM\footnotemark] is short for C++ Library for Audio and Music, and provides lot of communication possiblities with the sound hardware. This library supports both low and high level interface with the hardware as well as built in support for FFT. Iverstergating this project further, it was found out that the documentation was wery poor, and by that it was discarded as a posible interface.
+\footnotetext{\url{http://clam-project.org}}
+
 \item[PortAudio\footnotemark] was finally chosen as the lowermost component of the software as it complies with the requirements mentioned above.  The reason for this final decision was based on the simplicity of the usage of PortAudio. Futhermore it is extremely adaptable which makes it possible to use in a wide range of applications. A block diagram can be seen in figure \ref{fig:app_portaudio}.
-\end{description}
 \footnotetext{\url{http://www.portaudio.com/}}
+\end{description}
 
 \begin{figure}[htb]
 	\begin{center}
