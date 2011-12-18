@@ -1,7 +1,7 @@
 \chapter{DTMF mapping}\label{app:physical_encode}
 The mapping between DTMF tones and sequence code can be considered as a table look-up. But for implementation purpose this mapping was implemented as a few mathematical functions. This was done so implementing new frequencies is easy regarding adding new control codes. The mapping between DTMF tones and codes is shown in table \ref{app_dtmf:DTMF_mapping_table}.
 
-\begin{table}[!h]
+\begin{table}[htb]
 	\begin{center}
 		\begin{tabular}{c c|c c c c}
  		index & & 0 & 1 & 2 & 3 \\
@@ -24,7 +24,7 @@ The mapping between DTMF tones and sequence code can be considered as a table lo
 	\section{Implementation}
 	The implementation of a tone should be like stealing candy from kids, as a developer, too much work is unnecessary. So defining the tones as constant arrays, one for high tones, and one for low tones would be ideal. Pseudo code in listing \ref{app_dtmf:tone_array_listing} show the implementation of these arrays. The arrays correspond to the indexes in table \ref{app_dtmf:DTMF_mapping_table}.
 	
-	\begin{lstlisting}[float=!h,language={C++},caption={Implementation of tone arrays},label={app_dtmf:tone_array_listing}]
+	\begin{lstlisting}[float=htb,language={C++},caption={Implementation of tone arrays},label={app_dtmf:tone_array_listing}]
 //	Frequencies of interest
 const unsigned int lowTones[] = {697, 770, 852, 941, 350};
 const unsigned int highTones[] = {1209, 1336, 1477, 1633};
