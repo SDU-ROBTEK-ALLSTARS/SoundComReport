@@ -9,7 +9,7 @@ Two situations are to be considered when designing the interface for sending mes
 
 \subsection{Receiving a message}
 %To avoid the user to use lots of runtime on polling for new messages, 
-To avoid spending a lot of user runtime on polling for new messages, callback methods are used. As the protocol supports several ports for receiving data, a callback method can be connected to each port. Note that if no callback is connected to a port, the data received on this port will be discarded.
+To avoid spending a lot of user runtime on polling for new messages, callback methods (See \ref{callbackfunctions}) are used. As the protocol supports several ports for receiving data, a callback method can be connected to each port. Note that if no callback is connected to a port, the data received on this port will be discarded.
 
 \subsection{Stopping the library}
 When closing the API, the allocated memory needs to be deallocated. This is done automatically by the deconstructor of the API. When the API deconstructor is called, it tells all threads to exit their tasks and shut down.
@@ -48,22 +48,30 @@ This is the constructor method of the API class. This method is called when the 
 
 %\subsubsection*{Public void servicePort(unsigned char port, DtmfCallback * callbackMethod)}
 \subsubsection{Add receiver port method}
-This method is used for adding listening ports, and assign a user defined callback method to them. To define a class which can be used as callback object, it has to inherit from the \custtt{DtmfCallback class}, ensuring that the callback has the correct interface to receive data from the library. When a message is received the method named \custtt{callbackMethod} will be called on the defined object. The user of the library is responsible for providing the object with information to process the data as the user entended. Notice that the callback method will run in the callback thread and awareness of threading problems is required if data is to be passed on to the main thread. Alose notice that if the port is already defined, it will be overwritten by the newest defined callback method. Only one callback method is allowed on each port.
+This method is used for adding listening ports, and assign a user defined callback method to them. To define a class which can be used as callback object, it has to inherit from the \custtt{DtmfCallback class}, ensuring that the callback has the correct interface to receive data from the library. When a message is received the method named \custtt{callbackMethod} will be called on the defined object, with the incomming message of type \custtt{DtmfInMessage} as argument. The user of the library is responsible for providing the object with information to process the data as the user entended. Notice that the callback method will run in the callback thread and awareness of threading problems is required if data is to be passed on to the main thread. Alose notice that if the port is already defined, it will be overwritten by the newest defined callback method. Only one callback method is allowed on each port.
 
 %\subsubsection*{Public void makeToken();}
 %In case the token will get lost in the network, it is possible to manually insert a token with this method. When called the node on which it's called gets the token. Token passing method is documented here ??
 
 %\subsubsection*{Public DtmfOutMessage newMessage();}
 \subsubsection{Create new message method}
-This method is used when sending data. It returns an empty message, and enables the user to fill in the message data manually. The message itself contains functionalty to add data. A reference to the message is kept in the \custtt{DtmfApi}, so the message can sent itself by the build-in send method. This reference is also used to cleanup unused messages.
+This method is used when sending data. It returns an empty \custtt{DtmfOutMessage} message, and enables the user to fill in the message data manually. The message itself contains functionalty to add data. A reference to the message is kept in the \custtt{DtmfApi}, so the message can sent itself by the build-in send method. This reference is also used to cleanup unused messages.
 
 %\subsubsection*{Public void sendMessage(unsigned char rcvAddress, unsigned char rcvPort, char * data, unsigned long dataLength);}
 \subsubsection{Send message immediately}
-When this method is called with arguments, the message is created internally and send to the que right away. This method can be used if the user wants to send simple messages.
+When this method is called with arguments, the message (\custtt{DtmfOutMessage}) is created internally and send to the que right away. This method can be used if the user wants to send simple messages.
 
 %\subsubsection*{Deconstructing the api}
 \subsubsection{Deconstructings method}
 When the delete statement is called, the Dtmf library is shut down. (See usage example \ref{DeletingInstanceEx}) When the lib is asked to shut down, it tells the running threads to exit their main loop and join the main thread. This may take a while depending on the state of the backbone. When threads exits, they are joined to the main thread and all allocated messages will be deallocated.
+
+
+\subsection{Message types}
+\subsubsection{\custtt{DtmfOutMessage}}
+\custtt{DtmfOutMessage} can be seen as an empty envelope where the user can place the data to be sent over the Dtmf network. It contains information about the receiving station and on which port the message shall be delivered to. The message contains methods for inserting these values. Furthermore it contains the userdata to be sent over the network, and has methods for placing serveral data chunks in the same message. To send the message, a method called send is presend on the message itself. Calling send will pass the message on to the API which created the message and add it to the outgoing queue.
+
+\subsubsection{\custtt{DtmfInMessage}}
+The \custtt{DtmfInMessage} is used by the API when receiving messages. It contains information about the address of the sending node and an address pointer to where the data is located. \custtt{DtmfInMessage} is only used internaly in the library and thoughout the callback method when new data arrives.
 
 \section{Usage example}
 Usage examples are available in appendix \ref{app:usageexample}
