@@ -1,6 +1,6 @@
 \section{Architectural goals}
-For many developed libraries, it is a priority that the final product is easy to use, efficient and powerfull.  The same goals apply to the network library: It must be easy to use, the user should be able to start the library by just telling it what address it has, and it should be very easy to send a message, with nothing more than the data to send and an adress. Efficiency is more difficult, especially since the project requires using DTMF instead of an electric signal, but within that constraint, there is room for efficiency.
-Also, the user-application thread will need to spend as little as possible execution time in the network library code, and do as little as possible memory management related to networking operations, as this will minimize faults in the library by user actions.
+For many developed libraries, it is a priority that the final product is easy to use, efficient and powerfull.  The same goals apply to the network library. It must be easy to use, the user should be able to start the library by just telling it what address it has, and it should be very easy to send a message, with nothing more than the data to send and an adress. Efficiency is more difficult, especially since the project requires using DTMF instead of an electric signal, but within that constraint there is room for efficiency.
+The user-application thread will also need to spend as little as possible execution time in the network library code, and do as little as possible memory management related to networking operations, as this will minimize faults in the library by user actions.
 
 
 
@@ -40,6 +40,6 @@ When a user application wishes to send a message, the API will provide a ''messa
 In order to receive messages from other systems, the user must register a callback function, that will be called by the network library when the system has received a complete message. The lifetime of this message will be limited to the scope of the callback function.
 
 \subsubsection{The layer classes}
-The three layer classes reads data from a buffer, works on the data and writes it into the next buffer in the chain. Each layer may instantiate temporary internal buffers to store partially processed data between attention. Some of the layers will need to send a message to the layer before it, and when executing an encode or decode function, the layer is given access to both the appropriate send and receive buffers.
+The three layer classes reads data from a buffer, works on the data and writes it into the next buffer in the chain. Each layer may instantiate temporary internal buffers to store partially processed data between attention. Some of the layers will need to send a message to the layer before it when executing an encode or decode function. The layers are given access to the appropriate send and receive buffers.
 
 
