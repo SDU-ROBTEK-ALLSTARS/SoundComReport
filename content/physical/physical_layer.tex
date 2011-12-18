@@ -97,7 +97,7 @@ sound waves are used for communication, and the communication can only take plac
 	
 	Essentially the Goertzel algorithm is a second order IIR filter which is dependent on current input and previous
 	output, the filter is given as the difference equation \ref{eq:physical_goertzel_sequence}.
-	\begin{equation}y(n) = x(n) + 2\cdot cos(2\pi \cdot f_{0})\cdot y(n - 1) - y(n - 2),\end{equation}\label{eq:physical_goertzel_sequence}
+	\begin{equation}y(n) = x(n) + 2\cdot \cos(2\pi \cdot f_{0})\cdot y(n - 1) - y(n - 2),\end{equation}\label{eq:physical_goertzel_sequence}
 	where $f_{0}$ is the frequency of interest.
 	
 	By Z-transform the following is obtained:
