@@ -1,44 +1,44 @@
 \section{Design theory}\label{sec:trans_theory}
-In this section, the reasoning behind the design of the protocol is described. That is, any thoughts and ideas, about the inner workings of the protocol, that has ether been put into code or discarded for whatever reason. This whole section is, thus, a description of what went on before the actual software implementation took place.
+In this section, the reasoning behind the design of the protocol is described. That is, any thoughts and ideas, about the inner workings of the protocol, that has either been put into code or discarded for whatever reason. Thus, this whole section is a description of what went on before the actual software implementation took place.
 
 
 \subsection{Speed versus reliability}
-A dilemma, when formulating how the protocol should function is, that as high as possible speeds are desired.\marginnote{Ref. to the ''project ideas'' document} On the other hand, one must remember, that we want to make it as painless as possible for the user application to use the protocol (meaning the user should be able to expect successful delivery).
+A dilemma, when formulating how the protocol should function is that as high as possible speeds are desired (naturally). On the other hand one must remember (see Section \ref{sec:secondary_requirements}), that we want to make it as easy as possible for the user application to use the protocol (meaning the user should be able to expect successful delivery).
 
 A UDP\footnote{User datagram protocol.}-like protocol design would no doubt be one of the best ways to achieve a low overhead. The UDP protocol provides a connectionless service, where datagrams\footnote{The transfer unit of the UDP protocol.} are sent and then forgotten. That way the receiver does not have to spend bandwidth to acknowledge successful receptions. Additionally, the header size of a datagram is quite small, as there is no overhead used for error- or flow control. Datagrams are also sent without any way of knowing whether they are received in-order or not.
 
 \nomenclature{UDP}{User datagram protocol}\nomenclature{TCP}{Transmission control protocol}
 
-Using a TCP\footnote{Transmission control protocol.} inspired protocol instead would enable the transport layer to provide a much more reliable service. Now, in the TCP protocol, flow- and error control is added, as well as congestion control. Every packet is assigned a sequence number, ensuring they are passed on to the server application correctly, by the receiving transport layer protocol. Every packet is also acknowledged by the receiver, if it is successfully recorded. If not, the sender re-sends them. All these things combined makes TCP a lot more reliable, but it also increases it's header size to around three times the size of the UDP header. Especially if one is not sending a lot of data in each packet, the header can take up a large percentage of the combined (header plus data) package size.%%%%%%
+Using a TCP\footnote{Transmission control protocol.} inspired protocol instead would enable the transport layer to provide a much more reliable service. Now, in the TCP protocol, flow- and error control is added, as well as congestion control. Every packet is assigned a sequence number, ensuring they are passed on to the server application correctly, by the receiving transport layer protocol. Every packet is also acknowledged by the receiver, if it is successfully recorded. If not, the sender re-sends them. All this combined makes TCP much more reliable, but it also increases its header size to around three times the size of the UDP header. Especially if only a small amount of data is sent with each packet, the header can take up a large percentage of the combined (header plus data) package size.%%%%%%
 
-Although the services provided by the data link layer guarantees an error-free connection, we cannot be sure data is received in the correct order.\marginnote{Ref.} The data link layer does not provide \textit{that} guarantee. As there is an uncertainty here, we need to establish a way to ensure that data is passed on from the protocol to the above layer in the correct order. This can be done by using a system, where each outgoing data packet is assigned a sequence number.
+Although the services provided by the data link layer guarantees an error-free connection, it is not certain that data is received in the correct order.\marginnote{Ref.} The data link layer does not provide \textit{that} guarantee. As there is an uncertainty here, we need to establish a way to ensure that data is passed on from the protocol to the above layer in the correct order. This can be done by using a system, where each outgoing data packet is assigned a sequence number.
 
-Sequence numbering provides a way to make sure packets are delivered in the correct order, but with just the sequence number, it is not certain that the data bytes \textit{inside} a given packet are in the correct order. For this a checksum calculation is called for.
+Sequence numbering provides a way to make sure packets are delivered in the correct order, but with just the sequence number, it is not certain that the data bytes \textit{inside} a given packet are in the correct order, although the each individual byte might be valid. To solve this problem a checksum calculation is called for.
 
-All summed up, a protocol design, that will ensure in-order delivery of data, is needed. Features as flow- and congestion control is ignored. Mainly because the communication is going to take place via sound after all: We can safely say that the transfer speeds will not be high and congestion is unlikely to occur.\marginnote{Ref.} After all, the communication line is inherently half-duplex, making the data flow one-way (at a single point in time) by nature.
+Summed up, a protocol design that will ensure in-order delivery of data, is needed. Features as flow- and congestion control is ignored. Mainly because the communication is going to take place via sound after all, it is safe to say that the transfer speeds will not be high and congestion is unlikely to occur.\marginnote{Ref.} After all, the communication line is inherently half-duplex, making the data flow one-way (at a single point in time) by nature.
 
-Coincidentally the RUDP\footnote{Reliable UDP protocol.} described in \cite{RUDP} suits the needs well on many points. Therefore many of the properties, portrayed in the following parts, are based on those of the RUDP. Note that the RUDP document is an \textit{internet draft}, meaning it is work-in-progress (although it has seemingly not been updated for a long time).
+Coincidentally the RUDP\footnote{Reliable UDP protocol.} described in \cite{RUDP} satisfies the needs well on many points. Therefore many of the properties, portrayed in the following parts, are based on those of the RUDP. Note that the RUDP document is an \textit{internet draft}, meaning it is work-in-progress (although it has seemingly not been updated for a long time).
 
 \nomenclature{RUDP}{Reliable User Datagram Protocol}
 
 
 \subsection{Addressing processes}
-The data link layer takes care of the node-to-node delivery, where each node has an address. There is a problem however: The receiving data link layer protocol strips the header, containing the node address, off before the information reaches the transport layer protocol. Figure \ref{fig:trans_osi_modelish} shows this: The solid lines are the actual data transmission path, while the dotted lines are the individual layers' ''pseudo-transmission paths''. \textbf{DH} is the data link layer protocol header and, as we can see, it is not passed on up through the layers.
+The data link layer takes care of the node-to-node delivery, where each node has an address. There is a problem however: The receiving data link layer protocol strips the header, containing the node address, off before the information reaches the transport layer protocol. Figure \ref{fig:trans_osi_modelish} shows this: The solid lines are the actual data transmission paths, while the dotted lines are the individual layers' ''pseudo-transmission paths''. \textbf{DH} is the data link layer protocol header and, as we can see, it is not passed on up through the layers.
 
 \begin{figure}[htb]
  \centering
- \includegraphics[scale=0.62,trim=0 267 0 267]{content/graphics/transport/trans_osi_modelish.pdf}%trim=l b r t
- \caption{The transmission path from sending to receiving transport layer protocol}
+ \includegraphics[scale=0.62,trim=0 280 0 270]{content/graphics/transport/trans_osi_modelish.pdf}%trim=l b r t
+ \caption{The transmission path from sending to receiving transport layer protocol.}
  \label{fig:trans_osi_modelish}
 \end{figure}
 
-To obtain a way of distinguishing signaling processes from each other, another attribute must be introduced: A port number.\footnote{Port number, in this text, is separate from the port number normally associated with a process when it \textit{binds} via some kind of Internet socket. Still, the term is used, as it's purpose is the same.} The port number, assigned to a certain server application, must be known to the client before it starts sending. That is the only way the client process will know where to send data. In the protocol, we select the port number to be eight bits long. This reasoning behind this choice is, that it is unlikely that we have to server lots of applications at a time. Add to that, that we wish to keep a minimal overhead size (a higher port number would add more bits to the header), as we don't have a lot of bandwidth available to begin with.
+To obtain a way of distinguishing signaling processes from each other, another attribute must be introduced: A port number.\footnote{Port number, in this text, is separate from the port number normally associated with a process when it \textit{binds} via some kind of Internet socket. Still, the term is used, as its purpose is the same.} The port number, assigned to a certain server application, must be known to the client before it starts sending. That is the only way the client process will know where to send data. In the protocol, we select the port number to be eight bits long, which is only half as long as the port number used in the UDP protocol. The reasoning behind this choice is that it is unlikely that we have to serve lots of applications at a time. Add to that, that we wish to keep a minimal overhead size (a higher port number would add more bits to the header), as we don't have a lot of bandwidth available to begin with.
 
 
 \subsection{Packet format}\label{sub:trans_packet_format}
-From the above layer the protocol expects to just receive a stream of data. The order in which the data is received is significant, but the data itself is not. When received, the data bytes will be packed into packets of a maximum length of 255 bytes (it can be smaller). A maximum length of 255 bytes seems like a sensible size.\marginnote{Better reasoning/reference}
+From the above layer the protocol expects to just receive a stream of data. The order in which the data is received is significant, but the data itself is not. When received, the data bytes will be packed into packets of a maximum length of 128 bytes (the packet length is allowed to vary).
 
-All the attributes described above, leads to the packet header format as shown in Table \ref{tab:trans_packet_header}. It is 8 bytes long, which leaves a maximum possible amount of 248 bytes of data per packet. The flags field will be treated throughout the next parts of this section.
+All the attributes described above, leads to the packet header format as shown in Table \ref{tab:trans_packet_header}. It is 8 bytes long, which leaves a maximum possible amount of 120 bytes of data per packet. The flags field will be treated throughout the next part of this section.
 
 \begin{table}[htb]
  \centering
@@ -65,7 +65,7 @@ All the attributes described above, leads to the packet header format as shown i
   \hline
   %
  \end{tabular*}
- \caption{Transport layer protocol packet header}
+ \caption{Transport layer protocol packet header.}
  \label{tab:trans_packet_header}
 \end{table}
 
@@ -73,53 +73,53 @@ All the attributes described above, leads to the packet header format as shown i
 \subsection{Sequence numbering}
 As mentioned, sequence numbering is introduced to make sure the receiving protocol passes on data to the above layer in the correct order. Every packet that is sent will have such a number attached. The sequence number is eight bits long. A packet will also have an eight bit acknowledgment number, which is closely related to the sequence number, as we shall see.
 
-When a connection is initiated, a random sequence number between $0$ and $2^8-1$ is selected. This number will be attached to a so-called SYN packet (the \texttt{SYN} flag is then set), which is used to establish a connection and synchronise the senders sequence numbers with the receivers. Each party must then increment this number by 1 before sending a response packet, except in a few special cases, which will be discussed. The sequence number is allowed to overflow, effectively resetting it to 0.
+When a connection is initiated, a random sequence number between $0$ and $2^8-1$ is selected. This number will be attached to a so-called SYN packet (the \texttt{SYN} flag is then set), which is used to establish a connection. Each party has it's own sequence number which must increased by 1 before sending a packet, except in a few special cases, which will be discussed. The sequence number is allowed to overflow, effectively resetting it to 0.
 
-The acknowledgment number is also a number of 8 bits. It indicates, to the sender, the sequence number of a packet which the receiver has received correctly. If \texttt{ACK} flag is set it means the acknowledgment number is valid.
+The acknowledgment number is also a number of 8 bits. It indicates, to the sender, the sequence number of a packet which the receiver has successfully received. If the \texttt{ACK} flag is set it means the acknowledgment number is valid. In an ideal environment with no faulty receptions, a sender should receive an acknowledgment for each sequence number sent.
 
 \subsection{Error control}
-In order to avoid the risk of bytes shifting position inside one packet, a checksum is calculated. This checksum also serves as a strong error detection mechanism, although it should, in theory, not be needed as the data link layer protocol provides error control. The checksum type chosen is the cyclic redundancy check, or CRC, using the CRC-CCITT generator polynomial $x^{16} + x^{12} + x^5 + 1$.\marginnote{Elaborate on CRC + Ref.} This provides a checksum size of 16 bits.
+In order to avoid the risk of bytes shifting position inside one packet, a checksum is calculated. This checksum also serves as a strong error detection mechanism in general, although it should, in theory, not be needed as the data link layer protocol provides error control. The checksum type chosen is the cyclic redundancy check, or CRC, using the CRC-CCITT generator polynomial $x^{16} + x^{12} + x^5 + 1$.\marginnote{Elaborate on CRC + Ref.} This provides a checksum size of 16 bits.
 
 \nomenclature{CRC}{Cyclic redundancy check}
 
-The header of the packet is always getting it's checksum calculated. If the \texttt{CHK} flag bit is set, a checksum is calculated for the whole package. This is the default, and preferred, way of transmission.
+The header of the packet is always getting its checksum calculated. If the \texttt{CHK} flag bit is set, a checksum is calculated for the whole package. This is the default, and preferred, way of transmission.
 
 \subsection{Operation}
-Because of the need to synchronise sequence numbers, the protocol uses \textit{handshaking} in the form of the SYN packet and the response to it. When a connection is first opened, the SYN packet, with a random sequence number attached, is sent. The receiver must then respond within a set time frame to verify the connection. This response must have an acknowledgment number equal to the sequence number just sent. Figure \ref{fig:trans_syn_transfer} shows the connection establishment taking place. Disconnected and connected refers to the protocols internal status; how it perceives itself.
+Because of the need to synchronise sequence numbers, the protocol uses three-way \textit{handshaking} in the form of the SYN packet and the response to it (also a SYN packet, but with the \custtt{ACK} flag set, acknowledging the reception). When a connection is first opened, the SYN packet, with a random sequence number attached, is sent. The receiver must then respond within a set time frame to verify the connection. This response must have an acknowledgment number equal to the sequence number just sent. Figure \ref{fig:trans_syn_transfer} shows the connection establishment taking place. ''Disconnected'', ''wait for sync'' and ''connected'' refers to the protocols internal state.
 
 \begin{figure}[htb]
  \centering
  \includegraphics[scale=0.64,trim=0 290 0 255]{content/graphics/transport/trans_syn_transfer.pdf}%trim=l b r t
- \caption{The transport layer protocol opening a connection}
+ \caption{The transport layer protocol handshaking.}
  \label{fig:trans_syn_transfer}
 \end{figure}
 
-When a connection has been opened, communication keeps on happening as shown on Figure \ref{fig:trans_syn_transfer}, except in the case where packets are received out of sync, or more than one packet has been received in a row before getting the chance to acknowledge them. If that happens we have a scenario as shown in Figure \ref{fig:trans_syn_packburst}.
+When a connection has been opened, communication keeps on happening as shown on Figure \ref{fig:trans_syn_transfer}, except in the case where packets are received out of sync, or more than one packet is sent/received in a row. If more than one packet is received in a row, the receiver does not get the chance to acknowledge them one by one. If that happens we have a scenario as shown in Figure \ref{fig:trans_syn_packburst}.
 
 \begin{figure}[htb]
  \centering
- \includegraphics[scale=0.64,trim=0 290 0 255]{content/graphics/transport/trans_syn_packburst.pdf}%trim=l b r t
- \caption{The transport layer protocol transmitting unequal amounts of packets}
+ \includegraphics[scale=0.66,trim=0 300 0 265]{content/graphics/transport/trans_syn_packburst.pdf}%trim=l b r t
+ \caption{The transport layer protocol transmitting unequal amounts of packets.}
  \label{fig:trans_syn_packburst}
 \end{figure}
 
-If the number of unacknowledged packets, either in- or out of sync, becomes too large (if the queue becomes too full), an extended acknowledgment packet (\texttt{EAK} flag set) is sent. This is a special packet containing no user data. Instead the data field consists of the unacknowledged sequence numbers. It is still limited by the maximum packet length, though. Table \ref{tab:trans_ext_ack} illustrates the extended acknowledgment packet.
+If the number of unacknowledged packets, either in- or out of sync, becomes too large (if the queue becomes too full), an extended acknowledgment packet (\texttt{EAK} flag set) is sent. This is a special packet containing no user data. Instead the data field consists of the unacknowledged sequence numbers. It is still limited by the maximum packet length, though. Table \ref{tab:trans_ext_ack} illustrates the format of the extended acknowledgment packet.
 
 \begin{table}[htb]
  \centering
  \begin{tabular}{|c|c|c|c|c|}
  \hline
-  \multirow{2}{*}{Header} & \multirow{2}{*}{Unack. seq. $\#1$} & \multirow{2}{*}{Unack. seq. $\#2$} & \multirow{2}{*}{ $\cdots$ } & \multirow{2}{*}{Unack. seq. $\#N$} \\
+  \multirow{2}{*}{Header (8 bytes)} & \multirow{2}{*}{Unack. seq. $\#1$} & \multirow{2}{*}{Unack. seq. $\#2$} & \multirow{2}{*}{ $\cdots$ } & \multirow{2}{*}{Unack. seq. $\#N$} \\
   & & & & \\
  \hline
  \end{tabular}
- \caption{Transport layer protocol extended acknowledgment packet}
+ \caption{Transport layer protocol extended acknowledgment (\smalltt{EAK}) packet.}
  \label{tab:trans_ext_ack}
 \end{table}
 
-In the case there is no data to send, but the user of the protocol wishes to gauge the connection status, a NUL packet (\texttt{NUL} flag set) can be sent. The NUL packet contains no user data, but still consumes sequence numbers normally. When a NUL packet is received, the receiver must respond to it within a specified time interval, or the connection is deemed broken.
+In case there is no data to send, and the protocol user wishes to gauge if the connection is alive, a NUL packet (\texttt{NUL} flag set) can be sent. The NUL packet contains no user data, yet it still consumes a sequence number. When a NUL packet is received, the receiver must respond to it within a specified time interval, or the connection is deemed broken.
 
-The \texttt{RST} flag can be set to send a reset packet. When the reset packet is received, the receiver of the packet must stop sending data and flush it's data I/O queues. This can be used to either reset the connection or close it entirely: If the \texttt{SYN} flag is also set, a reset will occur. A new, randomly generated, sequence number must be attached to the sequence number field in this case. If, on the other hand, the \texttt{SYN} flag is not set, the connection will terminate.
+The \texttt{RST} flag can be set to send a reset packet. When the reset packet is received, the receiver of the packet must stop sending data and flush its data I/O queues. This can be used to either reset the connection or close it entirely: If the \texttt{SYN} flag is also set, a reset will occur. A new, randomly generated, sequence number must be attached to the sequence number field in this case. If, on the other hand, the \texttt{SYN} flag is not set, the connection will terminate, and a response will not be sent.
 
 
 \subsection{Retransmission handling}
@@ -127,12 +127,12 @@ To accommodate the need for retransmission, the protocol will feature in- and ou
 
 \begin{figure}[htb]
  \centering
- \includegraphics[scale=0.64,trim=0 290 0 255]{content/graphics/transport/trans_timeout.pdf}%trim=l b r t
- \caption{The transport layer protocol retransmission timeout}
+ \includegraphics[scale=0.66,trim=0 300 0 255]{content/graphics/transport/trans_timeout.pdf}%trim=l b r t
+ \caption{The transport layer protocol retransmission timeout.}
  \label{fig:trans_timeout}
 \end{figure}
 
-Figure \ref{fig:trans_timeout} shows a packet with sequence number 20 being sent. It gets lost underway though, and never reaches it's target. Luckily the sender had saved a copy of the sent packet, which he can then resend when the max. retransmission time has passed. When the receiver has later acknowledged the packet it is removed from the queue (this is not shown on the diagram).
+Figure \ref{fig:trans_timeout} shows a packet with sequence number 20 being sent. It gets lost underway though, and never reaches its target. Luckily the sender had saved a copy of the sent packet, which he can then resend when the maximum retransmission time has passed. When the receiver later acknowledges the packet it is removed from the queue (this is not shown on the diagram).
 
 
 %================= OLD =================
