@@ -1,10 +1,11 @@
 \section{Implementation}
-The data link layer is implemented as a \custtt{DataLinkLayer} class and a \custtt{Frame} class.
-The \custtt{DataLinkLayer} object is instantiated by the backbone class and controls the
-network token and the processing of frames into datagrams and vice versa. When
-instantiating, the address and token are controlled by arguments. The Frame
-objects and datagram objects are instantiated in buffers by the backbone and
-presented to the data link layer as method arguments.
+The data link layer is implemented as a \custtt{DataLinkLayer} class and a
+\custtt{Frame} class as shown in \ref{fig:class_diag_for_datalink}. The
+\custtt{DataLinkLayer} object is instantiated by the \custtt{BackBone} class and
+controls the network token and the processing of frames into datagrams and vice
+versa. When instantiated, the address and token are controlled by arguments. The
+Frame objects and datagram objects are instantiated in buffers by the backbone
+and presented to the data link layer as method arguments.
 
 \begin{figure}[htb]
 	\begin{center}
@@ -30,9 +31,9 @@ network token and thereby is able to send encoded data.
 	\end{center}
 \end{figure}
 
-The methods of the classes are developed to realize the flowchart of the data
-link layer. Decisions on whether to implement a method in one class or another
-is done using the expert pattern.
+The methods of the classes are developed to realize the
+flowcharts\ref{fig:dll_flow_encode} and
+\ref{fig:dll_flow_decode} of the data link layer. Decisions on whether to implement a method in one class or another is done using the expert pattern.
 
 \begin{figure}[htb]
 	\begin{center}
