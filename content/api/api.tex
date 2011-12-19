@@ -1,7 +1,7 @@
 \section{Usability considerations}
 The main responsibility for the API layer is to make it easy for the end user to set up and use the Dtmf library without the user having to worry about the layers below. The use of the API can be split into four parts: starting the library, sending a message, receiving a message and stopping the library. 
 
-\subsection{Initializing the library}
+\subsection{Initialising the library}
 The main information the library needs to know when starting is the address of the station on which it has been started, and whether it has the token or not (See data link frame design \ref{dll_frame_design}). These variables can  advantageously be set by the constructor of the class. Because the library needs constant attention on the sound interface to be able to send and receive data, the send and receive logic will be running in a different thread called backbone thread, so the user code continues to run in parallel with the Dtmf lib. Threading is described in \ref{threading}.
 
 \subsection{Sending a message}
@@ -28,11 +28,11 @@ One of the problems that can occur when using multiple threads is race condition
 To solve the race conditions, mutexes (mutual exclusion objects) are introduced. Mutexes are locks that can be used to prevent two threads working on the same memory simultaneously. A mutex works by setting a mutex lock when entering an area of the code, and unlocking it when leaving this area. If another thread tries to lock the mutex while it's locked, the thread is paused until the mutex gets unlocked. By putting operations using shared memory inside mutexes, the threads takes turns using the data and race conditions can be avoided.
 
 \subsubsection{The volatile keyword}
-When compiling C++ code, the compiler tries to optimize the output application\footnote{\url{http://msdn.microsoft.com/en-us/library/12a04hfd(v=vs.80).aspx}}. Practically this means that a variable can be buffered locally by a thread, and this will become a problem when two threads need to access the same data. The volatile keyword can be used to tell the compiler to make the threads reload the value from memory every time it's used. This will ensure that the correct value is read from the value.
+When compiling C++ code, the compiler tries to optimise the output application\footnote{\url{http://msdn.microsoft.com/en-us/library/12a04hfd(v=vs.80).aspx}}. Practically this means that a variable can be buffered locally by a thread, and this will become a problem when two threads need to access the same data. The volatile keyword can be used to tell the compiler to make the threads reload the value from memory every time it's used. This will ensure that the correct value is read from the value.
 
 \subsection{Thread description}
 \label{api_thread_description}
-Two threads are spawned when the API layer is initialized. The general idea behind these threads is to avoid interference between the Dtmf library and user application. The Dtmf library needs to constantly monitor the surrounding sounds to be able to reply in time. Using separate threads avoid user algorithms stalling these important processes.
+Two threads are spawned when the API layer is initialised. The general idea behind these threads is to avoid interference between the Dtmf library and user application. The Dtmf library needs to constantly monitor the surrounding sounds to be able to reply in time. Using separate threads avoid user algorithms stalling these important processes.
 
 \subsubsection{Callback thread}
 This thread is stopped by a mutex lock until new data arrives. When the backbone has put new data to the output buffer, it unlocks the mutex, allowing the callback to continue operating. The callback will start reading messages from the buffer. When reading a message, it looks up if there's a port defined for this message. If a callback is defined for the port, it will call the user-defined method with the message as argument. This allows the user to copy the data to a specified location. On exit the message is deleted. If there is no more messages in the queue, the callback thread locks the mutex.
@@ -43,27 +43,27 @@ The backbone is described in chapter \ref{chap:backbone}
 \subsection{Method description}
 \label{sub:api_method_description}
 %\subsubsection*{Public DtmfApi(unsigned char myAddress,bool hasToken);}
-\subsubsection{Initializing method}
+\subsubsection{Initialising method}
 This is the constructor method of the API class. This method is called when the class is to be used. The first argument is the address of the machine the library is started on. The second argument is used for defining whether this node has the token when joining the network. Note that only one node can have the token at a time (See data link frame design \ref{dll_frame_design}). When this method is called, two threads are started. At this point some necessary pointers are exchanged, allowing the backbone thread to unsleep the callback thread when new data arrives. These pointers also include information about writing to outgoing buffers from the API layer. The threads are described in \ref{api_thread_description}.
 
 %\subsubsection*{Public void servicePort(unsigned char port, DtmfCallback * callbackMethod)}
 \subsubsection{Add receiver port method}
-This method is used for adding listening ports, and assign a user defined callback method to them. To define a class which can be used as callback object, it has to inherit from the \custtt{DtmfCallback class}, ensuring that the callback has the correct interface to receive data from the library. When a message is received the method named \custtt{callbackMethod} will be called on the defined object, with the incomming message of type \custtt{DtmfInMessage} as argument. The user of the library is responsible for providing the object with information to process the data as the user entended. Notice that the callback method will run in the callback thread and awareness of threading problems is required if data is to be passed on to the main thread. Alose notice that if the port is already defined, it will be overwritten by the newest defined callback method. Only one callback method is allowed on each port.
+This method is used for adding listening ports, and assign a user defined callback method to them. To define a class which can be used as callback object, it has to inherit from the \custtt{DtmfCallback class}, ensuring that the callback has the correct interface to receive data from the library. When a message is received the method named \custtt{callbackMethod} will be called on the defined object, with the incomming message of type \custtt{DtmfInMessage} as argument. The user of the library is responsible for providing the object with information to process the data as the user intended. Notice that the callback method will run in the callback thread and awareness of threading problems is required if data is to be passed on to the main thread. Alose notice that if the port is already defined, it will be overwritten by the newest defined callback method. Only one callback method is allowed on each port.
 
 %\subsubsection*{Public void makeToken();}
 %In case the token will get lost in the network, it is possible to manually insert a token with this method. When called the node on which it's called gets the token. Token passing method is documented here ??
 
 %\subsubsection*{Public DtmfOutMessage newMessage();}
 \subsubsection{Create new message method}
-This method is used when sending data. It returns an empty \custtt{DtmfOutMessage} message, and enables the user to fill in the message data manually. The message itself contains functionalty to add data. A reference to the message is kept in the \custtt{DtmfApi}, so the message can sent itself by the build-in send method. This reference is also used to cleanup unused messages.
+This method is used when sending data. It returns an empty \custtt{DtmfOutMessage} message, and enables the user to fill in the message data manually. The message itself contains functionalty to add data. A reference to the message is kept in the \custtt{DtmfApi}, so the message can send itself by the build-in send method. This reference is also used to cleanup unused messages.
 
 %\subsubsection*{Public void sendMessage(unsigned char rcvAddress, unsigned char rcvPort, char * data, unsigned long dataLength);}
 \subsubsection{Send message immediately}
-When this method is called with arguments, the message (\custtt{DtmfOutMessage}) is created internally and send to the que right away. This method can be used if the user wants to send simple messages.
+When this method is called with arguments, the message (\custtt{DtmfOutMessage}) is created internally and sent to the que right away. This method can be used if the user wants to send simple messages.
 
 %\subsubsection*{Deconstructing the api}
 \subsubsection{Deconstructings method}
-When the delete statement is called, the Dtmf library is shut down. (See usage example \ref{DeletingInstanceEx}) When the lib is asked to shut down, it tells the running threads to exit their main loop and join the main thread. This may take a while depending on the state of the backbone. When threads exits, they are joined to the main thread and all allocated messages will be deallocated.
+When the delete statement is called, the Dtmf library is shut down. (See usage example \ref{DeletingInstanceEx}) When the lib is asked to shut down, it tells the running threads to exit their main loop and join the main thread. This may take a while depending on the state of the backbone. When threads exits, they are joined to the main thread, and all allocated messages will be deallocated.
 
 
 \subsection{Message types}
