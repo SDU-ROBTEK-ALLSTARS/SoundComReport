@@ -48,7 +48,9 @@
           <y:Geometry height="220.0" width="1.0" x="746.4000000000001" y="246.32240000000002"/>
           <y:Fill color="#000000" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" modelName="free" modelPosition="anywhere" textColor="#000000" visible="true" width="62.04296875" x="4.995999999999981" y="20.548000000000002">Connected</y:NodeLabel>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" modelName="free" modelPosition="anywhere" textColor="#000000" visible="true" width="62.04296875" x="3.8695999999998776" y="193.09199999999998">Connected</y:NodeLabel>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" modelName="free" modelPosition="anywhere" textColor="#000000" visible="true" width="73.345703125" x="4.377548437499968" y="33.47501406250001">Wait for sync</y:NodeLabel>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" modelName="free" modelPosition="anywhere" textColor="#000000" visible="true" width="76.708984375" x="4.641507812499981" y="8.489414062499975">Disconnected</y:NodeLabel>
           <y:Shape type="rectangle"/>
         </y:ShapeNode>
       </data>
@@ -59,14 +61,14 @@
           <y:Geometry height="220.0" width="1.0" x="385.0" y="246.32240000000002"/>
           <y:Fill color="#000000" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" modelName="free" modelPosition="anywhere" textColor="#000000" visible="true" width="76.708984375" x="-80.86000000000001" y="10.82000000000022">Disconnected</y:NodeLabel>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" modelName="free" modelPosition="anywhere" textColor="#000000" visible="true" width="62.04296875" x="-66.31282031249998" y="100.71741406249987">Connected</y:NodeLabel>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" modelName="free" modelPosition="anywhere" textColor="#000000" visible="true" width="76.708984375" x="-80.40240000000006" y="-2.722399999999766">Disconnected</y:NodeLabel>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" modelName="free" modelPosition="anywhere" textColor="#000000" visible="true" width="62.04296875" x="-65.80082031249992" y="111.98141406249988">Connected</y:NodeLabel>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" modelName="free" modelPosition="anywhere" textColor="#000000" visible="true" width="73.345703125" x="-77.22593049999995" y="22.923519999999996">Wait for sync</y:NodeLabel>
           <y:Shape type="rectangle"/>
         </y:ShapeNode>
       </data>
     </node>
     <node id="n4">
-      <data key="d5"/>
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="30.0" width="30.0" x="444.3999999999979" y="215.50873565673822"/>
@@ -78,7 +80,6 @@
       </data>
     </node>
     <node id="n5">
-      <data key="d5"/>
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="30.0" width="30.0" x="444.3999999999979" y="470.43155174255367"/>
@@ -107,7 +108,7 @@
           <y:Path sx="0.0" sy="-10.0" tx="0.0" ty="0.0"/>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
           <y:Arrows source="none" target="standard"/>
-          <y:EdgeLabel alignment="center" distance="2.0" fontFamily="Dialog" fontSize="11" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="30.9521484375" modelName="six_pos" modelPosition="head" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" visible="true" width="40.0830078125" x="-200.2562377929687" y="-28.52011571849488">seq: 15
+          <y:EdgeLabel alignment="center" distance="2.0" fontFamily="Dialog" fontSize="11" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="30.9521484375" modelName="six_pos" modelPosition="head" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" visible="true" width="40.0830078125" x="-200.2562377929687" y="-28.52011571849488">seq: 47
 ack: 14</y:EdgeLabel>
           <y:EdgeLabel alignment="center" distance="2.0" fontFamily="Dialog" fontSize="11" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="17.47607421875" modelName="six_pos" modelPosition="tail" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" visible="true" width="54.45068359375" x="-207.4400756835937" y="7.739914448477293">ACK+data</y:EdgeLabel>
           <y:BendStyle smoothed="false"/>
@@ -120,8 +121,8 @@ ack: 14</y:EdgeLabel>
           <y:Path sx="0.0" sy="70.0" tx="0.0" ty="80.0"/>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
           <y:Arrows source="none" target="standard"/>
-          <y:EdgeLabel alignment="center" distance="2.0" fontFamily="Dialog" fontSize="11" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="30.9521484375" modelName="six_pos" modelPosition="head" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" visible="true" width="40.0830078125" x="160.1732055664063" y="-28.52011571849488">seq: 16
-ack: 15</y:EdgeLabel>
+          <y:EdgeLabel alignment="center" distance="2.0" fontFamily="Dialog" fontSize="11" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="30.9521484375" modelName="six_pos" modelPosition="head" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" visible="true" width="40.0830078125" x="160.1732055664063" y="-28.52011571849488">seq: 15
+ack: 47</y:EdgeLabel>
           <y:EdgeLabel alignment="center" distance="2.0" fontFamily="Dialog" fontSize="11" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="17.47607421875" modelName="six_pos" modelPosition="tail" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" visible="true" width="54.45068359375" x="152.9893676757813" y="7.739914448477293">ACK+data</y:EdgeLabel>
           <y:BendStyle smoothed="false"/>
         </y:PolyLineEdge>
