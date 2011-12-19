@@ -3,7 +3,7 @@ The purpose of this experiment is to test the limits of error handling in the
 data link layer.
 
 \subsection{Procedure}
-The test program \custtt{test_2x_dll.cpp} is developed to instantiate two data
+The test program \custtt{test\_2x\_dll.cpp} is developed to instantiate two data
 link layer objects communicating through common buffers. The test utilises a
 function \custtt{simulateError()} to introduce a defined percentage of errors
 into the transmitted frames. The program iterates through error percentages from
@@ -15,6 +15,6 @@ A graph will be submitted here
 
 \subsection{Conclusion}
 Tests show that the time-error ratio is approximately linear up until around
-fourty percent. This is the environment in wich the protocol will work. When the
+forty percent. This is the environment in wich the protocol will work. When the
 error percentage rises above fifty percent, so much effort goes into control
 that almost no actual data are transmitted.
