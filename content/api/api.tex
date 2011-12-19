@@ -17,7 +17,7 @@ When closing the API, the allocated memory needs to be deallocated. This is done
 \section{Implementation}
 \subsection{Threading}
 \label{threading}
-Threading is used in the API layer to allow the concurrency that is needed between the user code, the send/receive logics and the callback method. By using threads, none of these will interrupt each other's execution except when reading and writing from shared memory. Boost threads (see \ref{app:boost}) are used to make the implementation in the code easy and fulfil the multi platform requirements. When the API layer is started, it starts two child threads in the constructor before it returns.
+Threading is used in the API layer to allow the concurrency that is needed between the user code, the send/receive logics and the callback method. By using threads, none of these will interrupt each other's execution except when reading and writing from shared memory. Boost threads (see Appendix \ref{app:boost}) are used to make the implementation in the code easy and fulfil the multi platform requirements. When the API layer is started, it starts two child threads in the constructor before it returns.
 
 \subsubsection{Thread race conditions}
 \label{thread_race_conditions}
