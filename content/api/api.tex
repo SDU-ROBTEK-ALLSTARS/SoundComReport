@@ -66,7 +66,7 @@ When this method is called with arguments, the message (\custtt{DtmfOutMessage})
 When the delete statement is called, the Dtmf library is shut down. (See usage example \ref{DeletingInstanceEx}) When the lib is asked to shut down, it tells the running threads to exit their main loop and join the main thread. This may take a while depending on the state of the backbone. When threads exits, they are joined to the main thread, and all allocated messages will be deallocated.
 
 
-\subsection{Message types}
+\subsection{Message types}\label{sec:api_message_types}
 \subsubsection{DtmfOutMessage}
 \custtt{DtmfOutMessage} can be seen as an empty envelope where the user can place the data to be sent over the Dtmf network. It contains information about the receiving station and on which port the message shall be delivered to. The message contains methods for inserting these values. Furthermore it contains the userdata to be sent over the network, and has methods for placing serveral data chunks in the same message. To send the message, a method called send is presend on the message itself. Calling send will pass the message on to the API which created the message and add it to the outgoing queue.
 

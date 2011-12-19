@@ -15,7 +15,7 @@ The first thing to consider is the encoding of signals. Since there are sixteen
 different DTMF tone combinations, each tone can carry four bits.
 
 The only type of error to consider is the situation where a tone is
-misinterpreted, which leads to a four bit burst error \cite[p. 267]{KOM}.
+misinterpreted, which leads to a four bit burst error \cite[267]{KOM}.
 Therefore the system should be designed specifically to detect errors of this type. Since the media
 is considered to be very noisy, transmissions should also be kept as short as
 possible.
@@ -27,7 +27,7 @@ three bytes.
 
 Example: We want to transmit the two bytes 0011 0101 and 0101 1110. The data
 link layer puts these in a four by four matrix and calculates the parity bits by
-adding the rows and columns as shown in table \ref{tab:two_dimensional_parity_check}.
+adding the rows and columns as shown in Table \ref{tab:two_dimensional_parity_check}.
 
 \begin{table}[htb]
 	\centering
@@ -43,7 +43,7 @@ adding the rows and columns as shown in table \ref{tab:two_dimensional_parity_ch
 	\label{tab:two_dimensional_parity_check}
 \end{table}
 
-Instead of increasing the size of each row by one to contain the parity bit as normally done, the parity bits are transmitted together as a redundant byte. In the case of this example the transmission would be as shown in table \ref{tab:bytes_to_be_transmitted}.
+Instead of increasing the size of each row by one to contain the parity bit as normally done, the parity bits are transmitted together as a redundant byte. In the case of this example the transmission would be as shown in Table \ref{tab:bytes_to_be_transmitted}.
 
 \begin{table}[htb]
 	\centering
@@ -56,7 +56,7 @@ Instead of increasing the size of each row by one to contain the parity bit as n
 
 Each four bit nipple is now transmitted as a DTMF-tone. Should one of the tones
 be misinterpreted, the receiving data link layer would get a mismatch of the
-parity bits. An example of this is shown in table \ref{tab:failed_parity_check}.
+parity bits. An example of this is shown in Table \ref{tab:failed_parity_check}.
 
 \begin{table}[htb]
 	\centering
@@ -81,14 +81,14 @@ will also lead to discarding the frame.
 
 \subsection{Flow control}
 The next aspect to consider is flow control. Since the DTMF-system
-cannot be used as full-duplex, piggybacking \cite[p. 339]{KOM} is impossible
+cannot be used as full-duplex, piggybacking \cite[339]{KOM} is impossible
 because the station would not know when to reply. This means that eventually the
 receiver will have to reply. This reply will also be of six-tones to take advantage of the parity system, and therefore it might
 as well contain information about witch frames to resend. In other words a
 selective repeat system is preferred. To introduce a selective repeat system,
 additional redundancy is needed.
 
-Pipelining \cite[p. 323]{KOM}must be considered to increase the speed of the
+Pipelining \cite[323]{KOM} must be considered to increase the speed of the
 system and is implemented as a three bit sequence number. This limits redundancy to a minimum
 while still benefiting from pipelining. The sender transmits eight frames
 (forty eight tones) and then waits for the receiver to reply with one frame
@@ -108,7 +108,7 @@ increased complexity and a less efficient design.
 Normally bytes are transmitted in chunks of eight, but since the length of
 datagrams can vary, the sender must have a way of telling the receiver to process smaller
 chunks. This introduces the need for an End Of Transmission flag (EOT). The EOT
-bit is also used to tell the receiver that it is time to reply and aloow it to
+bit is also used to tell the receiver that it is time to reply and allow it to
 talk even though it has no token.
 
 The next thing to consider is multipoint. There are three options: A token
