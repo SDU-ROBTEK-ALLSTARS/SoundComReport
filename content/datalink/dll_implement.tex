@@ -42,3 +42,18 @@ flowcharts\ref{fig:dll_flow_encode} and
 	\label{fig:dll_flow_encode}	
 	\end{center}
 \end{figure}
+
+The token network is implemented to deal with the cases shown in
+\ref{fig:dll_token_network}. It is important that the network is implemented to
+support the half duplex nature of the DTMF tone based network, since any
+collision would lead to errors. This is implemented by the EOT bit, that has to
+be received before a non tokenholder can talk. The tokenholder waits a specified
+amount of time after sendeing the EOT-bit before re-transmitting or moving on.
+
+\begin{figure}[htb]
+	\begin{center}
+	\includegraphics[scale=0.5,trim=0 140 0 140]{dll_token_network.pdf}
+	\caption{Cases of the implemented tokenn network}
+	\label{fig:dll_token_network}	
+	\end{center}
+\end{figure}

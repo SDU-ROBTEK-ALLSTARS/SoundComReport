@@ -107,7 +107,9 @@ increased complexity and a less efficient design.
 
 Normally bytes are transmitted in chunks of eight, but since the length of
 datagrams can vary, the sender must have a way of telling the receiver to process smaller
-chunks. This introduces the need for an End Of Transmission flag (EOT).
+chunks. This introduces the need for an End Of Transmission flag (EOT). The EOT
+bit is also used to tell the receiver that it is time to reply and aloow it to
+talk even though it has no token.
 
 The next thing to consider is multipoint. There are three options: A token
 network (reference), a time division network (reference) or a code division
@@ -117,19 +119,24 @@ proposed frame size, a lot of unused frames in a small network. This leaves us
 with a token passing network, so this is the choice.
 
 The selective repeat system and the token network introduces the need for
-different frame types. The proposed type field will consist of two bits, controlling the token and indicating frame types at the same time. Table \ref{tab:protocol_for_type_field} shows the meaning of the two bits.
+different frame types. The proposed type field will consist of two bits,
+controlling the token and indicating frame types at the same time. Table
+\ref{tab:protocol_for_type_field} shows the meaning of the two bits and their
+connection to the cases described in \ref{fig:dll_token_network}.
 
 \begin{table}[htb]
 	\centering
-	\begin{tabular}{|c|ll|}
+	\begin{tabular}{|c|l|}
 		\hline
-		00 & Has no token & Reply from receiver \\
+		00 &  Reply (OK in case: Send or request resend in case: resend
+		)
+		\\
 		\hline
-		01 & Has no token & Passes token to addressed station \\
+		01 &  Offer token (token offered in case: pass token) \\
 		\hline
-		10 & Has token & Accepts token \\
+		10 &  Accept token (token received in case: pass token) \\
 		\hline
-		11 & Has token & Data frame for addressed station \\
+		11 &  Data (frames in case: Send)\\
 		\hline
 	\end{tabular}
 	\caption{Protocol for type field}
