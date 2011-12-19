@@ -1,10 +1,11 @@
 \section{Implementation}
-The data link layer is implemented as a \custtt{DataLinkLayer} class and a Frame class.
-The \custtt{DataLinkLayer} object is instantiated by the backbone class and controls the
-network token and the processing of frames into datagrams and vice versa. When
-instantiating, the address and token is controlled by arguments. The Frame
-objects and datagram objects are instantiated in buffers by the backbone and
-presented to the data link layer as method arguments.
+The data link layer is implemented as a \custtt{DataLinkLayer} class and a
+\custtt{Frame} class as shown in \ref{fig:class_diag_for_datalink}. The
+\custtt{DataLinkLayer} object is instantiated by the \custtt{BackBone} class and
+controls the network token and the processing of frames into datagrams and vice
+versa. When instantiated, the address and token are controlled by arguments. The
+Frame objects and datagram objects are instantiated in buffers by the backbone
+and presented to the data link layer as method arguments.
 
 \begin{figure}[htb]
 	\begin{center}
@@ -17,7 +18,7 @@ presented to the data link layer as method arguments.
 Two public methods are used to call the data link layer, one for upwards traffic
 (\custtt{decode}) and one for downwards traffic (\custtt{encode}). Both methods are called with
 pointers to the four accessible buffers as arguments. Furthermore the backbone
-can call a method (\custtt{needs\-Attention}) to know whether the data link layer need
+can call a method (\custtt{needs\-Attention}) to know whether the data link layer needs
 extraordinary attention because a timer has run out. Another method
 (\custtt{canTransmit}) tells the backbone whether the data link layer object holds the
 network token and thereby is able to send encoded data.
@@ -30,14 +31,29 @@ network token and thereby is able to send encoded data.
 	\end{center}
 \end{figure}
 
-The methods of the classes are developed to realize the flowchart of the data
-link layer. Decisions on whether to implement a method in one class or another
-is done using the expert pattern.
+The methods of the classes are developed to realize the
+flowcharts\ref{fig:dll_flow_encode} and
+\ref{fig:dll_flow_decode} of the data link layer. Decisions on whether to implement a method in one class or another is done using the expert pattern.
 
 \begin{figure}[htb]
 	\begin{center}
 	\includegraphics[scale=0.5,trim=0 140 0 140]{dll_flow_encode.pdf}
 	\caption{Flow chart for data link layer encode method}
 	\label{fig:dll_flow_encode}	
+	\end{center}
+\end{figure}
+
+The token network is implemented to deal with the cases shown in
+\ref{fig:dll_token_network}. It is important that the network is implemented to
+support the half duplex nature of the DTMF tone based network, since any
+collision would lead to errors. This is implemented by the EOT bit, that has to
+be received before a non tokenholder can talk. The tokenholder waits a specified
+amount of time after sendeing the EOT-bit before re-transmitting or moving on.
+
+\begin{figure}[htb]
+	\begin{center}
+	\includegraphics[scale=0.5,trim=0 140 0 140]{dll_token_network.pdf}
+	\caption{Cases of the implemented tokenn network}
+	\label{fig:dll_token_network}	
 	\end{center}
 \end{figure}

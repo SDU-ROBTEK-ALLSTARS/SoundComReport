@@ -1,4 +1,5 @@
 \chapter{Usage example}
+\label{app:usageexample}
 \section{Creating instance}
 \begin{lstlisting}[float=htb,language={[ANSI]C++},caption={Creating instance example},label=CreatingInstanceEx]
 int main()
@@ -19,7 +20,7 @@ class MyPort1 : public DtmfCallback
 {
 	virtual void callbackMethod(DtmfInMessage * message)
 	{
-    // This function is called everytime data arrives. The incoming message only exist inside this method, so it's recommended to copy all needed information before exiting the function.
+    // This function is called everytime data arrives. The incoming message only exist inside this method, so it is recommended to copy all needed information before exiting the function.
     // Fetch data from DTMF class to local memory (Assuming we have a dataContainer available in the MyPort1 class)
     m.getData(this->dataContainer*, 0, m.getMessageLength());
     
@@ -53,7 +54,7 @@ unsigned char * hello = (unsigned char*)"Hello";
 unsigned char * world = (unsigned char*)"World";
 DtmfOutMessage message = api->newMessage(); // Create an empty message
 message.setData(hello, 0, std::strlen(hello)); // Add hello to message
-message.setData(world, std::strlen(hello), std::strlen(world)); // Append the world to message
+message.setData(world, std::strlen(hello), std::strlen(world)); // Append world to message
 message.send();
 \end{lstlisting}
 
