@@ -52,7 +52,7 @@ Figure \ref{fig:trans_encode_decode} shows the \custtt{encode()} and \custtt{dec
 
 
 \subsection{Encoding messages from the API}
-To first elaborate on the function of the \custtt{encode()} method, we see that it requires a message in the form of a \custtt{DtmfOutMessage} object, as described in more detail in Section \ref{sec:api_message_types}. This message object from the API contains the receivers port number as well as a pointer to an array of data. This is the data we want cut into pieces of the right size, to enclose in the \custtt{Packet} object.
+To first elaborate on the function of the \custtt{encode()} method, we see that it requires a message in the form of a \custtt{DtmfOutMessage} object, as described in more detail in Section \ref{sec:api_message_types}. This message object from the API contains the receivers port number as well as a pointer to an array of data. This is the data we want to cut into pieces of the right size, to enclose in the \custtt{Packet} object.
 
 The compatibility method \custtt{toPacketFromApi()} serves as a tool to create a suitable number of packets. Only the destination port and data fields are initialized at this point, though. The packet does not yet contain all the header information needed to send it. \custtt{toPacketFromApi()} places addresses of the created packets in the FIFO queue \custtt{outQueue\_}.
 
@@ -82,6 +82,6 @@ The simplified \custtt{decode()} method is shown on Figure \ref{fig:trans_decode
 
 
 \subsection{Unacknowledged packet queues}
-The concept of queues containing the unacknowledged packets is, in fact, realised as a \custtt{map} (standard library) container. This allows mapping of sequence numbers (from either received or sent packets) to \custtt{packet} data structure. That was one can easily find packets of a specific sequence number via. \custtt{find()} (of the algorithm standard library). One other property of the map container is, that entries are automatically sorted by key value. That way one can easily fetch packets in the right order (by sequence number), by iterating from either the beginning or the end of the map.
+The concept of queues containing the unacknowledged packets is, in fact, realised as a \custtt{map} (standard library) container. This allows mapping of sequence numbers (from either received or sent packets) to \custtt{packet} data structure. That way one can easily find packets of a specific sequence number via. \custtt{find()} (of the algorithm standard library). One other property of the map container is, that entries are automatically sorted by key value. That way one can easily fetch packets in the right order (by sequence number), by iterating from either the beginning or the end of the map.
 %map - sorting, key\custtt{
 %&deque

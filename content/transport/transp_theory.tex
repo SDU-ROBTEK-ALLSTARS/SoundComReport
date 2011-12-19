@@ -7,7 +7,7 @@ A dilemma, when formulating how the protocol should function is that as high as 
 
 A UDP\footnote{User datagram protocol.}-like protocol design would no doubt be one of the best ways to achieve a low overhead. The UDP protocol provides a connectionless service, where datagrams\footnote{The transfer unit of the UDP protocol.} are sent and then forgotten. That way the receiver does not have to spend bandwidth to acknowledge successful receptions. Additionally, the header size of a datagram is quite small, as there is no overhead used for error- or flow control. Datagrams are also sent without any way of knowing whether they are received in-order or not.
 
-\nomenclature{UDP}{User datagram protocol}\nomenclature{TCP}{Transmission control protocol}
+\nomenclature{UDP}{User Datagram Protocol}\nomenclature{TCP}{Transmission Control Protocol}
 
 Using a TCP\footnote{Transmission control protocol.} inspired protocol instead would enable the transport layer to provide a much more reliable service. Now, in the TCP protocol, flow- and error control is added, as well as congestion control. Every packet is assigned a sequence number, ensuring they are passed on to the server application correctly, by the receiving transport layer protocol. Every packet is also acknowledged by the receiver, if it is successfully recorded. If not, the sender re-sends them. All this combined makes TCP much more reliable, but it also increases its header size to around three times the size of the UDP header. Especially if only a small amount of data is sent with each packet, the header can take up a large percentage of the combined (header plus data) package size.%%%%%%
 
@@ -80,7 +80,7 @@ The acknowledgment number is also a number of 8 bits. It indicates, to the sende
 \subsection{Error control}
 In order to avoid the risk of bytes shifting position inside one packet, a checksum is calculated. This checksum also serves as a strong error detection mechanism in general, although it should, in theory, not be needed as the data link layer protocol provides error control. The checksum type chosen is the cyclic redundancy check, or CRC, using the CRC-CCITT generator polynomial $x^{16} + x^{12} + x^5 + 1$. This provides a checksum size of 16 bits.
 
-\nomenclature{CRC}{Cyclic redundancy check}
+\nomenclature{CRC}{Cyclic Redundancy Check}
 
 The header of the packet is always getting its checksum calculated. If the \texttt{CHK} flag bit is set, a checksum is calculated for the whole package. This is the default, and preferred, way of transmission.
 
@@ -180,7 +180,7 @@ Figure \ref{fig:trans_timeout} shows a packet with sequence number 20 being sent
 %
 %
 %\subsection{Operation}
-%Much like the UDP\nomenclature{UDP}{User datagram protocol} this transport layer protocol provides a connectionless service, meaning packets are sent without having to first establish a connection. Also they are sent without sequence numbers, though in our case this is not a problem. This protocol will only be used on a half-duplex line, and there is no routing from one network to another: The packets can only go one way, and there is only one packet on the line at a time, thus packets cannot be ''out of order''.
+%Much like the UDP\nomenclature{UDP}{User Datagram Protocol} this transport layer protocol provides a connectionless service, meaning packets are sent without having to first establish a connection. Also they are sent without sequence numbers, though in our case this is not a problem. This protocol will only be used on a half-duplex line, and there is no routing from one network to another: The packets can only go one way, and there is only one packet on the line at a time, thus packets cannot be ''out of order''.
 %
 %In this protocol, no flow or error control is incorporated.\marginnote{If needed we can implement error or flow ctrl anyway} This is mainly due to the reason that the data link layer and transport layer communicate directly, and not across networks where another protocol might provide an unreliable service (as with the IP\footnote{Internet protocol}\nomenclature{IP}{Internet protocol} which is provides \textit{best effort} delivery). With no error or flow control we save yet some more overhead space.
 %

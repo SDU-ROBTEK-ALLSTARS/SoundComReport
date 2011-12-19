@@ -9,7 +9,7 @@ and presented to the data link layer as method arguments.
 
 \begin{figure}[htb]
 	\centering
-	\includegraphics[scale=0.5,trim=0 170 0 170]{dll_domainmodel.pdf}
+	\includegraphics[scale=0.58,trim=0 170 0 170]{dll_domainmodel.pdf}
 	\caption{Domain model for data link layer}
 	\label{fig:class_diag_for_datalink}	
 \end{figure}
@@ -24,34 +24,34 @@ network token and thereby is able to send encoded data.
 
 \begin{figure}[htb]
 	\centering
-	\includegraphics[scale=0.5,trim=0 190 0 190]{dll_flow_decode.pdf}
+	\includegraphics[scale=0.58,trim=0 190 0 190]{dll_flow_decode.pdf}
 	\caption{Flow chart for data link layer decode method}
 	\label{fig:dll_flow_decode}	
 \end{figure}
 
 The methods of the classes are developed to realize the
-flowcharts \ref{fig:dll_flow_encode} and
+flowcharts shown in Figure \ref{fig:dll_flow_encode} and
 \ref{fig:dll_flow_decode} of the data link layer. Decisions on whether to implement a method in one class or another is done using the expert pattern.
 
 \begin{figure}[htb]
 	\begin{center}
-	\includegraphics[scale=0.5,trim=0 140 0 140]{dll_flow_encode.pdf}
+	\includegraphics[scale=0.58,trim=0 140 0 140]{dll_flow_encode.pdf}
 	\caption{Flow chart for data link layer encode method}
 	\label{fig:dll_flow_encode}	
 	\end{center}
 \end{figure}
 
-The token network is implemented to deal with the cases shown in
+The token network is implemented to deal with the cases shown in Figure
 \ref{fig:dll_token_network}. It is important that the network is implemented to
 support the half duplex nature of the DTMF tone based network, since any
 collision would lead to errors. This is implemented by the EOT bit, that has to
-be received before a non tokenholder can talk. The tokenholder waits a specified
-amount of time after sendeing the EOT-bit before re-transmitting or moving on.
+be received before a non token holder can talk. The token holder waits a specified
+amount of time after sending the EOT-bit before re-transmitting or moving on.
 
 \begin{figure}[htb]
 	\begin{center}
-	\includegraphics[scale=0.5,trim=0 140 0 140]{dll_token_network.pdf}
-	\caption{Cases of the implemented tokenn network}
+	\includegraphics[scale=0.58,trim=0 200 0 200]{dll_token_network.pdf}
+	\caption{Cases of the implemented token network}
 	\label{fig:dll_token_network}	
 	\end{center}
 \end{figure}
