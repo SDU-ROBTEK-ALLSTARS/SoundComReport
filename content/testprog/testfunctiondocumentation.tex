@@ -66,9 +66,12 @@ Testing the ability to communicate with errors is done by having two instances c
 
 \subsection{Transport Layer}
 
-More nEeded!
 
-The transport layer is responsible for verifying the checksum. An appropriate test is sending a stream of messages to the transport layer, to see if only the correctly checksummed messages arrive. With the two instance test it would be possible to see if the transport layer is able produce and interpretate the checksum.
+The transport layer is responsible for verifying the checksum of packages and deliver them to the application layer in correct order. 
+
+An appropriate test is sending a stream of messages to the transport layer, to see if only the correctly checksummed messages arrive. With the two instance test it would be possible to see if the transport layer is able produce and interpretate the checksum. 
+
+The test the ability to order the packages a test can be conducted were correct packages are sent out of order, and afterwards check if they are delivered correctly to the application layer.
 
 \subsection{Application Layer}
 
