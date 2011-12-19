@@ -74,7 +74,7 @@ Before implementation is started decisions of which functionalities that will be
 	function declaration with an arbitrary name. 
 	
 	\begin{lstlisting}[float=htb,language={C++},caption={PortAudios callback function declaration. This declaration is used for both input
-	streams, output streams, and the two in combination},label={lst:pa_callback}]
+	streams, output streams, and the two in combination.},label={lst:pa_callback}]
 static int paStreamCallback(const void *inputBuffer,
 							void *outputBuffer,
 							unsigned long framesPerBuffer,
@@ -96,7 +96,7 @@ static int paStreamCallback(const void *inputBuffer,
 		callback. Regarding BufferedSoundIO this parameter is used to send a reference to the object itself in which the stream resides. 
 		Listing \ref{lst:pa_stream_callback} shows the exact implementation of \custtt{paOutputStreamCallback}.
 		
-		\begin{lstlisting}[float=htb,language={C++},caption={Implementation of \smalltt{paOutputStreamCallback}},label={lst:pa_stream_callback}]
+		\begin{lstlisting}[float=htb,language={C++},caption={Implementation of \smalltt{paOutputStreamCallback.}},label={lst:pa_stream_callback}]
 static int paOutputStreamCallback(	const void *inputBuffer,
 									void *outputBuffer,
 									unsigned long framesPerBuffer,
@@ -115,7 +115,7 @@ static int paOutputStreamCallback(	const void *inputBuffer,
 		\begin{figure}[htb]
 			\begin{center}
 			\includegraphics[scale=0.7,trim=0 0 0 0]{content/graphics/physical/physical_output_callback.png}%trim=l b r t
-			\caption{A sketch up of \smalltt{outputStreamCallback(...)} function. More details on this can be found in BufferedSoundIO.cpp}
+			\caption{A sketch up of \smalltt{outputStreamCallback(...)} function. More details on this can be found in BufferedSoundIO.cpp.}
 			\label{fig:physical_output_callback}
 			\end{center}
 		\end{figure}
@@ -135,7 +135,7 @@ static int paOutputStreamCallback(	const void *inputBuffer,
 		\begin{figure}[htb]
 			\begin{center}
 			\includegraphics[scale=0.7,trim=0 0 0 0]{content/graphics/physical/physical_input_callback.png}%trim=l b r t
-			\caption{A sketch up of \smalltt{inputStreamCallback(...)} function. For more details this can be found in BufferedSoundIO.cpp}
+			\caption{A sketch up of \smalltt{inputStreamCallback(...)} function. For more details this can be found in BufferedSoundIO.cpp.}
 			\label{fig:physical_input_callback}
 			\end{center}
 		\end{figure}
