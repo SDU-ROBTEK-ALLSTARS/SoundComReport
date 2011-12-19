@@ -1,6 +1,9 @@
 \section{Application Layer}
 
-\begin{itemize}
-\item Moving a file trough the application layer
-\item with test class
-\end{itemize}
+The API layer does not have any error control nor noticeable performance variables to perform experiments on. Therefor only the functionality of the layer is testable. 
+
+The layer has been tested stand alone by making a "dummy" backbone that will read and write to simple text files. The text files will simulate the data streams to and from the transport layer, and thereby all the stack layers.
+
+%The test will prove that the passing of data between threads, buffers and classes works correctly. 
+
+The test itself was performed by making a simple program that uses the API layer to send and receive messages. Passing the output file from the "dummy" backbone to another "dummy" backbones input, it will simulate that the layers delivered the data. If the data then is received correct in the callback method, the API layer has successfully communicated to the backbone. The test was ran on the API layer, and the API layer successfully communicated through the "dummy" backbone to another API layer.
