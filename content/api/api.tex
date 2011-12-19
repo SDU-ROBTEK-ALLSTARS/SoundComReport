@@ -67,10 +67,10 @@ When the delete statement is called, the Dtmf library is shut down. (See usage e
 
 
 \subsection{Message types}
-\subsubsection{\custtt{DtmfOutMessage}}
+\subsubsection{DtmfOutMessage}
 \custtt{DtmfOutMessage} can be seen as an empty envelope where the user can place the data to be sent over the Dtmf network. It contains information about the receiving station and on which port the message shall be delivered to. The message contains methods for inserting these values. Furthermore it contains the userdata to be sent over the network, and has methods for placing serveral data chunks in the same message. To send the message, a method called send is presend on the message itself. Calling send will pass the message on to the API which created the message and add it to the outgoing queue.
 
-\subsubsection{\custtt{DtmfInMessage}}
+\subsubsection{DtmfInMessage}
 The \custtt{DtmfInMessage} is used by the API when receiving messages. It contains information about the address of the sending node and an address pointer to where the data is located. \custtt{DtmfInMessage} is only used internaly in the library and thoughout the callback method when new data arrives.
 
 \section{Usage example}
