@@ -1,6 +1,12 @@
 \section{Discussion}
-This discussion will elucidate some of the conflicts between the theoretical implementation and the actual implementation. This means that in time of writing, the \custtt{frameCallback(...)} function have not been implemented yet, as finding a solution for this problem have been harder than anticipated. A solution though, could be to implement a functor pattern in the \custtt{DtmfPhysical} class, this discussion will not delve at this pattern, but it is certainly worth digging into as the current implementation has a cheap hack to make the physical layer behave as described in the previous sections.
+This discussion will elucidate some of the conflicts between the theoretical implementation and the actual implementation. This mean that at time of writing, the \custtt{frameCallback(...)} function have not been implemented yet as finding a solution for this problem have been a little harder than anticipated. A solution though could be to implement a functor pattern in the DtmfPhysical class, this discussion will not delve at this pattern, but it is certainly worth digging into as the current implementation has a cheap hack to make the physical layer behave as described in the previous sections.
 
-Another improvement would be encapsulating the \custtt{DtmfPhysical} and \custtt{BufferedSoundIO} classes into a new class which would which would deliver the requested interface to the upper layer. This could proof to heighten the stability of the physical layer as the visibility of public methods in the \custtt{BufferedSoundIO} class could be kept internal in the physical layer.
+Another improvement would be encapsulating the DtmfPhysical and the BufferedSoundIO class into a new class which would deliver the requested interface to the upper layer. This could proof to heighten the stability of the physical layer as the visibility of public methods in the BufferedSoundIO class could be kept internal in the physical layer.
+
+List of known bugs/issues:
+\begin{itemize}
+\item Replace cheap hack with intended implementation.
+\item Hardcoded values made as defines.
+\end{itemize}
 
 Otherwise the implementation of the physical layer have proceeded with satisfaction.

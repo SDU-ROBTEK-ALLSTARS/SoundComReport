@@ -1,2 +1,34 @@
 \section{Physical Layer}
-The experiments conducted while implementing this layer are not exact scientific experiments. This will instead give an estimate of the layers performance, stability issues, and reliability.
+After the development of the physical layer was ended, a series of tests was ran to make an estimate of the stability, performance, and reliability. Results of these tests can be seen in appendix \ref{app:experiments}, section \ref{app:exp:physical_result}.
+
+	\subsection{Stability}
+	Exact stability tests will not be conducted, but crashes throughout the tests for performance and reliability will tell if the physical layer is unstable.
+
+	\subsection{Performance}
+	The performance will tell how fast data can be transmitted over the network. Performance test will keep three categories listed below:
+	
+	\begin{enumerate}
+	\item Transmission speed for sent data.
+	\item Transmission speed for received data.
+	\item Transmission speed for received data where frames are tested to see if data is okay.
+	\end{enumerate}
+	These results will represented as the bit rate in $[\sfrac{bit}{s}]$.
+	
+	\subsection{Reliability}
+	The reliability will tell how much data that has been transferred compared to data sent. Two sets of data will be recorded:
+	
+	\begin{enumerate}
+	\item A set for reliability of frames received.
+	\item A set for reliability of frames received which is valid.
+	\end{enumerate}
+	These results will be represented as the reliability in percent.
+	
+	\subsection{Test parameters}
+	All tests will be conducted with the sample rate of $8kHz$. The number of samples played for each tone will vary from hundred to thousand samples in steps of hundred. The number of samples will determine the speed of which data can be transmitted.
+	
+	\subsection{Measurements}
+	Two types of test will be conducted, one with a cable the sound cards output to the sound cards input. The other type of test will be conducted with sound waves through air, as was intended for the system.
+	The tests will be conducted with the program found in tests/physical\_layer\_test/main.cpp. This program hold a define for defining number of samples.
+	
+	\subsection{Results}
+	As mentioned results can be found in appendix \ref{app:experiments} in section \ref{app:exp:physical_result}. As the system is required to communicate with sound, the results from section \ref{app:exp:physical_result} is of interest. Table \ref{tab:exp_phys_speaker} show at which \textit{speeds} the physical layer is most reliable.

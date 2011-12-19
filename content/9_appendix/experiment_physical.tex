@@ -1,0 +1,48 @@
+\section{Physical layer}\label{app:exp:physical_result}
+	
+	\subsection{Measurements with loop-back cable}
+	\begin{table}[!h]
+		\begin{center}
+			\begin{tabular}{c|c c c|c c|c}
+			& \multicolumn{3}{c|}{Bit rate $[\sfrac{bit}{s}]$} & \multicolumn{2}{c|}{Percentage $[\%]$} & Transmission \\
+			Samples & Sent & Received & Frames Valid & Received & Frames Valid & Time $[s]$\\
+			\hline
+			100 & 668 & 642 & 642 & 96 & 95 & 11 \\
+			200 & 336 & 329 & 329 & 98 & 96 & 21 \\
+			300 & 221 & 221 & 221 & 100 & 100 & 32 \\
+			400 & 164 & 164 & 164 & 100 & 100 & 43 \\
+			500 & 133 & 133 & 133 & 100 & 100 & 53 \\
+			600 & 111 & 111 & 111 & 100 & 100 & 63 \\
+			700 & 94 & 94 & 94 & 100 & 99 & 74 \\
+			800 & 84 & 84 & 84 & 100 & 99 & 83 \\
+			900 & 74 & 74 & 74 & 100 & 100 & 95 \\
+			1000 & 67 & 67 & 67 & 100 & 99 & 104 \\
+			\end{tabular}
+		\end{center}
+		\caption{Performance test of physical layer with loop-back cable.}
+		\label{tab:exp_phys_cable}
+	\end{table}
+	
+	\pagebreak
+	\subsection{Measurements with speaker/microphone}
+	\begin{table}[!h]
+		\begin{center}
+			\begin{tabular}{c|c c c|c c|c}
+			& \multicolumn{3}{|c|}{Bit rate $[\sfrac{bit}{s}]$} & \multicolumn{2}{c|}{Percentage $[\%]$} & Transmission \\
+			Samples & Sent & Received & Frames Valid & Received & Frames Valid & Time $[s]$\\
+			\hline
+			100 & 673 & 0 & 0 & 0 & 0 & 10 \\
+			200 & 332 & 0 & 0 & 0 & 0 & 21 \\
+			300 & 222 & 0 & 0 & 0 & 0 & 31 \\
+			400 & 165 & 1 & 1 & 1 & 1 & 42 \\
+			500 & 132 & 132 & 132 & 100 & 99 & 53 \\
+			600 & 110 & 107 & 107 & 97 & 97 & 63 \\
+			700 & 94 & 94 & 94 & 100 & 99 & 74 \\
+			800 & 82 & 81 & 81 & 100 & 99 & 83 \\
+			900 & 74 & 70 & 70 & 94 & 100 & 95 \\
+			1000 & 66 & 62 & 62 & 94 & 99 & 104 \\
+			\end{tabular}
+		\end{center}
+		\caption{Performance test of physical layer without loop-back cable.}
+		\label{tab:exp_phys_speaker}
+	\end{table}
