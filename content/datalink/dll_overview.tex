@@ -12,11 +12,11 @@ First of all the requirements must be identified.
 
 \subsection{Encoding}
 The first thing to consider is the encoding of signals. Since there are sixteen
-different DTMF combinations, each tone can carry four bits.
+different DTMF tone combinations, each tone can carry four bits.
 
 The only type of error to consider is the situation where a tone is
-misinterpreted, which leads to a four bit burst error (reference). Therefore the
-system should be designed specifically to detect errors of this type. Since the media
+misinterpreted, which leads to a four bit burst error \cite[p. 267]{KOM}.
+Therefore the system should be designed specifically to detect errors of this type. Since the media
 is considered to be very noisy, transmissions should also be kept as short as
 possible.
 
@@ -81,19 +81,19 @@ will also lead to discarding the frame.
 
 \subsection{Flow control}
 The next aspect to consider is flow control. Since the DTMF-system
-cannot be used as full-duplex, piggybacking (reference) is impossible. This
-means that eventually the receiver will have to reply. This reply will also
-be of six-tones to take advantage of the parity system, and therefore it might
+cannot be used as full-duplex, piggybacking \cite[p. 339]{KOM} is impossible
+because the station would not know when to reply. This means that eventually the
+receiver will have to reply. This reply will also be of six-tones to take advantage of the parity system, and therefore it might
 as well contain information about witch frames to resend. In other words a
 selective repeat system is preferred. To introduce a selective repeat system,
 additional redundancy is needed.
 
-Pipelining must be considered to increase the speed of the system and is
-implemented as a three bit sequence number. This limits redundancy to a minimum
+Pipelining \cite[p. 323]{KOM}must be considered to increase the speed of the
+system and is implemented as a three bit sequence number. This limits redundancy to a minimum
 while still benefiting from pipelining. The sender transmits eight frames
 (forty eight tones) and then waits for the receiver to reply with one frame
 (six tones). Should the receiver not respond or should the reply be lost, the
-sender will automatically re-transmit after a while.
+sender will automatically re-transmit after a specified amount of time.
 
 \subsection{Frame design}\label{dll_frame_design}
 The physical layer will provide a starting point for each
@@ -103,11 +103,13 @@ need of stuffing (reference) and to additional redundancy.
 
 A frame size of three bytes is preferred for the proposed parity system. This
 means preferably transmitting one byte per frame. A smaller payload would mean
-increased complexity and lesser efficiency.
+increased complexity and a less efficient design.
 
 Normally bytes are transmitted in chunks of eight, but since the length of
 datagrams can vary, the sender must have a way of telling the receiver to process smaller
-chunks. This introduces the need for an End Of Transmission flag (EOT).
+chunks. This introduces the need for an End Of Transmission flag (EOT). The EOT
+bit is also used to tell the receiver that it is time to reply and aloow it to
+talk even though it has no token.
 
 The next thing to consider is multipoint. There are three options: A token
 network (reference), a time division network (reference) or a code division
@@ -117,19 +119,24 @@ proposed frame size, a lot of unused frames in a small network. This leaves us
 with a token passing network, so this is the choice.
 
 The selective repeat system and the token network introduces the need for
-different frame types. The proposed type field will consist of two bits, controlling the token and indicating frame types at the same time. Table \ref{tab:protocol_for_type_field} shows the meaning of the two bits.
+different frame types. The proposed type field will consist of two bits,
+controlling the token and indicating frame types at the same time. Table
+\ref{tab:protocol_for_type_field} shows the meaning of the two bits and their
+connection to the cases described in \ref{fig:dll_token_network}.
 
 \begin{table}[htb]
 	\centering
-	\begin{tabular}{|c|ll|}
+	\begin{tabular}{|c|l|}
 		\hline
-		00 & Has no token & Reply from receiver \\
+		00 &  Reply (OK in case: Send or request resend in case: resend
+		)
+		\\
 		\hline
-		01 & Has no token & Passes token to addressed station \\
+		01 &  Offer token (token offered in case: pass token) \\
 		\hline
-		10 & Has token & Accepts token \\
+		10 &  Accept token (token received in case: pass token) \\
 		\hline
-		11 & Has token & Data frame for addressed station \\
+		11 &  Data (frames in case: Send)\\
 		\hline
 	\end{tabular}
 	\caption{Protocol for type field}
