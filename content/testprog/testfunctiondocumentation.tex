@@ -52,11 +52,11 @@ Figure \ref{fig:TestFlowchart} shows the flowchart testing a single layer by fee
 	\end{center}
 \end{figure}
 
-\subsection{Physical Layer}
+\subsection{Physical layer}
 
 The single instance test, whether the computer is able to send and receive sound has already been done while developing and debugging the layer. Therefore it is more logical to perform a test with two instances of the layer, examining how many of the sent messages are actually received by the other instance.
 
-\subsection{Data link Layer}
+\subsection{Data link layer}
 
 
 The data link layers main responsibilities involve keeping track of the token giving permission to send and frame the messages before they are sent. To test that the framing is done properly, a test of a single instance of the data link layer is done. The two instance test is used for two purposes; testing the token and the ability to communicate with errors. The token test is mostly a debugging issue, but can also be used for optimization.
@@ -64,7 +64,7 @@ The data link layers main responsibilities involve keeping track of the token gi
 Testing the ability to communicate with errors is done by having two instances communicate, while inflicting a specified percent of errors. Thus it is possible to test the layers ability to maintain a connection with errors.
 
 
-\subsection{Transport Layer}
+\subsection{Transport layer}
 
 
 The transport layer is responsible for verifying the checksum of packages and deliver them to the application layer in correct order. 
@@ -73,13 +73,13 @@ An appropriate test is sending a stream of messages to the transport layer, to s
 
 The test the ability to order the packages a test can be conducted were correct packages are sent out of order, and afterwards check if they are delivered correctly to the application layer.
 
-\subsection{Application Layer}
+\subsection{Application layer}
 
 The application layer is the users program interface. It is able to easily receive data as input and forward it to the transport layer so that it can be sent. A lot of single instance testing and debugging has to be done to make sure that the application layer is able to handle all inputs correctly. It is also necessary to create a program mimicking a user's program, to test the application layer's ability to transfer a file, using the application layer's built-in functions. 
 
 The performance of the application layer is tested by building a file transfer program with the application layer recording the speed of transferring the files trough the application layer.
 
-\subsection{Layers Combined}
+\subsection{Layers combined}
 
 In this test all the layers are connected and controlled by the backbone. This test is done as a potential user, with the options provided by the application layer. Using the file transfer program from the application layer, it is now tested by sending the file from the application layer test between two computers. 
 \subsubsection{Ping}

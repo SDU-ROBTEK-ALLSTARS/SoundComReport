@@ -1,4 +1,4 @@
-\section{Framework Composition}\label{sec:physical_analysis} 
+\section{Framework composition}\label{sec:physical_analysis} 
 The physical layer defines the electrical and physical framework for receiving and 
 transmitting signals through the media, and furthermore it defines encoding/decoding 
 and alignment schemes for translating frames into signals and vice versa.
@@ -10,7 +10,7 @@ These requirements define some of the physical layer's properties. As the commun
 
 \nomenclature{DTMF}{Dual-Tone Multi-Frequency}
 
-	\subsection{DTMF as information Carrier}
+	\subsection{DTMF as information carrier}
 	DTMF is an abbreviation for Dual Tone Multiple Frequency. It is a system of tones that are used by
 	telephones when dialing a number. The system is an arrangement of four low tones and four high tones,
 	arranged in a four-by-four matrix which gives the system sixteen combinations.
@@ -44,7 +44,7 @@ These requirements define some of the physical layer's properties. As the commun
 	bit rate of the communication. As each tone hold four bits the bit rate can be written as below:
 	\begin{equation}bitrate = \frac{numberOfTones \cdot numberOfBitsPerTone}{time}\end{equation}
 	
-	\subsection{Utilisation of PortAudio Interface}
+	\subsection{Utilisation of PortAudio interface}
 	PortAudio exposes streams for recording or playing back sound through the sound card of a
 	computer. PortAudio allows developers to push raw audio data to the soundcards outgoing buffer and
 	receiving raw audio data from the soundcards ingoing buffer. Thus, PortAudio is a good foundation for the
@@ -76,7 +76,7 @@ These requirements define some of the physical layer's properties. As the commun
 	frame. The BufferedSoundIO class will detect sequences of DTMF tones which will be transformed into a sequence of
 	numbers. This sequence of numbers will then be sent to the DtmfPhysical where it will be translated into a frame.
 	
-	\subsection{Goertzel Algorithm}
+	\subsection{Goertzel algorithm}
 	To be able to detect if tones have been transmitted some algorithm for detection of tones have to be implemented.
 	For this purpose the Goertzel algorithm is used, this algorithm has the ability to detect if a signal contain a
 	specific frequency. Other algorithms exist which would provide the same information but those would be

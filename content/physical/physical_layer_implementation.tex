@@ -1,4 +1,4 @@
-\section{Physical layer software Implementation}
+\section{Physical layer software implementation}
 Before implementation is started decisions of which functionalities that will be exposed to the upper layer have to be made. This section will not go into every little aspect of implementing the software, but will give good overview of how the physical layer is utilized and also how it does work internally to process incoming and outgoing data. It is therefore recommended to take a look at the files located at src/physical/ to get the full view of the physical layer. Files that spoken of is listed below:
 
 \begin {itemize}
@@ -8,7 +8,7 @@ Before implementation is started decisions of which functionalities that will be
 \item BufferedSoundIO.cpp - This file contains the implementation of BufferedSoundIO class.
 \end{itemize}
 
-	\subsection{DtmfPhysical.h - Interface}
+	\subsection{DtmfPhysical.h - interface}
 	As mentioned the first decisions will define the requirements of the interface. Decisions around the interface are listed below:
 	\begin {enumerate}
 	\item The constructor has to take parameters for controlling sample rate for incoming and outgoing sound streams, length of sample buffers,
@@ -19,7 +19,7 @@ Before implementation is started decisions of which functionalities that will be
 	layer can be passed as a reference so manipulation of this buffer can take place at the physical layer. This is done for the same reasons as the latter requirement.
 	\end{enumerate}
 	
-	\subsection{DtmfPhysical.cpp - Implementation}
+	\subsection{DtmfPhysical.cpp - implementation}
 	The interface implementation takes place in the DtmfPhysical class which will be the class for exposing received data to the protocol stack
 	and receiving data from the protocol stack for data transmission.
 	
