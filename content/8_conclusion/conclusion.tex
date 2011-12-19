@@ -34,9 +34,13 @@ To what extend does the transport layer work?
 How did the transport layer perform during test?
 What could make it even better?
 
-To what extend does the API layer work? 
-How did the API layer perform during test?
-What could make it even better?
+%To what extend does the API layer work? 
+The API layer has only been tested for functionality as it was not possible to make any performance test on this layer. It is able to create user messages and pass these on to the correct buffers without making threading problems. The messages can be picked up by the backbone and send to the transport. It has also been tested that the API layer is able to receive data from the backbone, and call the user defined callback method.
+%Further improvements on the API layer depends greatly on for which specific application the library is to be used. 
+%How did the API layer perform during test?
+%No performance test was performed on the API layer.
+The API layer could be improved by extending the feedback functionality such as notification about the quality of the link and whether a message has been send or still is queued. These functionalities would of cause require the protocol layers to provide these informations to the API layer.
+
 
 To what extend does the Backbone work? 
 How did the backbone perform during test?
