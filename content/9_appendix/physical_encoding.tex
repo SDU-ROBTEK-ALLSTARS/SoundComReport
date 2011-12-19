@@ -22,13 +22,13 @@ Table \ref{app_dtmf:DTMF_mapping_table} shows a mapping of the relationship betw
 \end{table}
 
 	\section{Idea}
-	The idea is that the codes from 0 - 15 represent 4 bit data codes and the rest is control codes (16 - 19) according to table \ref{app_dtmf:DTMF_mapping_table}. A high tone and a low combined represents a code. A table look-up would probably act faster than a calculation because of the complexity compared to the simple reference look-up in memory. A table look-up requires a static system which map the codes to the tones. To make it easy to implement a new frequency if new control tones are needed a dynamic system is needed to map tones to codes.
+	The idea is that the codes from 0 - 15 represent 4 bit data codes and the rest is control codes (16 - 19) according to Table \ref{app_dtmf:DTMF_mapping_table}. A high tone and a low combined represents a code. A table look-up would probably act faster than a calculation because of the complexity compared to the simple reference look-up in memory. A table look-up requires a static system which map the codes to the tones. To make it easy to implement a new frequency if new control tones are needed a dynamic system is needed to map tones to codes.
 	
 	\section{Implementation}
 
 The implementation should be made so a developer can add tones without any unnecessary work.	
 %The implementation of a tone should be like stealing candy from kids, as a developer, too much work is unnecessary.
- So tones defined as constant arrays, one for high tones, and one for low tones would be ideal. Pseudo code in listing \ref{app_dtmf:tone_array_listing} shows the implementation of these arrays. The arrays correspond to the indexes in table \ref{app_dtmf:DTMF_mapping_table}.
+ So tones defined as constant arrays, one for high tones, and one for low tones would be ideal. Pseudo code in Listing \ref{app_dtmf:tone_array_listing} shows the implementation of these arrays. The arrays correspond to the indexes in Table \ref{app_dtmf:DTMF_mapping_table}.
 	
 	\begin{lstlisting}[float=htb,language={C++},caption={Implementation of tone arrays},label={app_dtmf:tone_array_listing}]
 //	Frequencies of interest

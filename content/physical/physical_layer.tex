@@ -46,8 +46,8 @@ These requirements define some of the physical layer's properties. As the commun
 	
 	\subsection{Utilisation of PortAudio interface}
 	PortAudio exposes streams for recording or playing back sound through the sound card of a
-	computer. PortAudio allows developers to push raw audio data to the soundcards outgoing buffer and
-	receiving raw audio data from the soundcards ingoing buffer. Thus, PortAudio is a good foundation for the
+	computer. PortAudio allows developers to push raw audio data to the sound cards outgoing buffer and
+	receiving raw audio data from the sound cards ingoing buffer. Thus, PortAudio is a good foundation for the
 	implementation of the physical layer as tone detecting, and tone generating algorithms can be laid on top
 	of PortAudio, as basic mathematics which apply to digital signal processing. The PortAudio API provides the
 	user with a callback function which implicitly exposes the sound card buffers for input and output. PortAudio

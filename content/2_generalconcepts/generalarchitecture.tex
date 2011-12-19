@@ -1,13 +1,13 @@
 \section{Architectural goals}
-For many developed libraries, it is a priority that the final product is easy to use, efficient and powerfull.  The same goals apply to the network library. It must be easy to use, the user should be able to start the library by just telling it what address it has, and it should be very easy to send a message, with nothing more than the data to send and an adress. Efficiency is more difficult, especially since the project requires using DTMF instead of an electric signal, but within that constraint there is room for efficiency.
+For many developed libraries, it is a priority that the final product is easy to use, efficient and powerful.  The same goals apply to the network library. It must be easy to use, the user should be able to start the library by just telling it what address it has, and it should be very easy to send a message, with nothing more than the data to send and an address. Efficiency is more difficult, especially since the project requires using DTMF instead of an electric signal, but within that constraint there is room for efficiency.
 The user-application thread will also need to spend as little as possible execution time in the network library code, and do as little as possible memory management related to networking operations, as this will minimize faults in the library by user actions.
 
 
 
 \subsection{Overall system architecture}
 The general architecture of this library, as seen in Figure \ref{fig:general_architecture}, is to have one centralised backbone construct, which is the only part of the library to have any long term data storage and awareness of the network state. 
-Within the backbone, resides a set of buffers used to store intermediate data and a set of layers, loosely corresponding to the layers of the osi model.
-The layers are: Api, transport, datalink and physical.
+Within the backbone, resides a set of buffers used to store intermediate data and a set of layers, loosely corresponding to the layers of the OSI model.
+The layers are: API, transport, data link and physical.
 The layers above the transport layer are deemed outside of the scope of this library, and instead an api layer is introduced to handle incoming and exiting data. Since we are not utilising an electrical connection to transfer data, an extra layer is introduced below the physical layer, to handle playing and recording sound in a reliable way. This is the audio interface.
 
 
@@ -22,14 +22,14 @@ Layers are represented by an object that can encode or decode a sequence of byte
 However each of the different layer representation have no way of controlling when it is being used by the library, no contextual information(i.e. knowledge of any other object in the system), and are therefore considered pure function objects.
 The backbone monitors, the buffers and the layers and controls that transformation of data is done in a way that eliminates congestion as much as possible and ensures no data is lost. Since the backbone must be able to operate autonomously, it will be instantiated with its own execution thread. 
 
-The data storage can then be regarded as an assembly line, where data is taken from one buffer, transformed and put into the next buffer, in order to apply all the necessary packaging that network communication requires. The end product  is sent to the audio library or the Api layer (in the case of sending and recieving data respectively).
+The data storage can then be regarded as an assembly line, where data is taken from one buffer, transformed and put into the next buffer, in order to apply all the necessary packaging that network communication requires. The end product  is sent to the audio library or the API layer (in the case of sending and receiving data respectively).
 
 Some of the layers might need attention based on other criteria than the condition of the buffers, it is the responsibility of the backbone to handle this as well.
 
 \begin{figure}[htb]
 	\begin{center}
 	\includegraphics[scale=0.6,trim=0 130 0 130]{traadgraph.pdf}
-	\caption{General DTMFLib architecture.}
+	\caption{General protocol stack architecture.}
 	\label{fig:general_architecture}	
 	\end{center}
 \end{figure}

@@ -38,7 +38,7 @@ Two threads are spawned when the API layer is initialised. The general idea behi
 This thread is stopped by a mutex lock until new data arrives. When the backbone has put new data to the output buffer, it unlocks the mutex, allowing the callback to continue operating. The callback will start reading messages from the buffer. When reading a message, it looks up if there's a port defined for this message. If a callback is defined for the port, it will call the user-defined method with the message as argument. This allows the user to copy the data to a specified location. On exit the message is deleted. If there is no more messages in the queue, the callback thread locks the mutex.
 
 \subsubsection{Backbone thread}
-The backbone is described in chapter \ref{chap:backbone}
+The backbone is described in Chapter \ref{chap:backbone}
 
 \subsection{Method description}
 \label{sub:api_method_description}
@@ -74,7 +74,7 @@ When the delete statement is called, the Dtmf library is shut down. (See usage e
 The \custtt{DtmfInMessage} is used by the API when receiving messages. It contains information about the address of the sending node and an address pointer to where the data is located. \custtt{DtmfInMessage} is only used internally in the library and throughout the callback method when new data arrives.
 
 \section{Usage example}
-Usage examples are available in appendix \ref{app:usageexample}
+Usage examples are available in Appendix \ref{app:usageexample}
 
 %\section{Further improvements}
 

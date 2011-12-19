@@ -18,7 +18,7 @@ The minimum value of a buffer is meant as a count of units that the system shoul
 The maximum value indicates how much data there can be in a buffer before the system is close to congestion. Therefore whenever there is too much data in a buffer, the backbone should prioritize moving it out.
 
 
-Too much outgoing data, or too little ingoing data in the system buffers, does not represent a stability threat, and the library will continue to operate at full, or close to full capacity under these circumstances. This means that the minimum threshold values doesn't apply to ingoing buffers, and maximum threshold values doesn't apply to outgoing buffers.
+Too much outgoing data, or too little ingoing data in the system buffers, does not represent a stability threat, and the library will continue to operate at full, or close to full capacity under these circumstances. This means that the minimum threshold values does not apply to ingoing buffers, and maximum threshold values does not apply to outgoing buffers.
 
 
 \subsection{Execution flow}
@@ -43,10 +43,10 @@ The same argument goes for the transport layer, which of course has the lowest p
 \end{enumerate}
 
 
-This prioritized flow (see figure \ref{fig:backboneprime}) will ideally ensure that the system strives to stay in a ''stable'' state, during medium load time. 
+This prioritized flow (see Figure \ref{fig:backboneprime}) will ideally ensure that the system strives to stay in a ''stable'' state, during medium load time. 
 
 
-Even if the library doesn't receive much processing time from the operating system, it should still manage to behave in a manner consistent with the protocol.
+Even if the library does not receive much processing time from the operating system, it should still manage to behave in a manner consistent with the protocol.
 
 
 When the system is a bit more relaxed, that is, all values are within working parameters, the system will assign work in a way that functions like round robin, which means that the system checks all buffers once, and then if there is no work to be done, goes to sleep for a predetermined amount of time. The first buffer to check is advanced through the six buffers for each attempt at general work, in accordance with flow \ref{fig:backbonegeneral}.
@@ -59,7 +59,7 @@ Whenever a buffer indicates that it needs to be emptied, it is not enough to jus
 The reason for this is that when a buffer indicates that it needs more items, if the buffer it fetches from is empty, then that buffer needs to be filled first.
 
 
-Since there isn't a one-to-one correspondence between frames and packages or packages and messages, a buffer checker function needs to be created; One for determining whether there is room for a message to be decoded and one to determine whether the data link layer can execute. The reason that the data link layers decode-and encode-functions aren't viewed independently is that the decode and encode functions always need to be called right after one another. This effectively wraps up into a single data link action, except when the layer indicates otherwise by the needs attention function.
+Since there is not a one-to-one correspondence between frames and packages or packages and messages, a buffer checker function needs to be created; One for determining whether there is room for a message to be decoded and one to determine whether the data link layer can execute. The reason that the data link layers decode-and encode-functions are not viewed independently is that the decode and encode functions always need to be called right after one another. This effectively wraps up into a single data link action, except when the layer indicates otherwise by the needs attention function.
 Note that these checks depend on, among other parameters, the maximum size of packages and frames.
 
 
