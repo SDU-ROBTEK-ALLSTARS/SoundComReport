@@ -1,5 +1,8 @@
 \chapter{DTMF mapping}\label{app:physical_encode}
-The mapping between DTMF tones and sequence code can be considered as a table look-up. But for implementation purpose this mapping was implemented as a few mathematical functions. This was done so implementing new frequencies is easy regarding adding new control codes. The mapping between DTMF tones and codes is shown in table \ref{app_dtmf:DTMF_mapping_table}.
+The mapping between DTMF tones and sequence code can be considered as a table look-up. But for implementation purpose this mapping was implemented as a few mathematical functions. 
+ Adding new control codes is prioritised, thus the system is made so new frequencies can easily be added.
+%This was done so implementing new frequencies is easy regarding adding new control codes.
+Table \ref{app_dtmf:DTMF_mapping_table} shows a mapping of the relationship between DTMF tones and codes. 
 
 \begin{table}[htb]
 	\begin{center}
@@ -22,7 +25,10 @@ The mapping between DTMF tones and sequence code can be considered as a table lo
 	The idea is that the codes from 0 - 15 represent 4 bit data codes and the rest is control codes (16 - 19) according to table \ref{app_dtmf:DTMF_mapping_table}. A high tone and a low combined represents a code. A table look-up would probably act faster than a calculation because of the complexity compared to the simple reference look-up in memory. A table look-up requires a static system which map the codes to the tones. To make it easy to implement a new frequency if new control tones are needed a dynamic system is needed to map tones to codes.
 	
 	\section{Implementation}
-	The implementation of a tone should be like stealing candy from kids, as a developer, too much work is unnecessary. So defining the tones as constant arrays, one for high tones, and one for low tones would be ideal. Pseudo code in listing \ref{app_dtmf:tone_array_listing} show the implementation of these arrays. The arrays correspond to the indexes in table \ref{app_dtmf:DTMF_mapping_table}.
+
+The implementation should be made so a developer can add tones without any unnecessary work.	
+%The implementation of a tone should be like stealing candy from kids, as a developer, too much work is unnecessary.
+ So tones defined as constant arrays, one for high tones, and one for low tones would be ideal. Pseudo code in listing \ref{app_dtmf:tone_array_listing} shows the implementation of these arrays. The arrays correspond to the indexes in table \ref{app_dtmf:DTMF_mapping_table}.
 	
 	\begin{lstlisting}[float=htb,language={C++},caption={Implementation of tone arrays},label={app_dtmf:tone_array_listing}]
 //	Frequencies of interest
@@ -47,7 +53,7 @@ const unsigned int numberOfHighTones =
 		\end{array} \right.
 	\]
 	
-	Mapping from two frequencies to a code is a calculation which consist of several operations and can be described as below.
+	Mapping two frequencies to a code is a calculation which consist of several operations and can be shown as below.
 	
 	\[
 		g(i_{l}, i_{h}) = i_{l} \cdot numberOfHighTones + i_{h},
@@ -56,4 +62,5 @@ const unsigned int numberOfHighTones =
 	where $i_{l}$ is the index of the low frequency and $i_{h}$ is the index of the high frequency.
 	
 	\section{Discussion}
-	If the faster static table look-up was wanted the table had to be creation in advance. This could either be done at start-up of the program og hardcoded into the program. But as these few calculations are not putting much load on the CPU, this will just be implemented in the software as functions.
+	
+If speed was the priority a static table look-up had to be created in advance. This could either be done at start-up of the program og hardcoded into the program. But as these few calculations are not putting much load on the CPU, this is implemented in the software as functions.
