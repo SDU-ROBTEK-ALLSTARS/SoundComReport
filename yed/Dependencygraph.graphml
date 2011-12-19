@@ -253,7 +253,7 @@
           <y:Geometry height="40.0" width="189.8489583333334" x="970.4140128968254" y="170.0"/>
           <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" modelName="internal" modelPosition="c" textColor="#000000" visible="true" width="90.689453125" x="49.57975260416674" y="10.6494140625">DtmfTransport.h</y:NodeLabel>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" modelName="internal" modelPosition="c" textColor="#000000" visible="true" width="103.36328125" x="43.24283854166674" y="10.6494140625">DtmfTransport.cpp</y:NodeLabel>
         </y:GenericNode>
       </data>
     </node>
