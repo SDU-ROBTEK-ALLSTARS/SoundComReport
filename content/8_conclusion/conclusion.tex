@@ -26,7 +26,7 @@ The backbone class works as expected. It is able to dispatch work to the correct
 The API layer has only been tested for functionality as it was not possible to make any performance test on this layer. It is able to create user messages and pass these on to the correct buffers without making threading problems. %The messages can be picked up by the backbone and send to the transport. It has also been tested that the API layer is able to receive data from the backbone, and call the user defined callback method. The API layer could be improved by extending the feedback functionality such as notification about the quality of the link and whether a message has been send or still is queued. These functionalities would of cause require the protocol layers to provide these informations to the API layer.
 
 %Test program
-The test function did work as intended. Unfortunately not all parts of the stack was tested as intended with this functionality, which was due to miscommunication in the group. Adding more options to the test tool would increase the versatility of it.
+The test function worked as intended. It was used for many different tests, because it could be modified to fit specific requirements. Unfortunately not all parts of the stack were tested as intended with this functionality, which was due to miscommunication in the group. Adding more options to the test tool would increase the versatility of it.
 
 %Conclusion for real
 Overall this project is a success as every layer have been tested and is working as intended. Assembling the layers into a protocol stack with the API on top have proven to cause some trouble. At the time of this writing a complete protocol stack with an API is not implemented fully as a working library.
