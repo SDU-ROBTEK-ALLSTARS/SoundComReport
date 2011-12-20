@@ -1,4 +1,4 @@
 \section{Transport layer}
 With regard to the transport layer, only functionality tests have been performed. Since the transfer speeds in general are not very fast, the performance of the transport layer protocol was never really an issue. If very high performance had been required, the best place to optimize would certainly be in-between the transport layer and the other parts of the protocol stack. Moving data between the \custtt{Packet} object and other objects is not particularly efficient, and could have been avoided although it would make the source code far less transparent.
 
-Each method of the transport layer has been tested briefly while developing the code, to find out whether the conversion between formats went as anticipated.
+Each method of the transport layer has been tested briefly while developing the code, to find out whether the conversion between formats, calculation of checksums and re-transmission of packets went as anticipated.
