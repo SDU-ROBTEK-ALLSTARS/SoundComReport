@@ -55,3 +55,8 @@ amount of time after sending the EOT-bit before re-transmitting or moving on.
 	\label{fig:dll_token_network}	
 	\end{center}
 \end{figure}
+
+\section{Discussion}
+The data link layer performed well under test and handles communication with up to sixty percent errors, though this amount of errors makes it very slow. With more than sixty percent errors all time goes into control frames and almost no frames are transmitted.
+% Data link layer diskussion ?????
+If it is possible to find a way of using a sliding window instead of the eight byte list currently implemented. There is currently a lot of transmission time being wasted in sending lists shorter than eight entries. Other changes could be considered to handle cases where a crucial frame is lost. For example the case where a reply is lost which results in some waiting time and the entire list being resend.

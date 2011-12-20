@@ -84,3 +84,6 @@ The simplified \custtt{decode()} method is shown on Figure \ref{fig:trans_decode
 The concept of queues containing the unacknowledged packets is, in fact, realised as a \custtt{map} (standard library) container. This allows mapping of sequence numbers (from either received or sent packets) to the \custtt{packet} data structure. That way one can easily find packets of a specific sequence number via. \custtt{find()} (of the algorithm standard library). One other property of the map container is, that entries are automatically sorted by key value. Therefore it is easy to fetch packets in the right order (by sequence number), by iterating from either the beginning to the end of the map.
 %map - sorting, key\custtt{
 %&deque
+
+\section{Discussion}
+Improvement could be made in the data transfer to- and from the transport layer protocol, but it is not highly necessary in this part of the protocol, as speed does not seem to be an issue. Rather, the ability to correctly deliver data to the API in the right order would be the criteria of success.

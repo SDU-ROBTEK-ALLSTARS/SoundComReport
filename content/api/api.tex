@@ -79,8 +79,9 @@ Usage examples are available in Appendix \ref{app:usageexample}
 %\section{Further improvements}
 
 
-%\section{Subconclusion}
-%The api has been implemented and tested to work stand-alone with a test application simulating the backbone. The example code 
-
+\section{Discussion}
+The API has been implemented and tested to work stand-alone with a test application simulating the backbone. 
+The messages can be picked up by the backbone and send to the transport. It has also been tested that the API layer is able to receive data from the backbone, and call the user defined callback method. 
+The API layer could be improved by extending the feedback functionality such as notification about the quality of the link and whether a message has been send or still is queued. These functionalities would of cause require the protocol layers to provide these informations to the API layer.
 
 % EXAMPLES LOCATED IN "code examples.tex"

@@ -99,3 +99,8 @@ When a layer is used to decode or encode, the only parameters it receives are po
 	\label{fig:backbonegeneral}	
 	\end{center}
 \end{figure}
+
+\section{Discussion}
+The backbone has not been tested, as it is meaningless to test it without the actual layers combined. Since the final assembly has not been completed at the time of writing, any backbone tests are impossible. However the backbone has been debugged and everything seems to be functioning properly.
+%Backbone diskussion????
+The input and output stacks could have their own backbone thread, in order to simplify the logic of which buffer to check. The communication to the physical layer could be handled through an actual queue with a mutex on the last element, instead of a ring buffer. The logic to detect whether the network layer and data link layer have room to perform their actions needs to be improved.
