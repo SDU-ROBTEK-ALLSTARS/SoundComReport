@@ -77,7 +77,7 @@ The method to pass data from the data link layer to the transport layer protocol
  \label{fig:trans_decode_flowchart_simple}
 \end{figure}
 
-The simplified \custtt{decode()} method is shown on Figure \ref{fig:trans_decode_flowchart_simple}. The \custtt{process\-Received\-Packet()} method is the ''decision maker'' of the \custtt{decode()} function. It makes sure to generate the appropriate response to a received packet: If an incoming acknowledgment number matches an unacknowledged, sent, packet it is deleted from the unacknowledged queue (see for example Figure \ref{fig:trans_syn_packburst}).
+The simplified \custtt{decode()} method is shown on Figure \ref{fig:trans_decode_flowchart_simple}. The \custtt{process\-Received\-Packet()} method is the ''decision maker'' of the \custtt{decode()} function. It makes sure to generate the appropriate response to a received packet: If an incoming acknowledgement number matches an unacknowledged, sent, packet it is deleted from the unacknowledged queue (see for example Figure \ref{fig:trans_syn_packburst}).
 
 
 \subsection{Unacknowledged packet queues}
